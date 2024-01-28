@@ -1,0 +1,16 @@
+# IP Change Check
+*/30 * * * * pi bash /home/pi/scripts/ipcheck.sh &
+
+# GitHub Update
+@reboot pi bash /home/pi/scripts/ghupdate.sh &
+0 1 * * * pi bash /home/pi/scripts/ghupdate.sh &
+
+# Reboots Once a Month & Turn Screen Off After Reboot
+15 1 1-7 * 1 pi bash /home/pi/scripts/reboot.sh 0 &
+@reboot pi bash /home/pi/scripts/reboot.sh 1 &
+
+# Database Backup Once a Day
+5 6 * * * pi bash /home/pi/scripts/dbbackup.sh &
+
+# Cleanup Once a Week
+30 6 * * 2 pi bash /home/pi/scripts/cleanup.sh &

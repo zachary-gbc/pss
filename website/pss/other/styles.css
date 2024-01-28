@@ -1,0 +1,63 @@
+/* -- Main Styles -- */
+html, body {
+	background-color: #FFFFEE;
+	padding: 2px 25px 2px 25px;
+	font-size: 1.1em;
+}
+.header {
+	color: blue;
+	font-family: "Lato", "Open Sans", Arial, sans-serif;
+	font-size: 2em;
+	font-weight: bold;
+	padding-left: 15px;
+}
+.headermenu {
+	padding-left: 25px;
+	padding-bottom: 5px;
+	border-bottom: thin green dashed;
+}
+.headerlinks, headerlinks:visited {
+	color: #000066;
+	font-family: "Lato", "Open Sans", Arial, sans-serif;
+	font-size: 1em;
+}
+.footer {
+	color: blue;
+	font-family: "Lato", "Open Sans", Arial, sans-serif;
+	font-size: 1em;
+	font-weight: bold;
+	border-top: thin green dashed;
+}
+h1, h2, h3, h4, h5, h6 {
+	color: blue;
+}
+
+/* -- Multiple Uses -- */
+.sectiontitle {
+	color: blue;
+	font-weight: bold;
+	font-family: arial;
+	font-size: 1.5em;
+	text-decoration: underline;
+	padding: 3px 3px 3px 3px;
+}
+table {
+	border: 2px solid #0033CC;
+}
+td {
+	padding: 3px 3px 0px 3px;
+}
+.tr_head {
+	background-color: #00007D;
+	color: #BBFFFF;
+}
+.tr_even {
+	background-color: #AAFFFF;
+}
+.tr_odd {
+	background-color: #CCFFFF;
+}
+.error_message {
+	color: red;
+	text-decoration: underline;
+}

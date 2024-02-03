@@ -17,12 +17,12 @@ then
   find . -name '*DS_Store*' -delete
 
   # Scripts
-  sudo mv -f /home/pi/pss/rpi/scripts/* /home/pi/scripts/
+  sudo mv -f /home/pi/pss/scripts/* /home/pi/scripts/
 
   # Crons
-  sudo mv -f /home/pi/pss/rpi/crons/general /etc/cron.d/general
+  sudo mv -f /home/pi/pss/crons/general /etc/cron.d/general
   sudo chown root:root /etc/cron.d/general
-  sudo mv -f /home/pi/pss/rpi/crons/screens /etc/cron.d/screens
+  sudo mv -f /home/pi/pss/crons/screens /etc/cron.d/screens
   sudo chown root:root /etc/cron.d/screens
 
   # Website

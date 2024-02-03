@@ -42,7 +42,7 @@ sudo mkdir -p /var/www/html/pss/scripts
 sudo chown pi:pi /var/www/html
 sudo chown pi:pi /var/www/html/pss/scripts
 echo "never" > /home/pi/lastupdatecommit
-cp /home/pi/pss/configs/pss.conf /home/pi/scripts/pss.conf
+cp /home/pi/pss/configs/pss.conf /home/pi/pss.conf
 cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/ghupdate.sh
 cp /home/pi/pss/scripts/pushover.sh /home/pi/scripts/pushover.sh
 sudo cp -f /home/pi/pss/crons/general /etc/cron.d/general
@@ -67,13 +67,14 @@ then
   sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-IP', '$dbip');"
   sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-Name', '$dbname');"
 
-  sudo sed -i "s/database_name.*/database_name=$dbname/" /home/pi/scripts/pss.conf
-  sudo sed -i "s/database_username.*/database_username=$dbuser/" /home/pi/scripts/pss.conf
-  sudo sed -i "s/database_password.*/database_password=$dpass/" /home/pi/scripts/pss.conf
-  sudo cp /home/pi/scripts/pss.conf /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_name.*/database_name=$dbname/" /home/pi/pss.conf
+  sudo sed -i "s/database_username.*/database_username=$dbuser/" /home/pi/pss.conf
+  sudo sed -i "s/database_password.*/database_password=$dpass/" /home/pi/pss.conf
+  sudo cp /home/pi/pss.conf /var/www/html/pss/conf/pss.conf
 else
-  sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /home/pi/scripts/pss.conf
-  sudo sed -i "s/database_ip.*/database_ip=$dbip/" /home/pi/scripts/pss.conf
+  sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /home/pi/pss.conf
+  sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_ip.*/database_ip=$dbip/" /home/pi/pss.conf
 fi
 
 sudo apt autoremove -y

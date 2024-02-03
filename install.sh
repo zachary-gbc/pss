@@ -20,20 +20,20 @@ else
   read dbip
 fi
 
-$log="/home/pi/install.log"
-echo "Initiating Install" > $log
+install_log="/home/pi/install.log"
+echo "Initiating Install" > $install_log
 
 sudo apt-get update
 sudo apt-get upgrade -y
-appstoinstall=("awscli","apache2","php","php-mysql","php-curl","mariadb-server","git","wget", "curl", "cec-utils", "ffmpeg", "vlc", "vlc-bin")
+appstoinstall=(awscli apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg vlc vlc-bin)
 for app in ${appstoinstall[@]}
 do
-  echo "--------------------" >> $log
-  echo "Installing $app" >> $log
-  sudo apt-get -qq install $app -y | tee -a $log
-  echo "Completed Install of $app" >> $log
-  echo "--------------------" >> $log
-  echo "" >> $log
+  echo "--------------------" >> $install_log
+  echo "Installing $app" >> $install_log
+  sudo apt-get -qq install $app -y | tee -a $install_log
+  echo "Completed Install of $app" >> $install_log
+  echo "--------------------" >> $install_log
+  echo "" >> $install_log
 done
 
 sudo mkdir -p /var/www/html/pss/scripts
@@ -44,7 +44,7 @@ mkdir /home/pi/scripts
 mkdir /home/pi/log
 cp /home/pi/pss/configs/pss.conf /home/pi/scripts/pss.conf
 cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/ghupdate.sh
-cp /home/pi/pss/scripts/pushover.py /home/pi/scripts/pushover.py
+cp /home/pi/pss/scripts/pushover.sh /home/pi/scripts/pushover.sh
 sudo mv -f /home/pi/pss/crons/general /etc/cron.d/general
 sudo chown root:root /etc/cron.d/general
 sudo rm /var/www/html/index.html

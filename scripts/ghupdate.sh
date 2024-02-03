@@ -27,10 +27,6 @@ then
 
   # Website
   sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"
-  sudo echo "no" > /var/www/html/sns/bashrunning
-  sudo echo "Unknown-~-0" > /var/www/html/sns/scrollto
-  sudo chmod 777 /var/www/html/sns/bashrunning
-  sudo chmod 777 /var/www/html/sns/scrollto
 
   echo $lastcommit > /home/pi/lastupdatecommit
 

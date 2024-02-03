@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS Devices;
 CREATE TABLE Devices(
   Dev_ID INT NOT NULL AUTO_INCREMENT,
   Dev_Name VARCHAR(255) NOT NULL UNIQUE,
@@ -17,6 +18,7 @@ CREATE TABLE Devices(
   PRIMARY KEY(Dev_ID)
 );
 
+DROP TABLE IF EXISTS Graphics;
 CREATE TABLE Graphics(
   Gr_ID INT NOT NULL AUTO_INCREMENT,
   Gr_Name VARCHAR(255) NOT NULL UNIQUE,
@@ -27,6 +29,7 @@ CREATE TABLE Graphics(
   PRIMARY KEY(Gr_ID)
 );
 
+DROP TABLE IF EXISTS Loops;
 CREATE TABLE Loops(
   Lop_ID INT NOT NULL AUTO_INCREMENT,
   Lop_Name VARCHAR(255) NOT NULL UNIQUE,
@@ -37,9 +40,10 @@ CREATE TABLE Loops(
   Lop_LastCreateDateTime DATETIME NULL,
   PRIMARY KEY(Lop_ID)
 );
-INSERT INTO Loops(Lop_Name, Lop_Type, Lop_Orientation, Lop_UpdateDateTime) VALUES('No Loop', 'Y', 'X', '1001-01-01');
+INSERT INTO Loops(Lop_Name, Lop_Type, Lop_Category, Lop_Orientation, Lop_UpdateDateTime) VALUES('No Loop', 'Y', 'X', 'X', '1001-01-01');
 DELETE FROM Loops;
 
+DROP TABLE IF EXISTS LoopGraphics;
 CREATE TABLE LoopGraphics(
   LG_Loop INT NOT NULL,
   LG_Graphic INT NOT NULL,
@@ -48,6 +52,7 @@ CREATE TABLE LoopGraphics(
   PRIMARY KEY(LG_Loop, LG_Graphic, LG_Order)
 );
 
+DROP TABLE IF EXISTS AutomaticLoopDates;
 CREATE TABLE AutomaticLoopDates(
   AD_Graphic INT NOT NULL,
   AD_Loop INT NOT NULL,
@@ -57,6 +62,7 @@ CREATE TABLE AutomaticLoopDates(
   AD_EndDateRange DATE NOT NULL
 );
 
+DROP TABLE IF EXISTS Schedules;
 CREATE TABLE Schedules(
   Sch_ID INT NOT NULL AUTO_INCREMENT,
   Sch_Name VARCHAR(255) NOT NULL,
@@ -77,6 +83,7 @@ CREATE TABLE Schedules(
   PRIMARY KEY(Sch_ID)
 );
 
+DROP TABLE IF EXISTS Users;
 CREATE TABLE Users(
   Usr_ID INT NOT NULL AUTO_INCREMENT,
   Usr_Name VARCHAR(255) NOT NULL UNIQUE,
@@ -89,6 +96,7 @@ CREATE TABLE Users(
   PRIMARY KEY(Usr_ID)
 );
 
+DROP TABLE IF EXISTS Variables;
 CREATE TABLE Variables(
   Var_ID INT NOT NULL AUTO_INCREMENT,
   Var_Name VARCHAR(255) NOT NULL,
@@ -102,6 +110,7 @@ INSERT INTO Variables(Var_Name, Var_Value) VALUES('Pushover-Token', '1');
 INSERT INTO Variables(Var_Name, Var_Value) VALUES('Pushover-User-Key', '1');
 INSERT INTO Variables(Var_Name, Var_Value) VALUES('Alert-On-IP-Change', 'no');
 
+DROP TABLE IF EXISTS PushoverLog;
 CREATE TABLE PushoverLog(
   PO_ID INT NOT NULL AUTO_INCREMENT,
   PO_Device VARCHAR(255) NOT NULL,

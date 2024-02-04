@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /home/pi/pss.conf
+. /var/www/html/pss/conf/pss.conf
 
 sleep 60
 

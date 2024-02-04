@@ -42,7 +42,7 @@ sudo mkdir -p /var/www/html/pss/scripts
 sudo chown pi:pi /var/www/html
 sudo chown pi:pi /var/www/html/pss/scripts
 echo "never" > /home/pi/lastupdatecommit
-cp /home/pi/pss/configs/pss.conf /home/pi/pss.conf
+cp /home/pi/pss/configs/pss.conf /var/www/html/pss/conf/pss.conf
 cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/ghupdate.sh
 cp /home/pi/pss/scripts/pushover.sh /home/pi/scripts/pushover.sh
 sudo cp -f /home/pi/pss/crons/general /etc/cron.d/general
@@ -51,10 +51,13 @@ sudo rm /var/www/html/index.html
 sudo rm /etc/cron.d/screens
 sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"
 
+phpversion=$(php -i | grep "PHP Version")
+phpversionnumber=${phpversion:15:3}
+
 sudo mkdir -p /var/www/html/pss/files
 sudo chown www-data:www-data /var/www/html/pss/files
-sudo sed -i 's/upload_max_filesize.*/upload_max_filesize = 800M/' /etc/php/7.4/apache2/php.ini
-sudo sed -i 's/post_max_size.*/post_max_size = 800M/' /etc/php/7.4/apache2/php.ini
+sudo sed -i 's/upload_max_filesize.*/upload_max_filesize = 800M/' /etc/php/$phpversionnumber/apache2/php.ini
+sudo sed -i 's/post_max_size.*/post_max_size = 800M/' /etc/php/$phpversionnumber/apache2/php.ini
 sudo sed -i 's/bind-address.*/#bind-address = 127.0.0.1/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo usermod -aG video www-data
 
@@ -67,12 +70,10 @@ then
   sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-IP', '$dbip');"
   sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-Name', '$dbname');"
 
-  sudo sed -i "s/database_name.*/database_name=$dbname/" /home/pi/pss.conf
-  sudo sed -i "s/database_username.*/database_username=$dbuser/" /home/pi/pss.conf
-  sudo sed -i "s/database_password.*/database_password=$dpass/" /home/pi/pss.conf
-  sudo cp /home/pi/pss.conf /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_name.*/database_name=$dbname/" /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_username.*/database_username=$dbuser/" /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_password.*/database_password=$dpass/" /var/www/html/pss/conf/pss.conf
 else
-  sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /home/pi/pss.conf
   sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
   sudo sed -i "s/database_ip.*/database_ip=$dbip/" /home/pi/pss.conf
 fi

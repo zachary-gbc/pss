@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-. /home/pi/pss.conf
+. /var/www/html/pss/conf/pss.conf
 
 lanip=$(hostname -I)
 

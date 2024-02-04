@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-. /home/pi/pss.conf
+. /var/www/html/pss/conf/pss.conf
 log=$(date -I)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 pssonoff="off"

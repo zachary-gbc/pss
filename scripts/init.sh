@@ -2,7 +2,7 @@
 
 sleep 30
 
-. /home/pi/pss.conf
+. /var/www/html/pss/conf/pss.conf
 
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 lanip=$(hostname -I)

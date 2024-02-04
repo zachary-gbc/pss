@@ -38,9 +38,11 @@ do
   echo "" >> $install_log
 done
 
+sudo mkdir -p /var/www/html/pss/conf
 sudo mkdir -p /var/www/html/pss/scripts
 sudo chown pi:pi /var/www/html
 sudo chown pi:pi /var/www/html/pss/scripts
+sudo chown pi:pi /var/www/html/pss/conf
 echo "never" > /home/pi/lastupdatecommit
 cp /home/pi/pss/configs/pss.conf /var/www/html/pss/conf/pss.conf
 cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/ghupdate.sh

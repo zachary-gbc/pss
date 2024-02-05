@@ -1,5 +1,5 @@
 <?php
-	$conflines=file('../conf/pss.conf');
+	$conflines=file('/var/www/html/pss/conf/pss.conf');
 	foreach($conflines as $line)
 	{
 		if(substr($line,0,11) == "database_ip") { $dbip=trim(str_replace('"','',substr($line,12))); }

@@ -74,7 +74,7 @@
       $autodow=""; $y=0;
       $table.="<table>\n<tr>\n<th>Graphic</th>\n</tr>\n";
 
-      $graphicslist="SELECT * FROM Graphics WHERE (Gr_Active='Y') AND (Gr_Delete='N') ORDER BY Gr_Category, Gr_Name";
+      $graphicslist="SELECT * FROM Graphics WHERE (Gr_Delete='N') ORDER BY Gr_Category, Gr_Name";
       if(!$rs=mysqli_query($db,$graphicslist)) { echo("Unable to Run Query: $graphicslist"); exit; }
       while($row = mysqli_fetch_array($rs)) { $graphics[$row['Gr_Category']][$row['Gr_ID']]=$row['Gr_Name']; }
 

@@ -22,7 +22,7 @@
       {
         $date=str_replace("'","''",$_POST["date$x"]);
         $time=str_replace("'","''",$_POST["time$x"]);
-        $startdatetime=date("YmdHi",strtotime($date . " " $time));
+        $startdatetime=date("YmdHi",strtotime($date . " " . $time));
         $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_OTStartDateTime='$startdatetime', Sch_ScreenOnOff='$screen', Sch_ScreenInput='$input',  Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
         if(!mysqli_query($db,$update)) { echo("Unable to Run Query: $update"); exit; }
       }
@@ -124,7 +124,7 @@
       }
       else
       {
-        $months=""; $days=""; $dows=""; $hours=""; $minutes=""; $alldows=array(1=>"Monday",2="Tuesday",3=>"Wednesday",4=>"Thursday",5=>"Friday",6=>"Saturday",7=>"Sunday");
+        $months=""; $days=""; $dows=""; $hours=""; $minutes=""; $alldows=array(1=>"Monday",2=>"Tuesday",3=>"Wednesday",4=>"Thursday",5=>"Friday",6=>"Saturday",7=>"Sunday");
         $loopgraphic=$row['Sch_LoopGraphic'];
         $duration=$row['Sch_DurationMinutes'];
         $screenonoff=$row['Sch_ScreenOnOff'];
@@ -142,11 +142,11 @@
           $lgoptions.="</optgroup>\n";
         }
 
-        foreach($y=1; $y<=12; $y++) { $s=""; if($row['Sch_RMonth'] == $y) { $s="selected='selected'"; } $months.=("<option value='$y' $s>" . date("F",mktime(1,1,1,$y,1,1)) . "</option>"); }
-        foreach($y=1; $y<=31; $y++) { $s=""; if($row['Sch_RDOM'] == $y) { $s="selected='selected'"; } $days.=("<option value='$y' $s>" . date("j",mktime(1,1,1,1,$y,1)) . "</option>"); }
-        foreach($y=1; $y<=7; $y++) { $s=""; if($row['Sch_RDOW'] == $y) { $s="selected='selected'"; } $dows.=("<option value='$y' $s>" . $alldows[$y] . "</option>"); }
-        foreach($y=1; $y<=23; $y++) { $s=""; if($row['Sch_RHour'] == $y) { $s="selected='selected'"; } $hours.=("<option value='$y' $s>" . date("g a",mktime($y,1,1,1,1,1)) . "</option>"); }
-        foreach($y=1; $y<=59; $y++) { $s=""; if($row['Sch_RMinute'] == $y) { $s="selected='selected'"; } $minutes.=("<option value='$y' $s>" . date("i",mktime(1,$y,1,1,1,1)) . "</option>"); }
+        for($y=1; $y<=12; $y++) { $s=""; if($row['Sch_RMonth'] == $y) { $s="selected='selected'"; } $months.=("<option value='$y' $s>" . date("F",mktime(1,1,1,$y,1,1)) . "</option>"); }
+        for($y=1; $y<=31; $y++) { $s=""; if($row['Sch_RDOM'] == $y) { $s="selected='selected'"; } $days.=("<option value='$y' $s>" . date("j",mktime(1,1,1,1,$y,1)) . "</option>"); }
+        for($y=1; $y<=7; $y++) { $s=""; if($row['Sch_RDOW'] == $y) { $s="selected='selected'"; } $dows.=("<option value='$y' $s>" . $alldows[$y] . "</option>"); }
+        for($y=1; $y<=23; $y++) { $s=""; if($row['Sch_RHour'] == $y) { $s="selected='selected'"; } $hours.=("<option value='$y' $s>" . date("g a",mktime($y,1,1,1,1,1)) . "</option>"); }
+        for($y=1; $y<=59; $y++) { $s=""; if($row['Sch_RMinute'] == $y) { $s="selected='selected'"; } $minutes.=("<option value='$y' $s>" . date("i",mktime(1,$y,1,1,1,1)) . "</option>"); }
 
         if($row['Sch_Active'] == "0") { $ottable.=("<tr bgcolor='#FF5F3C'>\n"); } else { $ottable.=("<tr>\n"); }
         $ottable.=("<th>" . $row['Sch_ID'] . "<input type='hidden' name='id$x' value=\"" . $row['Sch_ID'] . "\" /><input type='hidden' name='otr$x' value='R' /></th>\n");
@@ -186,7 +186,7 @@
     }
   }
 
-  echo("<form method='get' action=''><h3>Schedule for Location: <select name='locid'>$locations</select> &nbsp; <input type='submit' value='Submit' name='Open Schedule' /></h3></form>");
+  echo("<form method='get' action=''><h3>Schedule for: <select name='locid'>$locations</select> &nbsp; <input type='submit' value='Submit' name='Open Schedule' /></h3></form>");
 ?>
 
 <?php include('../other/footer.php'); ?>

@@ -39,8 +39,8 @@
 		if(($x%2) == 0) { $table.=("<tr class='tr_odd'>\n"); } else { $table.=("<tr class='tr_even'>\n"); } $x++;
 		if($row['Dev_Orientation'] == "L") { $ls="selected='selected'"; $ps=""; } else { $ls=""; $ps="selected='selected'"; }
 		$table.=("<th>" . $row['Dev_ID'] . "<input type='hidden' name='id$x' value=\"" . $row['Dev_ID'] . "\" /></th>\n");
-		$table.=("<td><input type='text' name='room$x' value=\"" . $row['Dev_RoomBuilding'] . "\" /></td>\n");
-		$table.=("<td><input type='text' name='name$x' value=\"" . $row['Dev_LocName'] . "\" /></td>\n");
+		$table.=("<td><input type='text' name='roombuilding$x' value=\"" . $row['Dev_RoomBuilding'] . "\" /></td>\n");
+		$table.=("<td><input type='text' name='locname$x' value=\"" . $row['Dev_LocName'] . "\" /></td>\n");
 		$table.=("<td><select name='orientation$x'><option value='L' $ls>Landscape</option><option value='P' $ps>Portrait</option></select></td>\n");
 		$table.=("<td><input type='text' name='name$x' value=\"" . $row['Dev_Name'] . "\" /></td>\n");
 		$table.=("<td><input type='text' name='type$x' value=\"" . $row['Dev_Type'] . "\" /></td>\n");
@@ -50,9 +50,9 @@
 		$table.=("</tr>\n");
 	}
 
-	$roomorbuilding="SELECT VariableValue FROM Variables WHERE (VariableName='RoomOrBuilding)"; $roombuilding="Room";
+	$roomorbuilding="SELECT Var_Value FROM Variables WHERE (Var_Name='RoomOrBuilding')"; $roombuilding="Room";
 	if(!$rs=mysqli_query($db,$roomorbuilding)) { echo("Unable to Run Query: $roomorbuilding"); exit; }
-	while($row = mysqli_fetch_array($rs)) { $roombuilding=$row['VariableValue']; }
+	while($row = mysqli_fetch_array($rs)) { $roombuilding=$row['Var_Value']; }
 
 	echo("<form method='post' action=''>\n<table>\n<tr>\n<th>ID</th>\n<th>$roombuilding</th>\n<th>Location</th>\n<th>Orientation</th>\n");
 	echo("<th>Name</th>\n<th>Type</th>\n<th>MAC Address</th>\n<th>IP Address</th>\n<th>Delete</th>\n</tr>\n$table</table>\n");

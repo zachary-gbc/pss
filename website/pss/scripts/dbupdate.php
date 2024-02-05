@@ -1,7 +1,7 @@
 <?php
   include('dblogin.php');
 
-  $type=""; $device=""; $devname="rpi-xx"; $devip=""; $update=""; $now=date("YmdHis");
+  $type=""; $device=""; $devname="rpi-xx"; $devip=""; $update=""; $select=""; $now=date("YmdHis");
   if(isset($_GET['type'])) { $type=$_GET['type']; }
   if(isset($_GET['device'])) { $device=$_GET['device']; }
   if(isset($_GET['devname'])) { $devname=$_GET['devname']; }
@@ -18,8 +18,8 @@
         $update="UPDATE Devices SET Dev_GHUpdateDateTime='$now' WHERE (Dev_MAC='$device')";
         break;
       case "devicedetails":
-        $select="SELECT Dev_Name FROM Devices WHERE (Dev_MAC='$device')"; $devicename="";
-        if(!$rs=mysqli_query($db,$select)) { exit; }
+        $subselect="SELECT Dev_Name FROM Devices WHERE (Dev_MAC='$device')"; $devicename="";
+        if(!$rs=mysqli_query($db,$subselect)) { exit; }
         while($row = mysqli_fetch_array($rs)) { $devicename=$row['Dev_Name']; }
         if($devicename == "")
         {

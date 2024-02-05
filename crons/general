@@ -14,5 +14,5 @@
 # Cleanup Once a Week
 30 6 * * 2 pi bash /home/pi/scripts/cleanup.sh &
 
-# Check Device Name in Database On Reboot
-@reboot pi bash /home/pi/scripts/devicename.sh &
+# Update Device Details in Database On Reboot
+@reboot pi bash /home/pi/scripts/devicedetails.sh &

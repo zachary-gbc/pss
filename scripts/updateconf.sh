@@ -7,16 +7,16 @@ mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
 if [ $database_ip == $lanip ]
 then
-  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Use-Pushover')")
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Use-Pushover')")
   sudo sed -i "s/pushover_configured.*/pushover_configured=\"$query\"/" /var/www/html/pss/conf/pss.conf
 
-  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Pushover-Token')")
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Pushover-Token')")
   sudo sed -i "s/pushover_token.*/pushover_token=\"$query\"/" /var/www/html/pss/conf/pss.conf
 
-  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Pushover-User-Key')")
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Pushover-User-Key')")
   sudo sed -i "s/pushover_user_key.*/pushover_user_key=\"$query\"/" /var/www/html/pss/conf/pss.conf
 
-  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Alert-On-IP-Change')")
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Alert-On-IP-Change')")
   sudo sed -i "s/alert_on_ip_change.*/alert_on_ip_change=\"$query\"/" /var/www/html/pss/conf/pss.conf
 fi
 

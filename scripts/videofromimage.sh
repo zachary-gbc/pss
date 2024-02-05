@@ -4,7 +4,7 @@
 
 lanip=$(hostname -I)
 
-if [[ $database_ip == $lanip ]]
+if [ $database_ip == $lanip ]
 then
   pngimages=$(ls /var/www/html/pss/files/*.png 2>/dev/null)
   jpgimages=$(ls /var/www/html/pss/files/*.jpg 2>/dev/null)

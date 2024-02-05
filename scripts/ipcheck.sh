@@ -18,7 +18,7 @@ waniplength=${#wanip}
 
 if [ $waniplength > 5 ] && [ $laniplength > 5 ]
 then
-  if [[ $curwan != $wanip ]] || [[ $curlan != $lanip ]]
+  if [ $curwan != $wanip ] || [ $curlan != $lanip ]
   then
     if [[ $pushover_configured == "yes" ]]
     then

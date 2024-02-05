@@ -4,11 +4,14 @@
 # Create Loops Once an Hour
 45 * * * * pi bash /home/pi/scripts/loopcreate.sh &
 
-# Update Conf File Once An Hour
-10 * * * * pi bash /home/pi/scripts/updateconf.sh &
+# Update Conf File Once A Day
+10 1 * * * pi bash /home/pi/scripts/updateconf.sh &
 
 # Download Schedule And Mirror Main Once an Hour
 50 * * * * pi bash /home/pi/scripts/cronsandmirror.sh &
 
 # Manual Change Check Every 5 Minutes
 # */15 * * * * pi bash /home/pi/scripts/manualchange.sh &
+
+# Turn Screen Off After Reboot
+@reboot pi bash /home/pi/scripts/reboot.sh 1 &

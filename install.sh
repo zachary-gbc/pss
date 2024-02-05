@@ -2,6 +2,7 @@
 
 lanip=$(hostname -I)
 dblan=${lanip%.*}
+mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
 echo "Is this the Main PSS Instance? (Yes or No)"
 read maininstall
@@ -69,15 +70,16 @@ then
   sudo mysql --user='root' -e "GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'$dblan%' IDENTIFIED BY '$dbpass'"
   sudo mysql --user='root' -e "CREATE DATABASE $dbname"
   sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" < /home/pi/pss/db.txt
-  sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-IP', '$dbip');"
+  sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-IP', '$lanip');"
   sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-Name', '$dbname');"
 
-  sudo sed -i "s/database_name.*/database_name=$dbname/" /var/www/html/pss/conf/pss.conf
-  sudo sed -i "s/database_username.*/database_username=$dbuser/" /var/www/html/pss/conf/pss.conf
-  sudo sed -i "s/database_password.*/database_password=$dpass/" /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_name.*/database_ip=\"$dbip\"/" /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_name.*/database_name=\"$dbname\"/" /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_username.*/database_username=\"$dbuser\"/" /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_password.*/database_password=\"$dbpass\"/" /var/www/html/pss/conf/pss.conf
 else
   sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
-  sudo sed -i "s/database_ip.*/database_ip=$dbip/" /home/pi/pss.conf
+  sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=devicename&device=$mac&devname=$HOSTNAME" >> /home/pi/log/$install_log
 fi
 
 sudo apt autoremove -y

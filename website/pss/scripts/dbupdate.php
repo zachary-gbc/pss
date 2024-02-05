@@ -1,9 +1,10 @@
 <?php
   include('dblogin.php');
 
-  $type=""; $device=""; $update=""; $now=date("YmdHis");
+  $type=""; $device=""; $devname="rpi-xx"; $update=""; $now=date("YmdHis");
   if(isset($_GET['type]'])) { $type=$_GET['type']; }
   if(isset($_GET['device]'])) { $device=$_GET['device']; }
+  if(isset($_GET['devname]'])) { $devname=$_GET['devname']; }
   
   if($device != "")
   {
@@ -15,14 +16,19 @@
       case "ghupdate":
         $update="UPDATE Devices SET Dev_GHUpdateDateTime='$now' WHERE (Dev_MAC='$device')";
         break;
-      case "init":
+      case "devicename":
         $select="SELECT Dev_Name FROM Devices WHERE (Dev_MAC='$device')"; $devicename="";
         if(!$rs=mysqli_query($db,$select)) { exit; }
         while($row = mysqli_fetch_array($rs)) { $devicename=$row['Dev_Name']; }
         if($devicename == "")
         {
-          $insert="INSERT INTO Devices(Dev_Name, Dev_MAC, Dev_Type, Dev_LocName, Dev_RoomBuilding, Dev_UpdateDateTime) VALUES('Unknown New Device Added $now', '$device', 'Unknown', 'Unknown', 'Unknown', now())";
-          if(!mysqli_query($db,$insert)) { echo("new"); exit; }
+          $insert="INSERT INTO Devices(Dev_Name, Dev_MAC, Dev_Type, Dev_LocName, Dev_RoomBuilding, Dev_UpdateDateTime) VALUES('$devname', '$device', 'Unknown', 'Unknown', 'Unknown', now())";
+          if(!mysqli_query($db,$insert)) { echo("Device NOT Added"); exit; }
+        }
+        elseif($devicename != $devname)
+        {
+          $update="UPDATE Devices SET Dev_Name='$devname' WHERE (Dev_MAC='$device')";
+          if(!mysqli_query($db,$insert)) { echo("Name NOT Updated"); exit; }
         }
         break;
       case "ipchange":

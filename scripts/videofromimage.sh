@@ -17,18 +17,16 @@ then
     id=${fileid::-2}
     lorp=${fileid:-1}
 
-    if [[ -f "/var/www/html/pss/files/temp.mp4" ]]
-    then
-      sudo rm /var/www/html/pss/files/temp.mp4
-    fi
+    sudo rm -f /var/www/html/pss/files/temp.mp4
     sudo ffmpeg -loop 1 -i $image -t 1 -pix_fmt yuv420p -vf scale=1920:1080 /var/www/html/pss/files/temp.mp4
 
     if [[ -f "/var/www/html/pss/files/temp.mp4" ]]
     then
-      sudo rm /var/www/html/pss/files/$fileid.mp4
-      sudo ffmpeg -stream_loop 10 -i /var/www/html/pss/files/temp.mp4 -c copy /var/www/html/pss/files/$fileid.mp4
+      sudo rm -f /var/www/html/pss/files/$fileid.mp4
+      sudo ffmpeg -stream_loop 9 -i /var/www/html/pss/files/temp.mp4 -c copy /var/www/html/pss/files/$fileid.mp4
+      sudo rm -f /var/www/html/pss/files/$file
     fi
-    sudo rm /var/www/html/pss/files/temp.mp4
+    sudo rm -f /var/www/html/pss/files/temp.mp4
     sleep 2
   done
 fi

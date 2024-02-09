@@ -60,26 +60,26 @@
   if(!$rs=mysqli_query($db,$alldevices)) { echo("Unable to Run Query: $alldevices"); exit; }
   while($row = mysqli_fetch_array($rs))
   { $rooms[$row['Dev_RoomBuilding']][$row['Dev_ID']]=$row['Dev_LocName']; $orientations[$row['Dev_ID']]=$row['Dev_Orientation']; }
-  foreach($rooms as $roomkey => $roomname)
+  foreach($rooms as $roomkey => $devices)
   {
-    $locations.="<optgroup label='$roomname'>";
-    foreach($rooms as $deviceid => $locname)
+    $locations.="<optgroup label='$roomkey'>";
+    foreach($devices as $deviceid => $locname)
     {
       $s=""; if($devid == $deviceid) { $s="selected='selected'"; $locationname=$locname; $orientation=$$orientations[$deviceid]; }
       $locations.="<option $s value='$deviceid'>$locname</option>";
     }
-    $locations.="<optgroup label='$roomname'>";
+    $locations.="</optgroup>";
   }
 
   if($devid != "")
   {
-    $lgselect=array(); $lgoptions=""; $ottable=""; $rtable=""; $x=0;
+    $lgselect=array(); $lgoptions=""; $ottable=""; $rtable=""; $otitem=false; $ritem=false; $x=0;
 
     $allloops="SELECT * FROM Loops WHERE (Lop_Orientation='$orientation') ORDER BY Lop_Name";
     if(!$rs=mysqli_query($db,$allloops)) { echo("Unable to Run Query: $allloops"); exit; }
     while($row = mysqli_fetch_array($rs)) { $lgselect["Loops"]["L-".$row['Lop_ID']]=$row['Lop_Name']; }
 
-    $allgraphics="SELECT * FROM Graphics WHERE (Gr_Delete='N') AND (Gr_Active='Y')ORDER BY Gr_Category, Gr_Name";
+    $allgraphics="SELECT * FROM Graphics WHERE (Gr_Delete='N') ORDER BY Gr_Category, Gr_Name";
     if(!$rs=mysqli_query($db,$allgraphics)) { echo("Unable to Run Query: $allgraphics"); exit; }
     while($row = mysqli_fetch_array($rs)) { $lgselect[$row['Gr_Category']]["G-".$row['Gr_ID']."-$orientation"]=$row['Gr_Name']; }
 
@@ -96,6 +96,7 @@
         $screenonoff=$row['Sch_ScreenOnOff'];
         $input=$row['Sch_ScreenInput'];
         $active=$row['Sch_Active'];
+        $otitem=true;
 
         $actives=""; if($row['Sch_Active'] == '1') { $actives="checked='checked'"; }
         if($row['Sch_ScreenOnOff'] == "1") { $yes="selected='selected'"; $no=""; } else { $yes=""; $no="selected='selected'"; }
@@ -130,6 +131,7 @@
         $screenonoff=$row['Sch_ScreenOnOff'];
         $input=$row['Sch_ScreenInput'];
         $active=$row['Sch_Active'];
+        $ritem=true;
 
         $actives=""; if($row['Sch_Active'] == '1') { $actives="checked='checked'"; }
         if($row['Sch_ScreenOnOff'] == "1") { $yes="selected='selected'"; $no=""; } else { $yes=""; $no="selected='selected'"; }
@@ -165,28 +167,34 @@
         $ottable.=("</tr>\n");
         $x++;
       }
-
-      echo("<form method='post' action=''>\n<h3>$locationname</h3>\n");
-      
-      echo("<h4 style='margin:0px'>One-Time Schedules:</h4>\n");
-      echo("<table>\n<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Date</th>\n<th><br>Time</th>\n<th>Duration<br>(Minutes)</th>\n");
-      echo("<th>Screen<br>On/Off</th>\n<th>Change<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$ottable");
-      echo("<tr gbcolor='008700'>\n<th colspan='10'> -- NEW ONE TIME SCHEDULE -- </th>\n</tr>\n");
-      echo("<tr>\n<td colspan='10'><input type='text' value='otnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
-      echo("</table>\n");
-
-      echo("<h4 style='margin:0px'>Recurring Schedules:</h4>\n");
-      echo("<table>\n<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Month</th>\n<th>Day of<br>Month</th>\n<th>Day of<br>Week</th>\n<th><br>Hour</th>\n");
-      echo("<th><br>Minute</th>\n<th>Duration<br>(Minutes)</th>\n<th>Screen<br>On/Off</th>\n<th>Change<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$rtable");
-      echo("<tr gbcolor='008700'>\n<th colspan='10' style='text-align:left'> -- NEW RECURRING SCHEDULE -- </th>\n</tr>\n");
-      echo("<tr>\n<td colspan='13'><input type='text' value='recnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
-      echo("</table>\n");
-
-      echo("<input type='hidden' value='$devid' name='devid' /><input type='submit' name='submit' value='Submit Changes' />\n</form>\n");
     }
+
+    echo("<form method='post' action=''>\n<h3>$locationname</h3>\n");
+    
+    echo("<h4 style='margin:0px'>One-Time Schedules:</h4>\n<table>\n");
+    if($otitem == true)
+    {
+      echo("<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Date</th>\n<th><br>Time</th>\n<th>Duration<br>(Minutes)</th>\n");
+      echo("<th>Screen<br>On/Off</th>\n<th>Change<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$ottable");
+    }
+    echo("<tr gbcolor='008700'>\n<th colspan='10'> -- NEW ONE TIME SCHEDULE -- </th>\n</tr>\n");
+    echo("<tr>\n<td colspan='10'><input type='text' value='otnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
+    echo("</table>\n");
+
+    echo("<h4 style='margin:0px'><br>Recurring Schedules:</h4>\n<table>\n");
+    if($ritem == true)
+    {
+      echo("<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Month</th>\n<th>Day of<br>Month</th>\n<th>Day of<br>Week</th>\n<th><br>Hour</th>\n");
+      echo("<th><br>Minute</th>\n<th>Duration<br>(Minutes)</th>\n<th>Screen<br>On/Off</th>\n<th>Change<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$rtable");
+    }
+    echo("<tr gbcolor='008700'>\n<th colspan='10' style='text-align:left'> -- NEW RECURRING SCHEDULE -- </th>\n</tr>\n");
+    echo("<tr>\n<td colspan='13'><input type='text' value='recnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
+    echo("</table>\n");
+
+    echo("<input type='hidden' value='$devid' name='devid' /><input type='submit' name='submit' value='Submit Changes' />\n</form>\n");
   }
 
-  echo("<form method='get' action=''><h3>Schedule for: <select name='locid'>$locations</select> &nbsp; <input type='submit' value='Submit' name='Open Schedule' /></h3></form>");
+  echo("<form method='get' action=''><h3>Schedule for: <select name='devid'>$locations</select> &nbsp; <input type='submit' value='Open Schedule' /></h3></form>");
 ?>
 
 <?php include('../other/footer.php'); ?>

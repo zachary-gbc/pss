@@ -19,7 +19,7 @@
 				if($orientation == "Portrait" && file_exists("/var/www/html/pss/files/$graphicid-P.mp4")) { $filecontents.="/var/www/html/pss/files/$graphicid" . "-P.mp4\n"; $exists=true; }
 				if($exists == false) { $amissing[$loopid][$graphicid]=$row['Gr_Name']; }
 			}
-			if($filecontents != "") { file_put_contents("/var/www/html/pss/files/loopvideos-$loopid", $filecontents); }
+			if($filecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.m3u", $filecontents); }
 		}
 	}
 
@@ -40,7 +40,7 @@
 				if($orientation == "Portrait" && file_exists("/var/www/html/pss/files/$graphicid-P.mp4")) { $filecontents.="/var/www/html/pss/files/$graphicid" . "-P.mp4\n"; $exists=true; }
 				if($exists == false) { $mmissing[$loopid][$graphicid]=$row['Gr_Name']; }
 			}
-			if($filecontents != "") { file_put_contents("/var/www/html/pss/files/loopvideos-$loopid", $filecontents); }
+			if($filecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.m3u", $filecontents); }
 		}
 	}
 

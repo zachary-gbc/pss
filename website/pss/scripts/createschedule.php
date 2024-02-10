@@ -12,19 +12,21 @@
 			{
 				if(substr($row['Sch_OTStartDateTime'],0,4) == date("Y"))
 				{
+					$sdatetime=$row['Sch_OTStartDateTime'];
 					$smonth=substr($row['Sch_OTStartDateTime'],4,2);
-					$sday=substr($row['Sch_OTStartDateTime'],6,2);
+					$sdom=substr($row['Sch_OTStartDateTime'],6,2);
 					$shour=substr($row['Sch_OTStartDateTime'],8,2);
 					$sminute=substr($row['Sch_OTStartDateTime'],10,2);
 					$duration=$row['Sch_DurationMinutes'];
-					$sdom="*"; $s=1;
+					$sdow="*"; $edow="*"; $s=1;
 					if($duration != 0)
 					{
-						$end=date('YmdHi',strtotime("+$duration minutes",strtotime("1111-$month-$day $hour:$minute:00"))); $e=1;
-						$emonth=date("m",$end);
-						$edom=date("j",$end);
-						$ehour=date("H",$end);
-						$eminute=date("i",$end);
+						$enddate=strtotime("+$duration minutes",strtotime($sdatetime));
+						$emonth=date("m",$enddate);
+						$edom=date("j",$enddate);
+						$ehour=date("H",$enddate);
+						$eminute=date("i",$enddate);
+						$e=1;
 					}
 				}
 			}

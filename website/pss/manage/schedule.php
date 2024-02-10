@@ -4,14 +4,13 @@
 
 <h3 style="margin: 3px 0px 0px 5px">Schedule</h3>
 <?php
-  if(isset($_GET['devid'])) { $devid=$_GET['devid']; } else { $devid=""; }
-	if(isset($_POST['submit']))
+  if(isset($_GET['devid'])) { $devid=$_GET['devid']; } elseif(isset($POST['devid'])) { $devid=$POST['devid']; } else { $devid=""; }
+	if(isset($_POST['submit']) && $devid != "")
 	{
 		$x=0;
 		while(isset($_POST["id$x"]))
 		{
       $id=str_replace("'","''",$_POST["id$x"]);
-      $devid=str_replace("'","''",$_POST["devid$x"]);
       $name=str_replace("'","''",$_POST["name$x"]);
       $loopgraphic=str_replace("'","''",$_POST["loopgraphic$x"]);
       $duration=str_replace("'","''",$_POST["duration$x"]);
@@ -23,7 +22,7 @@
         $date=str_replace("'","''",$_POST["date$x"]);
         $time=str_replace("'","''",$_POST["time$x"]);
         $startdatetime=date("YmdHi",strtotime($date . " " . $time));
-        $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_OTStartDateTime='$startdatetime', Sch_ScreenOnOff='$screen', Sch_ScreenInput='$input',  Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
+        $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_OTStartDateTime='$startdatetime', Sch_DurationMinutes='$duration', Sch_ScreenOnOff='$screen', Sch_ScreenInput='$input',  Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
         if(!mysqli_query($db,$update)) { echo("Unable to Run Query: $update"); exit; }
       }
         else
@@ -33,7 +32,7 @@
         $day=str_replace("'","''",$_POST["day$x"]);
         $month=str_replace("'","''",$_POST["month$x"]);
         $dow=str_replace("'","''",$_POST["dow$x"]);
-        $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_RMinute='$minute', Sch_RHour='$hour', Sch_RDOM='$day', Sch_RMonth='$month', Sch_RDOW='$dow', Sch_ScreenOnOff='$screen', Sch_ScreenInput='$input',  Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
+        $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_RMinute='$minute', Sch_RHour='$hour', Sch_RDOM='$day', Sch_RMonth='$month', Sch_RDOW='$dow', Sch_DurationMinutes='$duration', Sch_ScreenOnOff='$screen', Sch_ScreenInput='$input',  Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
         if(!mysqli_query($db,$update)) { echo("Unable to Run Query: $update"); exit; }
       }
 
@@ -44,13 +43,13 @@
 		if(isset($_POST['otnew']) && trim($_POST['otnew']) != "")
 		{
 			$newschedule=str_replace("'","''",$_POST["otnew"]);
-			$insert="INSERT INTO Schedules(Sch_Name, Sch_Device, Sch_LoopGraphic, Sch_ScreenInput, Sch_OneTimeRecurring, Sch_UpdateDateTime) VALUES('$newschedule', '$devid', '0', '0', '0', 'O', now())";
+			$insert="INSERT INTO Schedules(Sch_Name, Sch_Device, Sch_LoopGraphic, Sch_ScreenInput, Sch_OneTimeRecurring, Sch_UpdateDateTime) VALUES('$newschedule', '$devid', '0', '0', 'O', now())";
 			if(!mysqli_query($db,$insert)) { echo("Unable to Run Query: $insert"); exit; }
 		}
 		if(isset($_POST['recnew']) && trim($_POST['recnew']) != "")
 		{
 			$newschedule=str_replace("'","''",$_POST["recnew"]);
-			$insert="INSERT INTO Schedules(Sch_Name, Sch_Device, Sch_LoopGraphic, Sch_ScreenInput, Sch_OneTimeRecurring, Sch_UpdateDateTime) VALUES('$newschedule', '$devid', '0', '0', '0', 'R', now())";
+			$insert="INSERT INTO Schedules(Sch_Name, Sch_Device, Sch_LoopGraphic, Sch_ScreenInput, Sch_OneTimeRecurring, Sch_UpdateDateTime) VALUES('$newschedule', '$devid', '0', '0', 'R', now())";
 			if(!mysqli_query($db,$insert)) { echo("Unable to Run Query: $insert"); exit; }
 		}
 	}
@@ -65,7 +64,7 @@
     $locations.="<optgroup label='$roomkey'>";
     foreach($devices as $deviceid => $locname)
     {
-      $s=""; if($devid == $deviceid) { $s="selected='selected'"; $locationname=$locname; $orientation=$$orientations[$deviceid]; }
+      $s=""; if($devid == $deviceid) { $s="selected='selected'"; $locationname=$locname; $orientation=$orientations[$deviceid]; }
       $locations.="<option $s value='$deviceid'>$locname</option>";
     }
     $locations.="</optgroup>";
@@ -109,13 +108,13 @@
           $lgoptions.="</optgroup>\n";
         }
 
-        if($row['Sch_Active'] == "0") { $ottable.=("<tr bgcolor='#FF5F3C'>\n"); } else { $ottable.=("<tr>\n"); }
+        if($row['Sch_Active'] == "0") { $ottable.=("<tr bgcolor='#DE5D5D'>\n"); } else { $ottable.=("<tr>\n"); }
         $ottable.=("<th>" . $row['Sch_ID'] . "<input type='hidden' name='id$x' value=\"" . $row['Sch_ID'] . "\" /><input type='hidden' name='otr$x' value='O' /></th>\n");
         $ottable.=("<th><input type='text' style='width:200px' name='name$x' value=\"" . $row['Sch_Name'] . "\" /></th>\n");
         $ottable.=("<th><select name='loopgraphic$x'>\n<option value='0'>Loop Off</option>\n<option value='1' $nols>No Loop</option>\n$lgoptions</select></th>\n");
-        $ottable.=("<th><input type='date' style='width:50px' name='date$x' value='$date' /></th>\n");
-        $ottable.=("<th><input type='time' style='width:50px' name='time$x' value='$time' /></th>\n");
-        $ottable.=("<th><input type='number' style='width:50px' name='duration$x' value='duration' /></th>\n");
+        $ottable.=("<th><input type='date' style='width:75px' name='date$x' value='$date' /></th>\n");
+        $ottable.=("<th><input type='time' style='width:75px' name='time$x' value='$time' /></th>\n");
+        $ottable.=("<th><input type='number' style='width:50px' name='duration$x' value='$duration' /></th>\n");
         $ottable.=("<th><select name='screenonoff$x'><option value='1' $yes>Yes</option><option value='0' $no>No</option></select></th>\n");
         $ottable.=("<th><input type='number' name='input$x' value=\"" . $row['Sch_ScreenInput'] . "\" min='0' max='3' /></th>\n");
         $ottable.=("<th><input type='checkbox' $actives name='active$x' /></th>\n");
@@ -150,26 +149,26 @@
         for($y=1; $y<=23; $y++) { $s=""; if($row['Sch_RHour'] == $y) { $s="selected='selected'"; } $hours.=("<option value='$y' $s>" . date("g a",mktime($y,1,1,1,1,1)) . "</option>"); }
         for($y=1; $y<=59; $y++) { $s=""; if($row['Sch_RMinute'] == $y) { $s="selected='selected'"; } $minutes.=("<option value='$y' $s>" . date("i",mktime(1,$y,1,1,1,1)) . "</option>"); }
 
-        if($row['Sch_Active'] == "0") { $ottable.=("<tr bgcolor='#FF5F3C'>\n"); } else { $ottable.=("<tr>\n"); }
-        $ottable.=("<th>" . $row['Sch_ID'] . "<input type='hidden' name='id$x' value=\"" . $row['Sch_ID'] . "\" /><input type='hidden' name='otr$x' value='R' /></th>\n");
-        $ottable.=("<th><input type='text' style='width:200px' name='name$x' value=\"" . $row['Sch_Name'] . "\" /></th>\n");
-        $ottable.=("<th><select name='loopgraphic$x'>\n<option value='0'>Loop Off</option>\n<option value='1' $nols>No Loop</option>\n$lgoptions</select></th>\n");
-        $ottable.=("<th><select name='month$x'><option value='*'>All</option>$months</select></th>\n");
-        $ottable.=("<th><select name='day$x'><option value='*'>All</option>$days</select></th>\n");
-        $ottable.=("<th><select name='dow$x'><option value='*'>All</option>$dows</select></th>\n");
-        $ottable.=("<th><select name='hour$x'><option value='*'>All</option>$hours</select></th>\n");
-        $ottable.=("<th><select name='minute$x'><option value='*'>All</option>$minutes</select></th>\n");
-        $ottable.=("<th><input type='number' style='width:50px' name='duration$x' value='duration' /></th>\n");
-        $ottable.=("<th><select name='screenonoff$x'><option value='1' $yes>Yes</option><option value='0' $no>No</option></select></th>\n");
-        $ottable.=("<th><input type='number' name='input$x' value=\"" . $row['Sch_ScreenInput'] . "\" min='0' max='3' /></th>\n");
-        $ottable.=("<th><input type='checkbox' $actives name='active$x' /></th>\n");
-        $ottable.=("<th><input type='checkbox' name='delete$x' /></th>\n");
-        $ottable.=("</tr>\n");
+        if($row['Sch_Active'] == "0") { $rtable.=("<tr bgcolor='#DE5D5D'>\n"); } else { $rtable.=("<tr>\n"); }
+        $rtable.=("<th>" . $row['Sch_ID'] . "<input type='hidden' name='id$x' value=\"" . $row['Sch_ID'] . "\" /><input type='hidden' name='otr$x' value='R' /></th>\n");
+        $rtable.=("<th><input type='text' style='width:200px' name='name$x' value=\"" . $row['Sch_Name'] . "\" /></th>\n");
+        $rtable.=("<th><select name='loopgraphic$x'>\n<option value='0'>Loop Off</option>\n<option value='1' $nols>No Loop</option>\n$lgoptions</select></th>\n");
+        $rtable.=("<th><select name='month$x'><option value='*'>All</option>$months</select></th>\n");
+        $rtable.=("<th><select name='day$x'><option value='*'>All</option>$days</select></th>\n");
+        $rtable.=("<th><select name='dow$x'><option value='*'>All</option>$dows</select></th>\n");
+        $rtable.=("<th><select name='hour$x'><option value='*'>All</option>$hours</select></th>\n");
+        $rtable.=("<th><select name='minute$x'><option value='*'>All</option>$minutes</select></th>\n");
+        $rtable.=("<th><input type='number' style='width:50px' name='duration$x' value='$duration' /></th>\n");
+        $rtable.=("<th><select name='screenonoff$x'><option value='1' $yes>Yes</option><option value='0' $no>No</option></select></th>\n");
+        $rtable.=("<th><input type='number' name='input$x' value=\"" . $row['Sch_ScreenInput'] . "\" min='0' max='3' /></th>\n");
+        $rtable.=("<th><input type='checkbox' $actives name='active$x' /></th>\n");
+        $rtable.=("<th><input type='checkbox' name='delete$x' /></th>\n");
+        $rtable.=("</tr>\n");
         $x++;
       }
     }
 
-    echo("<form method='post' action=''>\n<h3>$locationname</h3>\n");
+    echo("<form method='post' action='?devid=$devid'>\n<h3>$locationname</h3>\n");
     
     echo("<h4 style='margin:0px'>One-Time Schedules:</h4>\n<table>\n");
     if($otitem == true)
@@ -177,8 +176,8 @@
       echo("<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Date</th>\n<th><br>Time</th>\n<th>Duration<br>(Minutes)</th>\n");
       echo("<th>Screen<br>On/Off</th>\n<th>Change<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$ottable");
     }
-    echo("<tr gbcolor='008700'>\n<th colspan='10'> -- NEW ONE TIME SCHEDULE -- </th>\n</tr>\n");
-    echo("<tr>\n<td colspan='10'><input type='text' value='otnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
+    echo("<tr><th>&nbsp;</th></tr>\n<tr bgcolor='94DE94'>\n<th colspan='10' style='text-align:left'> -- NEW ONE TIME SCHEDULE -- </th>\n</tr>\n");
+    echo("<tr>\n<td colspan='10'><input type='text' name='otnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
     echo("</table>\n");
 
     echo("<h4 style='margin:0px'><br>Recurring Schedules:</h4>\n<table>\n");
@@ -187,8 +186,8 @@
       echo("<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Month</th>\n<th>Day of<br>Month</th>\n<th>Day of<br>Week</th>\n<th><br>Hour</th>\n");
       echo("<th><br>Minute</th>\n<th>Duration<br>(Minutes)</th>\n<th>Screen<br>On/Off</th>\n<th>Change<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$rtable");
     }
-    echo("<tr gbcolor='008700'>\n<th colspan='10' style='text-align:left'> -- NEW RECURRING SCHEDULE -- </th>\n</tr>\n");
-    echo("<tr>\n<td colspan='13'><input type='text' value='recnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
+    echo("<tr><th>&nbsp;</th></tr>\n<tr bgcolor='94DE94'>\n<th colspan='13' style='text-align:left'> -- NEW RECURRING SCHEDULE -- </th>\n</tr>\n");
+    echo("<tr>\n<td colspan='13'><input type='text' name='recnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
     echo("</table>\n");
 
     echo("<input type='hidden' value='$devid' name='devid' /><input type='submit' name='submit' value='Submit Changes' />\n</form>\n");

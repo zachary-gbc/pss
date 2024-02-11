@@ -9,5 +9,5 @@ echo "MESSAGE $datetime: Starting loopcreate" >> /home/pi/log/$log.log
 
 if [ $database_ip == $lanip ]
 then
-  sudo curl -Ss http://$database_ip/pss/scripts/createloops.php >> /home/pi/log/$log.log
+  sudo curl -Ss http://$database_ip/pss/scripts/createloop.php >> /home/pi/log/$log.log
 fi

@@ -45,6 +45,7 @@ sudo chown pi:pi /var/www/html
 sudo chown pi:pi /var/www/html/pss/scripts
 sudo chown pi:pi /var/www/html/pss/conf
 echo "never" > /home/pi/lastupdatecommit
+echo "off" > /home/pi/looponoff
 cp /home/pi/pss/configs/pss.conf /var/www/html/pss/conf/pss.conf
 cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/ghupdate.sh
 cp /home/pi/pss/scripts/pushover.sh /home/pi/scripts/pushover.sh

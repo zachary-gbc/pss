@@ -24,8 +24,8 @@ then
   downloadlink="http://$database_ip/pss/files/loop-$number.m3u"
   message="Loop"
 else
-  file="/var/www/html/pss/files/$1.mp4"
-  downloadlink="http://$database_ip/pss/files/$1.mp4"
+  file="/var/www/html/pss/files/$number.mp4"
+  downloadlink="http://$database_ip/pss/files/$number.mp4"
   message="Graphic"
 fi
 

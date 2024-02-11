@@ -38,11 +38,12 @@
 				$smonth=$row['Sch_RMonth'];
 				$sdow=$row['Sch_RDOW'];
 				$duration=$row['Sch_DurationMinutes'];
+				$edow=$sdow; $s=1;
 				if($duration != 0)
 				{
-					$daystoadd=floor(($duration / 86400));
-					$hourstoadd=floor(($duration / 60));
-					$minutestoadd=ceil(($duration / 60));
+					$daystoadd=floor($duration / 86400);
+					$hourstoadd=floor($duration / 60);
+					$minutestoadd=fmod($duration,60);
 
 					if($sdom == "*") { $edom=$sdom; } else { $edom=($sdom + $daystoadd); }
 					if($shour == "*") { $ehour=$shour; } else { $ehour=($shour + $hourstoadd); }

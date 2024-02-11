@@ -1,10 +1,12 @@
 #!/usr/bin/bash
 
 . /var/www/html/pss/conf/pss.conf
-log=$(date -I)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 pssonoff="off"
 pssonoff=$(</home/pi/looponoff)
+log=$(date -I)
+datetime=$(date '+%Y-%m-%d %H:%M:%S');
+echo "MESSAGE $datetime: Starting cronsandmirror" >> /home/pi/log/$log.log
 
 if [[ ${looponoff:0:3} != "off" ]]
 then

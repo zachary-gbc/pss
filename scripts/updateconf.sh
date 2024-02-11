@@ -4,6 +4,9 @@
 
 lanip=$(hostname -I)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
+log=$(date -I)
+datetime=$(date '+%Y-%m-%d %H:%M:%S');
+echo "MESSAGE $datetime: Starting updateconf" >> /home/pi/log/$log.log
 
 if [ $database_ip == $lanip ]
 then

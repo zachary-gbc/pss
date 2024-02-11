@@ -6,6 +6,9 @@ sleep 60
 
 lastupdate=$(</home/pi/lastupdatecommit)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
+log=$(date -I)
+datetime=$(date '+%Y-%m-%d %H:%M:%S');
+echo "MESSAGE $datetime: Starting ghupdate" >> /home/pi/log/$log.log
 
 sudo rm -r -f /home/pi/pss
 git clone --depth=1 https://github.com/zachary-gbc/pss /home/pi/pss

@@ -3,6 +3,9 @@
 . /var/www/html/pss/conf/pss.conf
 
 lanip=$(hostname -I)
+log=$(date -I)
+datetime=$(date '+%Y-%m-%d %H:%M:%S');
+echo "MESSAGE $datetime: Starting videofromimage" >> /home/pi/log/$log.log
 
 if [ $database_ip == $lanip ]
 then

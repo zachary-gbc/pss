@@ -1,6 +1,9 @@
 #!/bin/bash
 
 sleep 30
+log=$(date -I)
+datetime=$(date '+%Y-%m-%d %H:%M:%S');
+echo "MESSAGE $datetime: Starting devicedetails" >> /home/pi/log/$log.log
 
 . /var/www/html/pss/conf/pss.conf
 

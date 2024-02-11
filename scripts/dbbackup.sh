@@ -1,8 +1,10 @@
 #!/bin/bash
 
 . /var/www/html/pss/conf/pss.conf
-log=$(date -I)
 lanip=$(hostname -I)
+log=$(date -I)
+datetime=$(date '+%Y-%m-%d %H:%M:%S');
+echo "MESSAGE $datetime: Starting dbbackup" >> /home/pi/log/$log.log
 
 mkdir -p /var/www/html/dbbackup
 

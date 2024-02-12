@@ -3,12 +3,12 @@
 . /var/www/html/pss/conf/pss.conf
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 pssonoff="off"
-pssonoff=$(</home/pi/looponoff)
+pssonoff=$(</home/pi/pssonoff)
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 echo "MESSAGE $datetime: Starting cronsandmirror" >> /home/pi/log/$log.log
 
-if [[ ${looponoff:0:3} != "off" ]]
+if [[ ${pssonoff:0:3} != "off" ]]
 then
   sudo curl -Ss http://$database_ip/pss/scripts/createschedule.php?device=$mac --output /etc/cron.d/loopschedule
   if [[ $database_ip != $lanip ]]

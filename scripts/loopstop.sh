@@ -13,6 +13,8 @@ datetime=$(date '+%Y-%m-%d %H:%M:%S');
 log=$(date -I)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
+echo "MESSAGE $datetime: Stopping Loop/Graphic, Turn TV On (1=yes): $1, Input Set: $2" >> /home/pi/log/$log.log
+
 echo "off" > /home/pi/pssonoff
 sleep 20
 pkill vlc
@@ -69,4 +71,4 @@ then
   fi
 fi
 
-sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input&type=0" >> /home/pi/log/$log.log
+sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input" >> /home/pi/log/$log.log

@@ -1,20 +1,20 @@
 #!/usr/bin/bash
 
 pssonoff="off"
-pssonoff=$(</home/pi/looponoff)
+pssonoff=$(</home/pi/pssonoff)
 dow=$(date +%u)
 datetime=$(date '+%Y-%m-%d %H:%M:%S')
 log=$(date -I)
 
-if [[ ${looponoff:0:3} == "off" ]]
+if [[ ${pssonoff:0:3} == "off" ]]
 then
   exit 1
 fi
 
-type=${looponoff:0:1}
-number=${looponoff:2}
+type=${pssonoff:0:1}
+number=${pssonoff:2}
 
-if [[ $type == "M" ]]
+if [[ $type == "L" ]]
 then
   file="/var/www/html/pss/files/loop-$number.m3u"
 else

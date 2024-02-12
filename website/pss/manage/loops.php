@@ -120,7 +120,8 @@
   while($row = mysqli_fetch_array($rs))
   {
     if($row['Lop_Category'] != $oldcat) { $oldcat=$row['Lop_Category']; $loops.=("<br><h4 style='margin:0px'>$oldcat</h4>\n"); }
-    $loops.=("<a href='?id=" . $row['Lop_ID'] . "'>" . $row['Lop_Name'] . "</a> (" . $row['Lop_Orientation'] . " - " . $row['Lop_Type'] . ")<br>\n");
+    if($row['Lop_Orientation'] == "L") { $orientation="Landscape"; } else { $orientation="Portrait"; }
+    $loops.=("<a href='?id=" . $row['Lop_ID'] . "'>" . $row['Lop_Name'] . "</a> (" . $orientation . " - " . $row['Lop_Type'] . ")<br>\n");
 
     if(isset($_GET['id']) && $_GET['id'] == $row['Lop_ID']) { $currentloop=$row['Lop_Name']; }
   }
@@ -139,7 +140,7 @@
   echo("<form method='post' action=''>\n$loops\n<br>");
   echo("Add New Loop: <input type='text' name='new' style='width:200px' /> &nbsp; ");
   echo("Category: <select name='category'>"); foreach($categories as $cat) { echo("<option value='$cat'>$cat</option>"); } echo("</select> &nbsp; ");
-  echo("Orientation: <select name='orientation'><option value='Landscape'>Landscape</option><option value='Portrait'>Portrait</option>\n</select> &nbsp; ");
+  echo("Orientation: <select name='orientation'><option value='L'>Landscape</option><option value='P'>Portrait</option>\n</select> &nbsp; ");
   echo("Type: <select name='type'><option value='Manual'>Manual</option><option value='Automatic'>Automatic</option>\n</select> &nbsp; ");
   echo("<input type='submit' value='Add New Loop' />\n</form>");
 ?>

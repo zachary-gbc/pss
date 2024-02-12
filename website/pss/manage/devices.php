@@ -37,11 +37,11 @@
 	while($row = mysqli_fetch_array($rs))
 	{
 		if(($x%2) == 0) { $table.=("<tr class='tr_odd'>\n"); } else { $table.=("<tr class='tr_even'>\n"); } $x++;
-		if($row['Dev_Orientation'] == "L") { $ls="selected='selected'"; $ps=""; } else { $ls=""; $ps="selected='selected'"; }
+		if($row['Dev_Orientation'] == "Landscape") { $ls="selected='selected'"; $ps=""; } else { $ls=""; $ps="selected='selected'"; }
 		$table.=("<th>" . $row['Dev_ID'] . "<input type='hidden' name='id$x' value=\"" . $row['Dev_ID'] . "\" /></th>\n");
 		$table.=("<td><input type='text' name='roombuilding$x' value=\"" . $row['Dev_RoomBuilding'] . "\" /></td>\n");
 		$table.=("<td><input type='text' name='locname$x' value=\"" . $row['Dev_LocName'] . "\" /></td>\n");
-		$table.=("<td><select name='orientation$x'><option value='L' $ls>Landscape</option><option value='P' $ps>Portrait</option></select></td>\n");
+		$table.=("<td><select name='orientation$x'><option value='Landscape' $ls>Landscape</option><option value='Portrait' $ps>Portrait</option></select></td>\n");
 		$table.=("<td><input type='text' name='name$x' value=\"" . $row['Dev_Name'] . "\" /></td>\n");
 		$table.=("<td><input type='text' name='type$x' value=\"" . $row['Dev_Type'] . "\" /></td>\n");
 		$table.=("<td><input type='text' name='mac$x' value=\"" . $row['Dev_MAC'] . "\" /></td>\n");

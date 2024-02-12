@@ -80,7 +80,7 @@
 
     $allgraphics="SELECT * FROM Graphics WHERE (Gr_Delete='N') ORDER BY Gr_Category, Gr_Name";
     if(!$rs=mysqli_query($db,$allgraphics)) { echo("Unable to Run Query: $allgraphics"); exit; }
-    while($row = mysqli_fetch_array($rs)) { $lgselect[$row['Gr_Category']]["G-".$row['Gr_ID']."-$orientation"]=$row['Gr_Name']; }
+    while($row = mysqli_fetch_array($rs)) { $lgselect[($row['Gr_Category'] . " Graphics")]["G-".$row['Gr_ID']."-$orientation"]=$row['Gr_Name']; }
 
     $schedules="SELECT * FROM Schedules WHERE (Sch_Device='$devid') ORDER BY Sch_Active DESC, Sch_Name";
     if(!$rs=mysqli_query($db,$schedules)) { echo("Unable to Run Query: $schedules"); exit; }

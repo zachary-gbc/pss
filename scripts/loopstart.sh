@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# 1 = loop (M-#) or graphic (L-# or P-#)
+# 1 = loop (L-#) or graphic (G-#-Landscape or G-#-Portrait)
 # 2 = start screen on (yes=1/no=0)
 # 3 = start screen input change (value)   echo 'tx 4F:82:10:00 $tv' | cec-client -s -d 1 for input 1, change the 10 to 20 for input 2
 # bash /home/pi/scripts/loopstart.sh L-1 1 7
@@ -18,7 +18,7 @@ mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
 echo "MESSAGE $datetime: Starting $1, Turn TV On (1=yes): $2, Input Set: $3" >> /home/pi/log/$log.log
 
-if [[ $type == "M" ]]
+if [ $type == "L" ]
 then
   file="/var/www/html/pss/files/loop-$number.m3u"
   downloadlink="http://$database_ip/pss/files/loop-$number.m3u"

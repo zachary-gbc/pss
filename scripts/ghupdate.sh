@@ -23,10 +23,8 @@ then
   sudo mv -f /home/pi/pss/scripts/* /home/pi/scripts/
 
   # Crons
-  sudo mv -f /home/pi/pss/crons/general /etc/cron.d/general
-  sudo chown root:root /etc/cron.d/general
-  sudo mv -f /home/pi/pss/crons/screens /etc/cron.d/screens
-  sudo chown root:root /etc/cron.d/screens
+  sudo mv -f /home/pi/pss/crons/pss /etc/cron.d/pss
+  sudo chown root:root /etc/cron.d/pss
 
   # Website
   sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"

@@ -46,6 +46,8 @@
 		$table.=("<td><input type='text' name='type$x' value=\"" . $row['Dev_Type'] . "\" /></td>\n");
 		$table.=("<td><input type='text' name='mac$x' value=\"" . $row['Dev_MAC'] . "\" /></td>\n");
 		$table.=("<td><input type='text' name='ip$x' value=\"" . $row['Dev_IP'] . "\" /></td>\n");
+		$table.=("<td>" . date("m/d/Y h:i a",strtotime($row['Dev_GHUpdateDateTime'])) . "</td>\n");
+		$table.=("<td>" . date("m/d/Y h:i a",strtotime($row['Dev_ConfDateTime'])) . "</td>\n");
 		$table.=("<td><input type='checkbox' name='delete$x' /></td>\n");
 		$table.=("</tr>\n");
 	}
@@ -54,8 +56,8 @@
 	if(!$rs=mysqli_query($db,$roomorbuilding)) { echo("Unable to Run Query: $roomorbuilding"); exit; }
 	while($row = mysqli_fetch_array($rs)) { $roombuilding=$row['Var_Value']; }
 
-	echo("<form method='post' action=''>\n<table>\n<tr>\n<th>ID</th>\n<th>$roombuilding</th>\n<th>Location</th>\n<th>Orientation</th>\n");
-	echo("<th>Name</th>\n<th>Type</th>\n<th>MAC Address</th>\n<th>IP Address</th>\n<th>Delete</th>\n</tr>\n$table</table>\n");
+	echo("<form method='post' action=''>\n<table>\n<tr>\n<th>ID</th>\n<th>$roombuilding</th>\n<th>Location</th>\n<th>Orientation</th>\n<th>Name</th>\n");
+	echo("<th>Type</th>\n<th>MAC Address</th>\n<th>IP Address</th>\n<th>GitHub Update</th>\n<th>Config Update</th>\n<th>Delete</th>\n</tr>\n$table</table>\n");
 	echo("<br>New Device Name: <input type='text' name='newdev' />\n <br><br><input type='submit' name='submit' value='Submit Changes' />\n</form>\n");
 ?>
 

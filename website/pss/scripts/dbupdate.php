@@ -41,7 +41,7 @@
       case "pushover":
         $title=$_GET['title'];
         $response=$_GET['response'];
-        $update="INSERT INTO PushoverLog PO_Device, PO_Title, PO_Response, PO_DateTime VALUES((SELECT Dev_ID FROM Devices WHERE (Dev_MAC='$device')), '$title', '$response', '$now')";
+        $update="INSERT INTO PushoverLog (PO_Device, PO_Title, PO_Response, PO_DateTime) VALUES((SELECT Dev_ID FROM Devices WHERE (Dev_MAC='$device')), '$title', '$response', '$now')";
         break;
       case "updateconf":
         $update="UPDATE Devices SET Dev_ConfDateTime='$now' WHERE (Dev_MAC='$device')";

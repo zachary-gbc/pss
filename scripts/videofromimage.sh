@@ -19,6 +19,7 @@ then
     fileid=${file::-4}
     id=${fileid::-2}
     lorp=${fileid:-1}
+    echo "MESSAGE $datetime: Converting $image to video" >> /home/pi/log/$log.log
 
     sudo rm -f /var/www/html/pss/files/temp.mp4
     sudo ffmpeg -loop 1 -i $image -t 1 -pix_fmt yuv420p -vf scale=1920:1080 /var/www/html/pss/files/temp.mp4

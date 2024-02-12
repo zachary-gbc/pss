@@ -5,6 +5,8 @@
 title=$1
 sound=$2
 message=$3
+log=$(date -I)
+mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
 if [[ $pushover_configured == "yes" ]]
 then

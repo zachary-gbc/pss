@@ -49,10 +49,9 @@ echo "off" > /home/pi/looponoff
 cp /home/pi/pss/configs/pss.conf /var/www/html/pss/conf/pss.conf
 cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/ghupdate.sh
 cp /home/pi/pss/scripts/pushover.sh /home/pi/scripts/pushover.sh
-sudo cp -f /home/pi/pss/crons/general /etc/cron.d/general
-sudo chown root:root /etc/cron.d/general
+sudo cp -f /home/pi/pss/crons/pss /etc/cron.d/pss
+sudo chown root:root /etc/cron.d/pss
 sudo rm /var/www/html/index.html
-sudo rm /etc/cron.d/screens
 sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"
 
 phpversion=$(php -i | grep "PHP Version")

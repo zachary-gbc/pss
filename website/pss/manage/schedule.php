@@ -2,7 +2,6 @@
 <title>Schedule</title>
 <?php include('../other/posttitle.php'); ?>
 
-<h3 style="margin: 3px 0px 0px 5px">Schedule</h3>
 <?php
   if(isset($_GET['devid'])) { $devid=$_GET['devid']; } elseif(isset($POST['devid'])) { $devid=$POST['devid']; } else { $devid=""; }
 	if(isset($_POST['submit']) && $devid != "")
@@ -168,7 +167,7 @@
       }
     }
 
-    echo("<form method='post' action='?devid=$devid'>\n<h3>$locationname</h3>\n");
+    echo("<form method='post' action='?devid=$devid'>\n<h3>Schedule for $locationname</h3>\n");
     
     echo("<h4 style='margin:0px'>One-Time Schedules:</h4>\n<table>\n");
     if($otitem == true)

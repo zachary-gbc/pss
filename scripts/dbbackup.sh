@@ -8,7 +8,7 @@ echo "MESSAGE $datetime: Starting dbbackup" >> /home/pi/log/$log.log
 
 mkdir -p /var/www/html/dbbackup
 
-if [ $database_ip == $lanip ]
+if [ "$database_ip" == "$lanip" ]
 then
   sudo mysqldump --user="$database_username" --password="$database_password" $database_name -r /var/www/html/dbbackup/$database_name-$log.sql
   exit 1

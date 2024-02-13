@@ -8,7 +8,7 @@ log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 echo "MESSAGE $datetime: Starting updateconf" >> /home/pi/log/$log.log
 
-if [ $database_ip == $lanip ]
+if [ "$database_ip" == "$lanip" ]
 then
   query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Use-Pushover')")
   sudo sed -i "s/pushover_configured.*/pushover_configured=\"$query\"/" /var/www/html/pss/conf/pss.conf
@@ -25,7 +25,7 @@ then
   sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=updateconf&device=$mac" >> /home/pi/log/$log.log
 fi
 
-if [ $database_ip != $lanip ]
+if [ "$database_ip" != "$lanip" ]
 then
   sudo curl -Ss "http://$database_ip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
   sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=updateconf&device=$mac" >> /home/pi/log/$log.log

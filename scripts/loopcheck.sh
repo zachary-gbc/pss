@@ -6,7 +6,7 @@ dow=$(date +%u)
 datetime=$(date '+%Y-%m-%d %H:%M:%S')
 log=$(date -I)
 
-if [[ ${pssonoff:0:3} == "off" ]]
+if [ ${pssonoff:0:3} == "off" ]
 then
   exit 1
 fi
@@ -14,7 +14,7 @@ fi
 type=${pssonoff:0:1}
 number=${pssonoff:2}
 
-if [[ $type == "L" ]]
+if [ $type == "L" ]
 then
   file="/var/www/html/pss/files/loop-$number.m3u"
 else

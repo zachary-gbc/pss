@@ -71,4 +71,4 @@ then
   fi
 fi
 
-sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input" >> /home/pi/log/$log.log
+sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input&loop=0" >> /home/pi/log/$log.log

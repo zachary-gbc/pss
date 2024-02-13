@@ -99,7 +99,7 @@ then
   cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
   echo "$1" > /home/pi/pssonoff
 fi
-curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input&type=$1" >> /home/pi/log/$log.log
+curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input&loop=$1" >> /home/pi/log/$log.log
 
 sleep 5
 bash /home/pi/scripts/loopcheck.sh &

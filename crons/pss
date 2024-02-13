@@ -28,7 +28,7 @@
 # Turn Screen Off After Reboot
 @reboot pi bash /home/pi/scripts/reboot.sh 1 &
 
-# GitHub Update
+# GitHub Update Once A Day
 @reboot pi bash /home/pi/scripts/ghupdate.sh &
 0 1 * * * pi bash /home/pi/scripts/ghupdate.sh &
 

@@ -45,7 +45,7 @@
     while($row = mysqli_fetch_array($rs)) { $roombuilding=$row['Var_Value']; }
 
     echo("<table>\n<tr>\n<th> &nbsp; $roombuilding &nbsp; </th>\n<th> &nbsp; Location &nbsp; </th>\n<th> &nbsp; TV On/Off &nbsp; </th>\n");
-    echo("<th> &nbsp; TV Input &nbsp; </th>\n<th> &nbsp; Loop &nbsp; </th>\n<th>Date Updated</th>\n");
+    echo("<th> &nbsp; TV Input &nbsp; </th>\n<th> &nbsp; Loop/Graphic &nbsp; </th>\n<th>Date Updated</th>\n");
     echo("</tr>\n$table</table>\n<br><br>\n");
   }
 ?>

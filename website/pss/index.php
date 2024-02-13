@@ -29,7 +29,7 @@
 
     if($x%2 == 0) { $table.=("<tr class='tr_odd'>\n"); } else { $table.=("<tr class='tr_even'>\n"); } $x++;
     $table.=("<th>" . $row['Dev_RoomBuilding'] . "</th>\n");
-    $table.=("<th>" . $row['Dev_Name'] . "</th>\n");
+    $table.=("<th>" . $row['Dev_LocName'] . "</th>\n");
     $table.=("<th style='background-color:$powercolor'>" . $power . "</th>\n");
     $table.=("<th>" . $input . "</th>\n");
     $table.=("<td>" . $loop . "</td>\n");

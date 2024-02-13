@@ -1,7 +1,7 @@
 <?php
   include('dblogin.php');
 
-  $type=""; $device=""; $devname="rpi-xx"; $devip=""; $update=""; $select=""; $now=date("YmdHis");
+  $type=""; $device=""; $devname="rpi-xx"; $devip=""; $update=""; $now=date("YmdHis");
   if(isset($_GET['type'])) { $type=$_GET['type']; }
   if(isset($_GET['device'])) { $device=$_GET['device']; }
   if(isset($_GET['devname'])) { $devname=$_GET['devname']; }
@@ -51,13 +51,7 @@
     if($update != "")
     {
       if(!mysqli_query($db,$update)) { echo("Unable to Run Query: $update"); exit; }
-      echo("MESSAGE " . date("Y-m-d H:i:s") . ": Database Updated Successfully\n");
-    }
-
-    if($select != "")
-    {
-      if(!$rs=mysqli_query($db,$select)) { exit; }
-      while($row = mysqli_fetch_array($rs)) { echo($row['Dev_Name']); }
+      echo("MESSAGE " . date("Y-m-d H:i:s") . ": Database Updated Successfully ($type)\n");
     }
   }
 ?>

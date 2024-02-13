@@ -5,9 +5,17 @@
 <?php } ?>
 
 <?php
-  echo("<h3>All Graphics</h3>");
+  $categories="";
+  if(isset($_GET['graphicfilter'])) { $graphicfilter="AND (Gr_Category='" . $_GET['graphicfilter'] . "')"; echo("<h3>" . $_GET['graphicfilter'] . " Graphics</h3>"); }
+  else
+  {
+    $graphicfilter=""; echo("<h3>All Graphics</h3>");
+    $dbcategories="SELECT Gr_Category FROM Graphics GROUP BY Gr_Category ORDER BY Gr_Category";
+    if(!$rs=mysqli_query($db,$dbcategories)) { echo("Unable to Run Query: $dbcategories"); exit; }
+    while($row = mysqli_fetch_array($rs)) { $categories.=("<a href='?graphicfilter=" . $row['Gr_Category'] . "'>" . $row['Gr_Category'] . "</a> &nbsp; &nbsp; "); }
+  }
 
-  $graphics="SELECT * FROM Graphics WHERE (Gr_Delete='N') ORDER BY Gr_Category, Gr_Name"; $oldcat=""; $table="";$x=0;
+  $graphics="SELECT * FROM Graphics WHERE (Gr_Delete='N') $graphicfilter ORDER BY Gr_Category, Gr_Name"; $oldcat=""; $table="";$x=0;
   if(!$rs=mysqli_query($db,$graphics)) { echo("Unable to Run Query: $graphics"); exit; }
   while($row = mysqli_fetch_array($rs))
   {
@@ -28,7 +36,7 @@
   }
 
   if($table == "") { echo("No Graphics Available"); }
-  else { echo("<table>\n$table</table>\n"); }
+  else { echo("$categories<table>\n$table</table>\n"); }
 ?>
 
 <?php if(!isset($graphiclist)) { include('../other/footer.php'); } ?>

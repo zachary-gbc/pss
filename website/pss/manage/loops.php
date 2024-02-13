@@ -126,7 +126,7 @@
     if(isset($_GET['id']) && $_GET['id'] == $row['Lop_ID']) { $currentloop=$row['Lop_Name']; }
   }
 
-  if($currentloop != "")  echo("<h3>$currentloop <a style='font-size:smaller' href='/pss/files/loop-" . $_GET['id'] . ".mp4' target='_blank'>(Preview)</a></h3>"); 
+  if($currentloop != "")  echo("<h3>$currentloop</h3>"); 
 
   if(isset($_GET['id']))
   {

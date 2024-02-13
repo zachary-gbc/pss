@@ -191,8 +191,7 @@
 
     echo("<input type='hidden' value='$devid' name='devid' /><input type='submit' name='submit' value='Submit Changes' />\n</form>\n");
   }
-
-  echo("<form method='get' action=''><h3>Schedule for: <select name='devid'>$locations</select> &nbsp; <input type='submit' value='Open Schedule' /></h3></form>");
+  else { echo("<form method='get' action=''><h3>Schedule for: <select name='devid'>$locations</select> &nbsp; <input type='submit' value='Open Schedule' /></h3></form>"); }
 ?>
 
 <?php include('../other/footer.php'); ?>

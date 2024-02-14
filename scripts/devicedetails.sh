@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 30
+sleep 45
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 echo "MESSAGE $datetime: Starting devicedetails" >> /home/pi/log/$log.log

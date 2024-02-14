@@ -2,7 +2,7 @@
 
 . /var/www/html/pss/conf/pss.conf
 
-sleep 60
+sleep 62
 
 lastupdate=$(</home/pi/lastupdatecommit)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')

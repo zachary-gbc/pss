@@ -34,7 +34,7 @@ for app in ${appstoinstall[@]}
 do
   echo "--------------------" >> $install_log
   echo "Installing $app" >> $install_log
-  sudo apt-get -qq install $app -y | tee -a $install_log
+  sudo apt-get -qq install $app -y
   echo "Completed Install of $app" >> $install_log
   echo "--------------------" >> $install_log
   echo "" >> $install_log

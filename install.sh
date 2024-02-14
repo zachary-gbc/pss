@@ -16,6 +16,7 @@ then
   echo "Keep it simple, this isn't Fort Knox here (example 'MyPassw0rd123!')"
   read dbpass
   echo ""
+  dbip=$lanip
 else
   echo "Input Main Host IP Address To Copy Settings:"
   read dbip
@@ -73,7 +74,7 @@ then
   sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-IP', '$lanip');"
   sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-Name', '$dbname');"
 
-  sudo sed -i "s/database_name.*/database_ip=\"$dbip\"/" /var/www/html/pss/conf/pss.conf
+  sudo sed -i "s/database_ip.*/database_ip=\"$dbip\"/" /var/www/html/pss/conf/pss.conf
   sudo sed -i "s/database_name.*/database_name=\"$dbname\"/" /var/www/html/pss/conf/pss.conf
   sudo sed -i "s/database_username.*/database_username=\"$dbuser\"/" /var/www/html/pss/conf/pss.conf
   sudo sed -i "s/database_password.*/database_password=\"$dbpass\"/" /var/www/html/pss/conf/pss.conf

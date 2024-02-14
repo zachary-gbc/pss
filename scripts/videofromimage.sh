@@ -4,7 +4,7 @@
 
 pssonoff="off"
 pssonoff=$(</home/pi/pssonoff)
-lanip=$(hostname -I)
+lanip=$(hostname -I | tr -d ' ')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 echo "MESSAGE $datetime: Starting videofromimage" >> /home/pi/log/$log.log

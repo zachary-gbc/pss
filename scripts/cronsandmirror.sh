@@ -2,6 +2,7 @@
 
 . /var/www/html/pss/conf/pss.conf
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
+lanip=$(hostname -I | tr -d ' ')
 pssonoff="off"
 pssonoff=$(</home/pi/pssonoff)
 log=$(date -I)

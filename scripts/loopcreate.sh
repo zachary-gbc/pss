@@ -2,7 +2,7 @@
 
 . /var/www/html/pss/conf/pss.conf
 
-lanip=$(hostname -I)
+lanip=$(hostname -I | tr -d ' ')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 echo "MESSAGE $datetime: Starting loopcreate" >> /home/pi/log/$log.log

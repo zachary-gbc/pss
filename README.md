@@ -3,8 +3,9 @@
 ## Steps for initialization of pi:
 1. Follow steps to install new operating system and login using ssh or keyboard
 
-1. sudo raspi-config
+1. sudo raspi-config (if not setup when installing OS)
   - System Options
+    - Update Hostname (recommended to know which device is which but not required)
     - Wireless LAN
     - Update password (recommended but not required)
   - Interface Options

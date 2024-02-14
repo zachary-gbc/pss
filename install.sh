@@ -4,9 +4,9 @@ lanip=$(hostname -I)
 dblan=${lanip%.*}
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
-echo "Is this the Main PSS Instance? (Yes or No)"
+echo "Is this the Main PSS Instance? (y or n)"
 read maininstall
-if [[ $maininstall == "yes" ]]
+if [[ $maininstall == "Y" ]] || [[ $maininstall == "y" ]]
 then
   echo "Please Input a Database Name No Spaces Allowed (example churchname_prod)"
   read dbname
@@ -65,7 +65,7 @@ sudo sed -i 's/post_max_size.*/post_max_size = 800M/' /etc/php/$phpversionnumber
 sudo sed -i 's/bind-address.*/#bind-address = 127.0.0.1/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo usermod -aG video www-data
 
-if [[ $maininstall == "yes" ]]
+if [[ $maininstall == "Y" ]] || [[ $maininstall == "y" ]]
 then
   sudo mysql --user='root' -e "GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'localhost' IDENTIFIED BY '$dbpass'"
   sudo mysql --user='root' -e "GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'$dblan%' IDENTIFIED BY '$dbpass'"

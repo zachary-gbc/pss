@@ -33,7 +33,7 @@
     $table.=("<th style='background-color:$powercolor'>" . $power . "</th>\n");
     $table.=("<th>" . $input . "</th>\n");
     $table.=("<td>" . $loop . "</td>\n");
-    $table.=("<td $updatelatecolor>" . date("m/d/Y h:i a",strtotime($row['Dev_UpdateDateTime'])) . "</td>\n");
+    $table.=("<td $updatelatecolor>" . date("m/d/Y h:i a",strtotime($row['Dev_CronMirrorDateTime'])) . "</td>\n");
     $table.=("</tr>\n");
   }
 

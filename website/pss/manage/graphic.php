@@ -1,5 +1,5 @@
 <?php include('../other/pretitle.php'); ?>
-<title>Add/Edit Graphic</title>
+<title>Graphic</title>
 <?php include('../other/posttitle.php'); ?>
 
 <?php
@@ -81,7 +81,7 @@
   echo("<th>Upload: </th>\n<td><input type='file' name='uploadfile' /></td>\n</tr>\n");
   
   echo("<tr>\n<th>Upload Type: </th>\n<td><input type='radio' name='type' value='L' checked='checked'> Landscape &nbsp; <input type='radio' name='type' value='P'> Portrait</td>\n");
-  if($id != "new") { echo("<tr>\n<th>Delete:</th>\n<th><input name='delete' type='checkbox' /></td>"); }
+  if($id != "new") { echo("<th>Delete:</th>\n<th><input name='delete' type='checkbox' /></td>"); }
   else { echo("<td colspan='2'></td>\n"); }
   echo("</tr>\n");
 
@@ -105,12 +105,13 @@
 
     echo("<br><h3 style='margin:0px'>Add Graphic to Automatic Loops</h3>");
 
-    $aloops="SELECT Lop_ID, Lop_Name FROM Loops WHERE (Lop_Type='Automatic')";
+    $aloops="SELECT Lop_ID, Lop_Name, Lop_Orientation FROM Loops WHERE (Lop_Type='Automatic')";
     if(!$rs=mysqli_query($db,$aloops)) { echo("Unable to Run Query: $aloops"); exit; }
     while($row = mysqli_fetch_array($rs))
     {
+      if($row['Lop_Orientation'] == "L") { $orientation="Landscape"; } else { $orientation="Portrait"; }
       $loop=$row['Lop_ID'];
-      echo("<br><strong>" . $row['Lop_Name'] . ":</strong><br>\n");
+      echo("<br><strong>" . $row['Lop_Name'] . " ($orientation):</strong><br>\n");
       echo("<form method='post' action='graphicautodates.php?graphic=$id&loop=$loop' id='$id-$loop' target='iframeform-$id-$loop'>\n");
       echo("</form>\n");
       echo("<iframe src='graphicautodates.php?graphic=$id&loop=$loop' id='iframeform' name='iframeform-$id-$loop' hidden></iframe>\n");

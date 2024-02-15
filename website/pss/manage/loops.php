@@ -121,7 +121,7 @@
   {
     if($row['Lop_Category'] != $oldcat) { $oldcat=$row['Lop_Category']; $loops.=("<br><h4 style='margin:0px'>$oldcat</h4>\n"); }
     if($row['Lop_Orientation'] == "L") { $orientation="Landscape"; } else { $orientation="Portrait"; }
-    $loops.=("<a href='?id=" . $row['Lop_ID'] . "'>" . $row['Lop_Name'] . "</a> (" . $orientation . " - " . $row['Lop_Type'] . ")<br>\n");
+    $loops.=(" &nbsp; &nbsp; <a href='?id=" . $row['Lop_ID'] . "'>" . $row['Lop_Name'] . "</a> (" . $orientation . " - " . $row['Lop_Type'] . ")<br>\n");
 
     if(isset($_GET['id']) && $_GET['id'] == $row['Lop_ID']) { $currentloop=$row['Lop_Name']; }
   }

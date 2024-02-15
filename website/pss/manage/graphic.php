@@ -51,7 +51,7 @@
       if(!$rs=mysqli_query($db,$update)) { echo("Unable to Run Query: $update"); exit; }
     }
 
-    if($nameerror == false && $uploaderror == false) { echo("<h3>Success</h3>\n<h4>$namemessage $uploadmessage</h4><hr>"); }
+    if($uploaderror == false) { echo("<h3>Success</h3>\n<h4>$namemessage $uploadmessage</h4><hr>"); }
     else { echo("<h3>Some Errors, See Below</h3>\n<h4>$namemessage<br>$uploadmessage</h4><br><hr>"); }
   }
 

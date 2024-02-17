@@ -20,7 +20,7 @@
 45 * * * * pi bash /home/pi/scripts/loopcreate.sh &
 
 # Update Conf File Once A Day
-10 1 * * * pi bash /home/pi/scripts/updateconf.sh &
+#10 1 * * * pi bash /home/pi/scripts/updateconf.sh &
 
 # Download Schedule And Mirror Main Once an Hour
 50 * * * * pi bash /home/pi/scripts/cronsandmirror.sh &

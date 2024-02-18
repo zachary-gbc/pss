@@ -80,10 +80,18 @@ then
   sudo sed -i "s/database_password.*/database_password=\"$dbpass\"/" /var/www/html/pss/conf/pss.conf
 else
   sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
-  sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=devicename&device=$mac&devname=$HOSTNAME" >> /home/pi/log/$install_log
+  sudo curl -Ss "http://$dbip/pss/scripts/dbupdate.php?type=devicename&device=$mac&devname=$HOSTNAME" >> /home/pi/log/$install_log
 fi
 
 sudo apt autoremove -y
+
+. /var/www/html/pss/conf/pss.conf
+
+echo ""
+echo "----------------------"
+echo "-- Main Pi IP: $database_ip --"
+echo "-- Check Conf if IP Incorrect --"
+echo "----------------------"
 
 echo ""
 echo "----------------------"

@@ -27,6 +27,6 @@ fi
 
 if [ "$database_ip" != "$lanip" ]
 then
-  sudo curl -Ss "http://$database_ip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
-  sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=updateconf&device=$mac" >> /home/pi/log/$log.log
+  sudo curl -Ssf "http://$database_ip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
+  sudo curl -Ssf "http://$database_ip/pss/scripts/dbupdate.php?type=updateconf&device=$mac" >> /home/pi/log/$log.log
 fi

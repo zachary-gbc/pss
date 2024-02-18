@@ -1,7 +1,7 @@
 <?php
   include('dblogin.php');
 
-  $type=""; $device=""; $devname="rpi-xx"; $devip=""; $update=""; $now=date("YmdHis");
+  $type=""; $device=""; $devname="rpi-xx"; $devip=""; $update=""; $dbupdate=""; $now=date("YmdHis");
   if(isset($_GET['type'])) { $type=$_GET['type']; }
   if(isset($_GET['device'])) { $device=$_GET['device']; }
   if(isset($_GET['devname'])) { $devname=$_GET['devname']; }

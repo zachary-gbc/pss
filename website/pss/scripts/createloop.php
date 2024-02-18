@@ -15,8 +15,7 @@
 			while($row = mysqli_fetch_array($rs))
 			{
 				$graphicid=$row['Gr_ID']; $exists=false;
-				if($orientation == "Landscape" && file_exists("/var/www/html/pss/files/$graphicid-L.mp4")) { $filecontents.="/var/www/html/pss/files/$graphicid" . "-L.mp4\n"; $exists=true; }
-				if($orientation == "Portrait" && file_exists("/var/www/html/pss/files/$graphicid-P.mp4")) { $filecontents.="/var/www/html/pss/files/$graphicid" . "-P.mp4\n"; $exists=true; }
+				if(file_exists("/var/www/html/pss/files/$graphicid-$orientation.mp4")) { $filecontents.="/var/www/html/pss/files/$graphicid" . "-$orientation.mp4\n"; $exists=true; }
 				if($exists == false) { $amissing[$loopid][$graphicid]=$row['Gr_Name']; }
 			}
 			if($filecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.m3u", $filecontents); }
@@ -36,8 +35,7 @@
 			while($row = mysqli_fetch_array($rs))
 			{
 				$graphicid=$row['Gr_ID']; $exists=false;
-				if($orientation == "Landscape" && file_exists("/var/www/html/pss/files/$graphicid-L.mp4")) { $filecontents.="/var/www/html/pss/files/$graphicid" . "-L.mp4\n"; $exists=true; }
-				if($orientation == "Portrait" && file_exists("/var/www/html/pss/files/$graphicid-P.mp4")) { $filecontents.="/var/www/html/pss/files/$graphicid" . "-P.mp4\n"; $exists=true; }
+				if(file_exists("/var/www/html/pss/files/$graphicid-$orientation.mp4")) { $filecontents.="/var/www/html/pss/files/$graphicid" . "-$orientation.mp4\n"; $exists=true; }
 				if($exists == false) { $mmissing[$loopid][$graphicid]=$row['Gr_Name']; }
 			}
 			if($filecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.m3u", $filecontents); }

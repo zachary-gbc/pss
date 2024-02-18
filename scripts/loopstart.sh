@@ -96,7 +96,7 @@ sleep 1
 if [[ $1 != 1 ]]
 then
   echo "MESSAGE $datetime: Starting $message" >> /home/pi/log/$log.log
-  cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
+  DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
   echo "$1" > /home/pi/pssonoff
 fi
 curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input&loop=$1" >> /home/pi/log/$log.log

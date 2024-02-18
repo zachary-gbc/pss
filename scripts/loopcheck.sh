@@ -24,7 +24,7 @@ fi
 vlcrunning=$(pidof vlc.bin)
 if [[ -z $vlcrunning ]]
 then
-  cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
+  DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
   sleep 5
   vlcrunning=$(pidof vlc.bin)
   if [[ -z $vlcrunning ]]

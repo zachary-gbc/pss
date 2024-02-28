@@ -17,22 +17,45 @@ echo "MESSAGE $datetime: Stopping Loop/Graphic, Turn TV On (1=yes): $1, Input Se
 
 echo "off" > /home/pi/pssonoff
 sleep 20
-pkill vlc
-sleep 5
-vlcrunning=$(pidof vlc)
-if [[ $vlcrunning ]]
+
+if [[ $omxorvlc == "o" ]]
 then
-  sleep 10
+  pkill omxplayer
+else
   pkill vlc
-  sleep 5
-  vlcrunning=$(pidof vlc)
+fi
+sleep 5
+
+if [[ $omxorvlc == "o" ]]
+then
+  omxrunning=$(pidof omxplayer.bin)
+  if [[ $omxrunning ]]
+  then
+    pkill omxplayer
+    sleep 5
+    omxrunning=$(pidof omxplayer.bin)
+    if [[ $omxrunning ]]
+    then
+      echo "ALERT $datetime: omxplayer Failed to Stop" >> /home/pi/log/$log.log
+      bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "Player Failed to Stop"
+    fi
+  fi
+else
+  vlcrunning=$(pidof vlc.bin)
   if [[ $vlcrunning ]]
   then
-    echo "ALERT $datetime: vlc Failed to Stop" >> /home/pi/log/$log.log
-    bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "VLC Player Failed to Stop"
+    pkill vlc
     sleep 5
+    vlcrunning=$(pidof vlc.bin)
+    if [[ $vlcrunning ]]
+    then
+      echo "ALERT $datetime: vlc Failed to Stop" >> /home/pi/log/$log.log
+      bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "Player Failed to Stop"
+    fi
   fi
 fi
+sleep 5
+
 if [[ $2 == "1" ]]
 then
   echo tx 4F:82:10:00 $tv | cec-client -s -d 1

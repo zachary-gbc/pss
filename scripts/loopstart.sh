@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# 1 = loop (L-#) or graphic (G-#-Landscape or G-#-Portrait)
+# 1 = loop (L-#) or graphic (G-#-L or G-#-P)
 # 2 = start screen on (yes=1/no=0)
 # 3 = start screen input change (value)   echo 'tx 4F:82:10:00 $tv' | cec-client -s -d 1 for input 1, change the 10 to 20 for input 2
 # bash /home/pi/scripts/loopstart.sh L-1 1 1
@@ -90,13 +90,23 @@ then
 fi
 
 pkill loopcheck.sh
-pkill vlc
+if [[ $omxorvlc == "o" ]]
+then
+  pkill omxplayer
+else
+  pkill vlc
+fi
 sleep 1
 
 if [[ $1 != 1 ]]
 then
   echo "MESSAGE $datetime: Starting $message" >> /home/pi/log/$log.log
-  DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
+  if [[ $omxorvlc == "o" ]]
+  then
+    bash omxloop.sh $message $file &
+  else
+    DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
+  fi
   echo "$1" > /home/pi/pssonoff
 fi
 curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input&loop=$1" >> /home/pi/log/$log.log

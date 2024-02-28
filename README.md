@@ -18,5 +18,8 @@
 
 1. git clone --depth=1 https://github.com/zachary-gbc/pss /home/pi/pss
 
+1. sudo nano /etc/rc.local
+  - Add following line before exit 0: sleep 10 && /usr/bin/clear > /dev/tty1 &
+
 1. bash /home/pi/pss/install.sh
   - Follow prompts on screen

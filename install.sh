@@ -4,6 +4,8 @@ lanip=$(hostname -I)
 dblan=${lanip%.*}
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
+echo "Will this system use (o)OMXPlayer or (v)VLC? (o or v)"
+read omxvlc
 echo "Is this the Main PSS Instance? (y or n)"
 read maininstall
 if [[ $maininstall == "Y" ]] || [[ $maininstall == "y" ]]
@@ -29,7 +31,13 @@ mkdir -p /home/pi/log
 
 sudo apt-get update
 sudo apt-get upgrade -y
-appstoinstall=(awscli apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg vlc vlc-bin)
+if [[ $omxvlc == "o" ]]
+then
+  appstoinstall=(apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg omxplayer)
+else
+  appstoinstall=(apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg vlc vlc-bin)
+fi
+
 for app in ${appstoinstall[@]}
 do
   echo "--------------------" >> $install_log
@@ -78,6 +86,8 @@ then
   sudo sed -i "s/database_name.*/database_name=\"$dbname\"/" /var/www/html/pss/conf/pss.conf
   sudo sed -i "s/database_username.*/database_username=\"$dbuser\"/" /var/www/html/pss/conf/pss.conf
   sudo sed -i "s/database_password.*/database_password=\"$dbpass\"/" /var/www/html/pss/conf/pss.conf
+
+  sudo sed -i "s/omxorvlc.*/omxorvlc=\"$omxvlc\"/" /var/www/html/pss/conf/pss.conf
 else
   sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
   sudo curl -Ss "http://$dbip/pss/scripts/dbupdate.php?type=devicename&device=$mac&devname=$HOSTNAME" >> /home/pi/log/$install_log

@@ -22,6 +22,9 @@ then
   query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "SELECT Var_Value FROM Variables WHERE (Var_Name='Alert-On-IP-Change')")
   sudo sed -i "s/alert_on_ip_change.*/alert_on_ip_change=\"$query\"/" /var/www/html/pss/conf/pss.conf
 
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "SELECT Var_Value FROM Variables WHERE (Var_Name='OMXPlayer-Or-VLC')")
+  sudo sed -i "s/omxorvlc.*/omxorvlc=\"$query\"/" /var/www/html/pss/conf/pss.conf
+
   sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=updateconf&device=$mac" >> /home/pi/log/$log.log
 fi
 

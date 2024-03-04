@@ -7,10 +7,10 @@ pssonoff="off"
 pssonoff=$(</home/pi/pssonoff)
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
-echo "MESSAGE $datetime: Starting cronsandmirror" >> /home/pi/log/$log.log
 
 if [ ${pssonoff:0:3} == "off" ]
 then
+  echo "MESSAGE $datetime: Starting cronsandmirror" >> /home/pi/log/$log.log
   sudo curl -Ss http://$database_ip/pss/scripts/createschedule.php?device=$mac --output /etc/cron.d/loopschedule
   if [ "$database_ip" != "$lanip" ]
   then

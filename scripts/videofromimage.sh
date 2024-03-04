@@ -7,10 +7,10 @@ pssonoff=$(</home/pi/pssonoff)
 lanip=$(hostname -I | tr -d ' ')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
-echo "MESSAGE $datetime: Starting videofromimage" >> /home/pi/log/$log.log
 
 if [ "$database_ip" == "$lanip" ] && [ ${pssonoff:0:3} == "off" ]
 then
+  echo "MESSAGE $datetime: Starting videofromimage" >> /home/pi/log/$log.log
   pngimages=$(ls /var/www/html/pss/files/*.png 2>/dev/null)
   jpgimages=$(ls /var/www/html/pss/files/*.jpg 2>/dev/null)
   images="$pngimages $jpgimages"

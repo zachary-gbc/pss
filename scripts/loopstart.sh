@@ -103,7 +103,7 @@ then
   echo "MESSAGE $datetime: Starting $message" >> /home/pi/log/$log.log
   if [[ $omxorvlc == "o" ]]
   then
-    bash omxloop.sh $message $file &
+    bash /home/pi/scripts/omxloop.sh $message $file &
   else
     DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
   fi

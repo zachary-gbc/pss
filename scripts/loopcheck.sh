@@ -30,7 +30,7 @@ then
   omxrunning=$(pidof omxplayer.bin)
   if [[ -z $omxrunning ]]
   then
-    bash omxloop.sh $message $file &
+    bash /home/pi/scripts/omxloop.sh $message $file &
     sleep 5
     omxrunning=$(pidof omxplayer.bin)
     if [[ -z $omxrunning ]]

@@ -16,10 +16,10 @@ then
     if [ $item -gt $items ]
     then
       item=0
-    fi
-    if [ ${pssonoff:0:3} == "off" ]
-    then
-      break
+      if [ ${pssonoff:0:3} == "off" ]
+      then
+        exit 1
+      fi
     fi
   done
 else

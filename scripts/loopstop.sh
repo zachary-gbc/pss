@@ -24,7 +24,7 @@ then
 else
   pkill vlc
 fi
-sleep 5
+sleep 60
 
 if [[ $omxorvlc == "o" ]]
 then

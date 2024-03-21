@@ -8,7 +8,6 @@ then
   readarray -t files < $2
   items=${#files[@]}
   item=0
-  pssonoff=$(</home/pi/pssonoff)
   while [ true ]
   do
     omxplayer --no-keys ${files[$item]}
@@ -16,6 +15,7 @@ then
     if [ $item -gt $items ]
     then
       item=0
+      pssonoff=$(</home/pi/pssonoff)
       if [ ${pssonoff:0:3} == "off" ]
       then
         exit 1

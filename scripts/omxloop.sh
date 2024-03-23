@@ -12,7 +12,7 @@ then
   do
     omxplayer --no-keys ${files[$item]}
     item=$((item + 1))
-    if [ $item -gt $items ]
+    if [ $item -ge $items ]
     then
       item=0
       pssonoff=$(</home/pi/pssonoff)

@@ -11,6 +11,7 @@ CREATE TABLE Devices(
   Dev_Power VARCHAR(10) NULL,
   Dev_Input VARCHAR(10) NULL,
   Dev_Loop VARCHAR(10) NULL,
+  Dev_OMXorVLC VARCHAR(10) NULL,
   Dev_CronMirrorDateTime VARCHAR(255) NULL,
   Dev_GHUpdateDateTime VARCHAR(255) NULL,
   Dev_ConfDateTime VARCHAR(255) NULL,

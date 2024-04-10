@@ -86,8 +86,6 @@ then
   sudo sed -i "s/database_name.*/database_name=\"$dbname\"/" /var/www/html/pss/conf/pss.conf
   sudo sed -i "s/database_username.*/database_username=\"$dbuser\"/" /var/www/html/pss/conf/pss.conf
   sudo sed -i "s/database_password.*/database_password=\"$dbpass\"/" /var/www/html/pss/conf/pss.conf
-
-  sudo sed -i "s/omxorvlc.*/omxorvlc=\"$omxvlc\"/" /var/www/html/pss/conf/pss.conf
 else
   sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
   sudo curl -Ss "http://$dbip/pss/scripts/dbupdate.php?type=devicename&device=$mac&devname=$HOSTNAME" >> /home/pi/log/$install_log

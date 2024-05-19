@@ -15,7 +15,7 @@ then
   echo "Please Input a User for the Database (No Spaces)"
   read dbuser
   echo "Please Input a Password for $dbuser (No Spaces)"
-  echo "Keep it simple, this isn't Fort Knox here (example 'MyPassw0rd123!')"
+  echo "Keep it simple, this isn't Fort Knox"
   read dbpass
   echo ""
   dbip=$lanip
@@ -24,7 +24,7 @@ else
   read dbip
 fi
 
-install_log="/home/pi/install.log"
+install_log="/home/pi/pss_install.log"
 echo "Initiating Install" > $install_log
 mkdir -p /home/pi/scripts
 mkdir -p /home/pi/log
@@ -53,7 +53,7 @@ sudo mkdir -p /var/www/html/pss/scripts
 sudo chown pi:pi /var/www/html
 sudo chown pi:pi /var/www/html/pss/scripts
 sudo chown pi:pi /var/www/html/pss/conf
-echo "never" > /home/pi/lastupdatecommit
+echo "never" > /home/pi/pss_lastupdatecommit
 echo "off" > /home/pi/pssonoff
 cp /home/pi/pss/configs/pss.conf /var/www/html/pss/conf/pss.conf
 cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/ghupdate.sh

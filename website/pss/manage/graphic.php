@@ -14,7 +14,7 @@
     if(isset($_POST['delete'])) { $delete="Y"; $newname=($newname . " - Deleted " . mktime()); } else { $delete="N"; }
     $namemessage=""; $uploadmessage=""; $uploaderror=false; $dbinserterr=false; $x=0;
 
-    if($_FILES["uploadfile"]["error"] == 0) { $uploadname=$_FILES["uploadfile"]["name"]; $extarr=explode(".",$uploadname); $uploadext=end($extarr); }
+    if($_FILES["uploadfile"]["error"] == 0) { $uploadname=$_FILES["uploadfile"]["name"]; $extarr=explode(".",$uploadname); $uploadext=strtolower(end($extarr)); }
     if($uploadext != "" && $uploadext != "mp4" && $uploadext != "png" && $uploadext != "jpg") { $uploadmessage.=("Only png, jpg, and mp4 files are currently allowed"); $uploaderror=true; }
     else
     {

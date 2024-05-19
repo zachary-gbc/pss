@@ -4,7 +4,7 @@
 
 sleep 62
 
-lastupdate=$(</home/pi/lastupdatecommit)
+lastupdate=$(</home/pi/pss_lastupdatecommit)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
@@ -29,7 +29,7 @@ then
   # Website
   sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"
 
-  echo $lastcommit > /home/pi/lastupdatecommit
+  echo $lastcommit > /home/pi/pss_lastupdatecommit
 
   curl http://$database_ip/pss/scripts/dbupdate.php?type=ghupdate\&device=$mac
 fi

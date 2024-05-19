@@ -32,5 +32,8 @@
 @reboot pi bash /home/pi/scripts/ghupdate.sh &
 0 1 * * * pi bash /home/pi/scripts/ghupdate.sh &
 
+# Update Main DB With Location Status Once an Hour
+0 * * * * pi bash /home/pi/scripts/updatemain.sh &
+
 # Manual Change Check Every 5 Minutes
 # */15 * * * * pi bash /home/pi/scripts/manualchange.sh &

@@ -8,8 +8,10 @@ message=$3
 log=$(date -I)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
+
 if [[ $pushover_configured == "yes" ]]
 then
+  echo "MESSAGE $datetime: Starting pushover" >> /home/pi/log/$log.log
   response=$(curl -s --form-string "token=$pushover_token" --form-string "user=$pushover_user_key" --form-string "message=$message" --form-string "title=$title" --form-string "sound=$sound" https://api.pushover.net/1/messages.json)
 
   if [[ "$response" == *"\"status\":1"* ]]; then

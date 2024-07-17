@@ -25,7 +25,7 @@ then
   then
     if [[ $pushover_configured == "yes" ]] && [[ $alert_on_ip_change == "yes" ]]
     then
-      bash /home/pi/scripts/pushover.sh "$HOSTNAME IP Changed" "bugle" "WAN: $wanip | LAN: $lanip"
+      bash /home/pi/scripts/pushover.sh "$HOSTNAME IP Changed" "none" "WAN: $wanip | LAN: $lanip"
     fi
     echo $lanip > /home/pi/scripts/lanip
     echo $wanip > /home/pi/scripts/wanip

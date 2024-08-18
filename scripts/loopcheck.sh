@@ -41,12 +41,12 @@ then
     fi
   fi
 else
-  vlcrunning=$(pidof vlc.bin)
+  vlcrunning=$(pidof vlc)
   if [[ -z $vlcrunning ]]
   then
     DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
     sleep 5
-    vlcrunning=$(pidof vlc.bin)
+    vlcrunning=$(pidof vlc)
     if [[ -z $vlcrunning ]]
     then
       echo "ALERT $datetime: Loop Stopped" >> /home/pi/log/$log.log

@@ -88,7 +88,7 @@ then
   sudo sed -i "s/database_password.*/database_password=\"$dbpass\"/" /var/www/html/pss/conf/pss.conf
 else
   sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
-  sudo curl -Ss "http://$dbip/pss/scripts/dbupdate.php?type=devicedetails&device=$mac&devname=$HOSTNAME" >> /home/pi/log/$install_log
+  sudo curl -Ss "http://$dbip/pss/scripts/dbupdate.php?type=devicedetails&device=$mac&devname=$HOSTNAME" >> $install_log
   echo "sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf"
   echo "sudo curl -Ss 'http://$dbip/pss/scripts/dbupdate.php?type=devicedetails&device=$mac&devname=$HOSTNAME'"
 fi

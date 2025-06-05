@@ -47,7 +47,7 @@
     }
     else
     {
-      $update="UPDATE Graphics SET Gr_Name='$newname', Gr_Category='$category', Gr_UpdateDateTime=now(), Gr_Delete='$delete' WHERE (Gr_ID='$id')";
+      $update="UPDATE Graphics SET Gr_Name='$newname', Gr_Category='$category', Gr_UpdateDateTime=now(), Gr_Converted='N', Gr_Delete='$delete' WHERE (Gr_ID='$id')";
       if(!$rs=mysqli_query($db,$update)) { echo("Unable to Run Query: $update"); exit; }
     }
 

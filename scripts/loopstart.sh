@@ -21,8 +21,14 @@ echo "MESSAGE $datetime: Starting $1, Turn TV On (1=yes): $2, Input Set: $3" >> 
 
 if [ $type == "L" ]
 then
-  file="/var/www/html/pss/files/loop-$number.m3u"
-  downloadlink="http://$database_ip/pss/files/loop-$number.m3u"
+  if [[ $omxorvlc == "o" ]]
+  then
+    file="/var/www/html/pss/files/loop-$number.mp4"
+    downloadlink="http://$database_ip/pss/files/loop-$number.mp4"
+  else
+    file="/var/www/html/pss/files/loop-$number.m3u"
+    downloadlink="http://$database_ip/pss/files/loop-$number.m3u"
+  fi
   message="Loop"
 else
   file="/var/www/html/pss/files/$number.mp4"
@@ -103,7 +109,7 @@ then
   echo "MESSAGE $datetime: Starting $message" >> /home/pi/log/$log.log
   if [[ $omxorvlc == "o" ]]
   then
-    bash /home/pi/scripts/omxloop.sh $message $file &
+    omxplayer --no-keys --loop $file &
   else
     DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
   fi

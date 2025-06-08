@@ -18,7 +18,12 @@ number=${pssonoff:2}
 
 if [ $type == "L" ]
 then
-  file="/var/www/html/pss/files/loop-$number.m3u"
+  if [[ $omxorvlc == "o" ]]
+  then
+    file="/var/www/html/pss/files/loop-$number.mp4"
+  else
+    file="/var/www/html/pss/files/loop-$number.m3u"
+  fi
   message="Loop"
 else
   file="/var/www/html/pss/files/$number.mp4"
@@ -30,7 +35,7 @@ then
   omxrunning=$(pidof omxplayer.bin)
   if [[ -z $omxrunning ]]
   then
-    bash /home/pi/scripts/omxloop.sh $message $file &
+    omxplayer --no-keys --loop $file &
     sleep 5
     omxrunning=$(pidof omxplayer.bin)
     if [[ -z $omxrunning ]]

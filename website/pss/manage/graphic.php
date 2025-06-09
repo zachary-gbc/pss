@@ -19,6 +19,7 @@
     else
     {
       $filetypecheck=strtoupper($uploadtype . $uploadext);
+      unlink("/var/www/html/pss/files/$id-$uploadtype.$uploadext");
       move_uploaded_file($_FILES["uploadfile"]["tmp_name"], ("/var/www/html/pss/files/$id-$uploadtype.$uploadext"));
       switch($_FILES["uploadfile"]["error"])
       {

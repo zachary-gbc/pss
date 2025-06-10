@@ -10,7 +10,7 @@
   if(!$rs=mysqli_query($db,$status)) { echo("Unable to Run Query: $status"); exit; }
   while($row = mysqli_fetch_array($rs))
   {
-    $devices[$row['Dev_ID']]=($row['Dev_RoomBuilding'] . " - " . $row['Dev_LocName']);
+    $devices[$row['Dev_Mac']]=($row['Dev_RoomBuilding'] . " - " . $row['Dev_LocName']);
     $input=$row['Dev_Input']; $loop=$row['Dev_Loop'];
     if($row['Dev_Power'] == "On") { $power="On"; $powercolor="#00FF00"; } else { $power="Off"; $powercolor="#FF0000"; }
     if(substr($loop,0,1) == "L")
@@ -61,11 +61,11 @@
   if(!$rs=mysqli_query($db,$allgraphics)) { echo("Unable to Run Query: $allgraphics"); exit; }
   while($row = mysqli_fetch_array($rs)) { $lgselect[($row['Gr_Category'] . " Graphics")]["G-".$row['Gr_ID']."-$orientation"]=$row['Gr_Name']; }
 
-  echo("<form method='post' action='/pss/scripts/manualchange.php?addmanualchange=true' target='manual_change_iframe'><table>");
+  echo("<form method='post' action='/pss/scripts/manualaction.php?addmanualaction=true' target='manual_change_iframe'><table>");
   echo("<tr>\n<th style='text-align:right'>Device: </th>\n<td><select name='device'>");
   foreach($devices as $id => $name) { echo("<option value='$id'>$name</option>"); }
   echo("</select></td>\n<td rowspan='4'>");
-  echo("<iframe name='manual_change_iframe' src='/pss/scripts/manualchange.php' style='height:75px;width:220px;border:0' title='Manual Change Confirmation'></iframe></td>\n</tr>\n");
+  echo("<iframe name='manual_change_iframe' src='/pss/scripts/manualaction.php' style='height:75px;width:220px;border:0' title='Manual Change Confirmation'></iframe></td>\n</tr>\n");
   echo("<tr><th style='text-align:right'>Change: </th><td><select name='number'>");
   foreach($numbers as $id => $name) { echo("<option value='$id'>$name</option>"); }
   echo("</select></td>\n</tr>\n");

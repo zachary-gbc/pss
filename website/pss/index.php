@@ -62,7 +62,7 @@
   while($row = mysqli_fetch_array($rs)) { $lgselect[($row['Gr_Category'] . " Graphics")]["G-".$row['Gr_ID']]=$row['Gr_Name']; }
 
   echo("<form method='post' action='/pss/scripts/manualaction.php?addmanualaction=true' target='manual_change_iframe'><table>");
-  echo("<tr>\n<th style='text-align:right'>Device: </th>\n<td><select name='device'>");
+  echo("<tr>\n<th style='text-align:right'>Device: </th>\n<td><select name='device'><option value='0'>Choose Device</option>");
   foreach($devices as $id => $name) { echo("<option value='$id'>$name</option>"); }
   echo("</select></td>\n<td rowspan='4'>");
   echo("<iframe name='manual_change_iframe' src='/pss/scripts/manualaction.php' style='height:75px;width:220px;border:0' title='Manual Change Confirmation'></iframe></td>\n</tr>\n");

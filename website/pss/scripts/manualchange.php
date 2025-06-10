@@ -1,30 +1,12 @@
 <?php
-  if(isset($_POST['submit']))
-  {
-    include('dblogin.php'); $task=""; $input=""; $looporpower=""; $ip="";
+	include('dblogin.php');
 
-    if(isset($_POST['device'])) { $device=$_POST['device']; }
-    if(isset($_POST['task'])) { $task=$_POST['task']; }
-    if(isset($_POST['input'])) { $input=$_POST['input']; }
-    if($task == "start") { if(isset($_POST['loop'])) { $looporpower=$_POST['loop']; } }
-    if($task == "stop") { if(isset($_POST['power'])) { $looporpower=$_POST['power']; } }
-
-    $devip="SELECT Dev_IP FROM Devices WHERE (Dev_ID='$device')";
-    if(!$rs=mysqli_query($db,$ipaddress)) { echo("Unable to Run Query: $devip"); exit; }
-    while($row = mysqli_fetch_array($rs)) { $ip=$row['Dev_IP']; }
-
-    if($ip != "") { $link="http://$ip/pss/scripts/manualchange.php?task=$task&input=$input&looporpower=$looporpower"; header("Location: $link"); }
-  }
-  else
-  {
-    $ip=str_replace(".","",$_SERVER['SERVER_ADDR']); $filename="manualchange-$ip"; $contents=""; $task=""; $input=""; $looporpower="";
-
-    if(isset($_GET['task'])) { $task=$_GET['task']; }
-    if(isset($_GET['input'])) { $input=$_GET['input']; }
-    if(isset($_GET['looporpower'])) { $looporpower=$_GET['looporpower']; }
-  
-    if($task == "start" || $task == "stop") { $contents=$task . "-" . $input . "-" . $looporpower; }
-    
-    if($contents != "") { file_put_contents($filename,$contents,FILE_APPEND); }  
-  }
+	if(isset($_GET['addmanualchange']) && isset($_POST['device']) && isset($_POST['number']) && isset($_POST['variables']))
+	{
+		$numbers=array(0 => "Choose Action", 11 => "Start Loop", 12 => "Stop Loop", 13 => "Turn TV On", 14 => "Turn TV Off", 15 => "Download Graphic or Loop", 16 => "Download Crons", 21 => "Change TV to Input 1", 22 => "Change TV to Input 2", 23 => "Change TV to Input 3", 24 => "Change TV to Input 4", 25 => "Change TV to Input 5");
+		$device=$_POST['device']; $number=$_POST['number']; $_POST['variables'];
+		$insert="INSERT INTO ManualChange(MC_Device, MC_Number, MC_Variables) VALUES('$device', '$number', '$variables')";
+		if(!mysqli_query($db,$insert)) { echo("Unable to Run Query: $insert"); }
+		else { echo("<h3 style='color:#008000'>Manual Change Added</h3>$numbers[$number]"); }
+	}
 ?>

@@ -19,3 +19,9 @@ then
   fi
   sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=cronsandmirror&device=$mac" >> /home/pi/log/$log.log
 fi
+
+if [ $1 == "manualcrons" ]
+then
+  echo "MESSAGE $datetime: Starting cronsandmirror(manualcrons)" >> /home/pi/log/$log.log
+  sudo curl -Ss http://$database_ip/pss/scripts/createschedule.php?device=$mac --output /etc/cron.d/loopschedule
+fi

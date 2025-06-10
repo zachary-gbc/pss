@@ -58,6 +58,15 @@
         if(!$rs=mysqli_query($db,$subselect)) { exit; }
         while($row = mysqli_fetch_array($rs)) { echo($row['Dev_OMXorVLC']); break; }
         break;
+      
+      case "manualaction":
+        $manualactions="SELECT MA_Number, MA_Variables FROM ManualActions WHERE (MA_Device='$device') AND (MA_Acknowledge IS NULL) ORDER BY MA_ID"; $actions="";
+        if(!$rs=mysqli_query($db,$manualactions)) { exit; }
+        while($row = mysqli_fetch_array($rs)) { $actions.=($row['MA_Number'] . "-" . $row['MA_Variables'] . "\n"); }
+        if($actions == "") { echo("null"); } else { echo($actions); }
+        $updateactions="UPDATE ManualActions SET MA_Acknowledge=now() WHERE (MA_Device='$device')";
+        if(!mysqli_query($db,$updateactions)) { exit; }
+        break;
     }
 
     if($update != "")

@@ -21,12 +21,14 @@ vars=""
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
-changes=$(curl http://$database_ip/pss/scripts/dbupdate.php?type=manualaction\&device=$mac)
+doaction=$(cat /var/www/html/scripts/manualaction)
 
-if [[ "$changes" == "null" ]]
+if [[ "$doaction" == "null" ]]
 then
   exit 1
 fi
+
+actions=$(curl http://$database_ip/pss/scripts/dbupdate.php?type=manualaction\&device=$mac)
 
 while IFS= read -r line; do
   number=${line:0:2}
@@ -53,4 +55,6 @@ while IFS= read -r line; do
   curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&$vars" >> /home/pi/log/$log.log
 
   sleep 1
-done <<< "$changes"
+done <<< "$actions"
+
+echo "null" > /var/www/html/pss/scripts/manualaction

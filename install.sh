@@ -62,7 +62,7 @@ sudo cp -f /home/pi/pss/crons/pss /etc/cron.d/pss
 sudo chown root:root /etc/cron.d/pss
 sudo rm /var/www/html/index.html
 sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"
-sudo chmod 777 /var/www/html/pss/scripts/manualaction
+sudo chown www-data:www-data /var/www/html/pss/scripts
 
 phpversion=$(php -i | grep "PHP Version")
 phpversionnumber=${phpversion:15:3}

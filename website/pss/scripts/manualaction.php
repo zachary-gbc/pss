@@ -15,14 +15,14 @@
 				$getip="SELECT Dev_IP FROM Devices WHERE (Dev_MAC='$device')"; $ip="";
 				if(!$rs=mysqli_query($db,$getip)) { echo("Unable to Run Query: $getip"); exit; }
 				while($row = mysqli_fetch_array($rs)) { $ip=$row['Dev_IP']; }
-				if($ip != "") { header("Location: http://$ip/pss/scripts/manualchange.php?number=$number"); }
+				if($ip != "") { header("Location: http://$ip/pss/scripts/manualaction.php?confirmationnumber=$number"); }
 			}
 		}
 	}
-	else
+	elseif(isset($_GET['confirmationnumber']))
 	{
-		file_put_contents("manualupdate","yes");
-		$number=$_GET['number'];
+		file_put_contents("manualaction","yes");
+		$number=$_GET['confirmationnumber'];
 		echo("<h3 style='color:#008000'>Manual Action Added</h3>$numbers[$number]");
 	}
 ?>

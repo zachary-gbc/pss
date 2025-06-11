@@ -17,6 +17,7 @@
 . /var/www/html/pss/conf/pss.conf
 
 x=1
+vars=""
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
@@ -37,17 +38,19 @@ while IFS= read -r line; do
   case $number in
     11) bash /home/pi/scripts/loopstart.sh $variables ;;
     12) bash /home/pi/scripts/loopstop.sh ;;
-    13) echo on 0 | cec-client -s -d 1; sleep 10 ;;
-    14) echo standby 0 | cec-client -s -d 1 ;;
+    13) echo on 0 | cec-client -s -d 1; sleep 10; vars="power=on" ;;
+    14) echo standby 0 | cec-client -s -d 1; vars="power=off" ;;
     15) sudo curl -o /var/www/html/pss/files/$variables.mp4 http://$database_ip/pss/files/$2.mp4 ;;
     16) bash /home/pi/scripts/cronsandmirror.sh manualcrons ;;
-    21) echo tx 4F:82:10:00 0 | cec-client -s -d 1 ;;
-    22) echo tx 4F:82:20:00 0 | cec-client -s -d 1 ;;
-    23) echo tx 4F:82:30:00 0 | cec-client -s -d 1 ;;
-    24) echo tx 4F:82:40:00 0 | cec-client -s -d 1 ;;
-    25) echo tx 4F:82:50:00 0 | cec-client -s -d 1 ;;
+    21) echo tx 4F:82:10:00 0 | cec-client -s -d 1; vars="input=1" ;;
+    22) echo tx 4F:82:20:00 0 | cec-client -s -d 1; vars="input=2" ;;
+    23) echo tx 4F:82:30:00 0 | cec-client -s -d 1; vars="input=3" ;;
+    24) echo tx 4F:82:40:00 0 | cec-client -s -d 1; vars="input=4" ;;
+    25) echo tx 4F:82:50:00 0 | cec-client -s -d 1; vars="input=5" ;;
     *) ;;
   esac
+
+  curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&$vars" >> /home/pi/log/$log.log
 
   sleep 1
 done <<< "$changes"

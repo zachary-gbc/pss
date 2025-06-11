@@ -21,7 +21,7 @@ vars=""
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
-doaction=$(cat /var/www/html/scripts/manualaction)
+doaction=$(cat /var/www/html/pss/scripts/manualaction)
 
 if [[ "$doaction" == "null" ]]
 then
@@ -38,8 +38,8 @@ while IFS= read -r line; do
   echo "MESSAGE $datetime: Starting Manual Action ($number-$variables)" >> /home/pi/log/$log.log
 
   case $number in
-    11) bash /home/pi/scripts/loopstart.sh $variables ;;
-    12) bash /home/pi/scripts/loopstop.sh ;;
+    11) bash /home/pi/scripts/loopstart.sh $variables & ;;
+    12) bash /home/pi/scripts/loopstop.sh & ;;
     13) echo on 0 | cec-client -s -d 1; sleep 10; vars="power=On" ;;
     14) echo standby 0 | cec-client -s -d 1; vars="power=Off" ;;
     15) sudo curl -o /var/www/html/pss/files/$variables.mp4 http://$database_ip/pss/files/$2.mp4 ;;

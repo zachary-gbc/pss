@@ -32,14 +32,14 @@ while IFS= read -r line; do
   number=${line:0:2}
   variables=${line:3}
   lgtype=${variables:0:1}
-  if [[ "$lgtype" == "L" ]]; then $variables=${variables:0:-2}; fi
+  if [[ "$lgtype" == "L" ]]; then length="${#variables}"; variables="${variables:0:length-2}"; fi
   echo "MESSAGE $datetime: Starting Manual Action ($number-$variables)" >> /home/pi/log/$log.log
 
   case $number in
     11) bash /home/pi/scripts/loopstart.sh $variables ;;
     12) bash /home/pi/scripts/loopstop.sh ;;
-    13) echo on 0 | cec-client -s -d 1; sleep 10; vars="power=on" ;;
-    14) echo standby 0 | cec-client -s -d 1; vars="power=off" ;;
+    13) echo on 0 | cec-client -s -d 1; sleep 10; vars="power=On" ;;
+    14) echo standby 0 | cec-client -s -d 1; vars="power=Off" ;;
     15) sudo curl -o /var/www/html/pss/files/$variables.mp4 http://$database_ip/pss/files/$2.mp4 ;;
     16) bash /home/pi/scripts/cronsandmirror.sh manualcrons ;;
     21) echo tx 4F:82:10:00 0 | cec-client -s -d 1; vars="input=1" ;;

@@ -9,7 +9,7 @@
 . /var/www/html/pss/conf/pss.conf
 
 tv="0"
-power="On"
+power="unknown"
 input="unknown"
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 log=$(date -I)
@@ -57,6 +57,7 @@ fi
 if [[ $2 == "1" ]]
 then
   echo on $tv | cec-client -s -d 1
+  power="On"
   sleep 10
   powerstatus=$(echo pow $tv | cec-client -s -d 1)
   if [[ $powerstatus != *": on"* ]]

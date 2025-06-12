@@ -6,7 +6,7 @@
 #   12 - Stop Loop
 #   13 - Turn TV On
 #   14 - Turn TV Off
-#   15 - Download Graphic or Loop
+#   15 - Download Graphics and Loops
 #   16 - Download Crons
 #   21 - Change TV to Input 1
 #   22 - Change TV to Input 2
@@ -42,7 +42,7 @@ while IFS= read -r line; do
     12) bash /home/pi/scripts/loopstop.sh & ;;
     13) echo on 0 | cec-client -s -d 1; sleep 10; vars="power=On" ;;
     14) echo standby 0 | cec-client -s -d 1; vars="power=Off" ;;
-    15) sudo curl -o /var/www/html/pss/files/$variables.mp4 http://$database_ip/pss/files/$2.mp4 ;;
+    15) bash /home/pi/scripts/cronsandmirror.sh manualmirror ;;
     16) bash /home/pi/scripts/cronsandmirror.sh manualcrons ;;
     21) echo tx 4F:82:10:00 0 | cec-client -s -d 1; vars="input=1" ;;
     22) echo tx 4F:82:20:00 0 | cec-client -s -d 1; vars="input=2" ;;

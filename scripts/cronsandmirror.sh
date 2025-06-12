@@ -15,7 +15,18 @@ then
   exit
 fi
 
-if [ ${pssonoff:0:3} == "off" ]
+if [[ "$1" == "manualmirror" ]]
+then
+  echo "MESSAGE $datetime: Starting cronsandmirror(manualmirror)" >> /home/pi/log/$log.log
+  if [ "$database_ip" != "$lanip" ]
+  then
+    sudo wget -np -nH --cut-dirs 2 -mirror -R '*index*' -P /var/www/html/pss/files/ http://$database_ip/pss/files/
+    sudo chown www-data:www-data /var/www/html/pss/files/*
+  fi
+  exit
+fi
+
+if [ ${pssonoff:0:3} == "off" ] && [[ "$1" == "" ]]
 then
   echo "MESSAGE $datetime: Starting cronsandmirror" >> /home/pi/log/$log.log
   sudo curl -Ss http://$database_ip/pss/scripts/createschedule.php?device=$mac --output /etc/cron.d/loopschedule
@@ -26,4 +37,3 @@ then
   fi
   sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=cronsandmirror&device=$mac" >> /home/pi/log/$log.log
 fi
-

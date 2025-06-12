@@ -37,9 +37,9 @@
         break;
 
       case "locationstatus":
-        if(isset($_GET['power'])) { $dbupdate.=("Dev_Power='" . $_GET['power'] . "', "); }
-        if(isset($_GET['input'])) { $dbupdate.=("Dev_Input='" . $_GET['input'] . "', "); }
-        if(isset($_GET['loop'])) { $dbupdate.=("Dev_Loop='" . $_GET['loop'] . "', "); }
+        if(isset($_GET['power']) && $_GET['power'] != "unknown") { $dbupdate.=("Dev_Power='" . $_GET['power'] . "', "); }
+        if(isset($_GET['input']) && $_GET['input'] != "unknown") { $dbupdate.=("Dev_Input='" . $_GET['input'] . "', "); }
+        if(isset($_GET['loop']) && $_GET['loop'] != "unknown") { $dbupdate.=("Dev_Loop='" . $_GET['loop'] . "', "); }
         if($dbupdate != "") { $dbupdate=substr($dbupdate,0,-2); $update="UPDATE Devices SET $dbupdate WHERE (Dev_MAC='$device')"; }
         break;
 

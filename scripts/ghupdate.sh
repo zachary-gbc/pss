@@ -28,6 +28,7 @@ then
 
   # Website
   sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"
+  sudo chown www-data:www-data /var/www/html/pss/scripts/manualaction
 
   echo $lastcommit > /home/pi/pss_lastupdatecommit
 

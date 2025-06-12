@@ -57,4 +57,4 @@ while IFS= read -r line; do
   sleep 1
 done <<< "$actions"
 
-echo "null" > /var/www/html/pss/scripts/manualaction
+sudo sh -c "echo 'null' > /var/www/html/pss/scripts/manualaction"

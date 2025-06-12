@@ -52,7 +52,7 @@
   }
 
   echo("<h3>Perform Manual Action:</h3>\n");
-  $numbers=array(0 => "Choose Action", 11 => "Start Loop", 12 => "Stop Loop", 13 => "Turn TV On", 14 => "Turn TV Off", 15 => "Download Graphic or Loop", 16 => "Download Crons", 21 => "Change TV to Input 1", 22 => "Change TV to Input 2", 23 => "Change TV to Input 3", 24 => "Change TV to Input 4", 25 => "Change TV to Input 5");
+  $numbers=array(0 => "Choose Action", 11 => "Start Loop", 12 => "Stop Loop", 13 => "Turn TV On", 14 => "Turn TV Off", 15 => "Download Graphics and Loops", 16 => "Download Schedule", 21 => "Change TV to Input 1", 22 => "Change TV to Input 2", 23 => "Change TV to Input 3", 24 => "Change TV to Input 4", 25 => "Change TV to Input 5");
 
   $allloops="SELECT * FROM Loops ORDER BY Lop_Name";
   if(!$rs=mysqli_query($db,$allloops)) { echo("Unable to Run Query: $allloops"); exit; }

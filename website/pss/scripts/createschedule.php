@@ -13,19 +13,19 @@
 				if(substr($row['Sch_OTStartDateTime'],0,4) == date("Y"))
 				{
 					$sdatetime=$row['Sch_OTStartDateTime'];
-					$smonth=substr($row['Sch_OTStartDateTime'],4,2);
-					$sdom=substr($row['Sch_OTStartDateTime'],6,2);
-					$shour=substr($row['Sch_OTStartDateTime'],8,2);
-					$sminute=substr($row['Sch_OTStartDateTime'],10,2);
+					$smonth=substr($row['Sch_OTStartDateTime'],4,2); if(substr($smonth,0,1) == 0) { $smonth=substr($smonth,1); }
+					$sdom=substr($row['Sch_OTStartDateTime'],6,2); if(substr($sdom,0,1) == 0) { $sdom=substr($sdom,1); }
+					$shour=substr($row['Sch_OTStartDateTime'],8,2); if(substr($shour,0,1) == 0) { $shour=substr($shour,1); }
+					$sminute=substr($row['Sch_OTStartDateTime'],10,2); if(substr($sminute,0,1) == 0) { $sminute=substr($sminute,1); }
 					$duration=$row['Sch_DurationMinutes'];
 					$sdow="*"; $edow="*"; $s=1;
 					if($duration != 0)
 					{
 						$enddate=strtotime("+$duration minutes",strtotime($sdatetime));
-						$emonth=date("m",$enddate);
+						$emonth=date("n",$enddate);
 						$edom=date("j",$enddate);
-						$ehour=date("H",$enddate);
-						$eminute=date("i",$enddate);
+						$ehour=date("G",$enddate);
+						$eminute=intval(date("i",$enddate));
 						$e=1;
 					}
 				}

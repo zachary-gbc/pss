@@ -63,7 +63,7 @@ do
   fi
 
   # Update DB
-  mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Graphics SET Gr_Converted='Y' WHERE (Gr_ID='$query')"
+  mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Graphics SET Gr_Converted='Y', Gr_UpdateDateTime=now() WHERE (Gr_ID='$query')"
   lastquery=$query
   sleep 10
 done

@@ -8,7 +8,6 @@
 		| <a class="headerlinks" href="/pss/manage/graphiclist.php">Edit Graphic</a>
 		| <a class="headerlinks" href="/pss/manage/loops.php">Loops</a>
 		| <a class="headerlinks" href="/pss/manage/schedule.php">Schedules</a>
-		| <a class="headerlinks" href="/pss/manage/devices.php">Devices</a>
 		<!--| <a class="headerlinks" href="/pss/other/profile.php">Profile</a>-->
 		<!--| <a style="font-size:small"class="headerlinks" href="/pss/other/login.php?logout=true">[Logout]</a>-->
 	</div>

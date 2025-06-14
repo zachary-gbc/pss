@@ -1,6 +1,10 @@
 <?php
 	include('dblogin.php');
-	$aloopstobuild=array(); $mloopstobuild=array(); $amissing=array(); $mmissing=array(); $now=date("Y-m-d H:i:s"); $month=date("n"); $todaydate=date("Y-m-d");
+	$aloopstobuild=array(); $mloopstobuild=array(); $amissing=array(); $mmissing=array(); $now=date("Y-m-d H:i:s"); $month=date("n"); $todaydate=date("Y-m-d"); $lastconcat=0;
+
+	$lastconcatvar="SELECT Var_Value FROM Variables WHERE (Var_Name='Last-Loop-Created')";
+	if(!$rs=mysqli_query($db,$lastconcatvar)) { echo("Unable to Run Query: $lastconcatvar"); exit; }
+	while($row = mysqli_fetch_array($rs)) { $lastconcat=$row['Var_Value']; }
 
 	$automaticloops="SELECT Lop_ID, Lop_Orientation FROM Loops INNER JOIN AutomaticLoopDates ON Loops.Lop_ID=AutomaticLoopDates.AD_Loop";
 	if(!$rs=mysqli_query($db,$automaticloops)) { echo("Unable to Run Query: $automaticloops"); exit; }
@@ -10,10 +14,12 @@
 	{
 		foreach($aloopstobuild as $loopid => $orientation)
 		{
-			$graphics="SELECT Gr_ID, Gr_Name FROM AutomaticLoopDates INNER JOIN Graphics ON AutomaticLoopDates.AD_Graphic=Graphics.Gr_ID WHERE (AD_Loop='$loopid') AND ((AD_Date='$todaydate') OR (AD_Month='$month') OR ((AD_StartDateRange<='$todaydate') AND (AD_EndDateRange>='$todaydate')))"; $vlcfilecontents=""; $concatfilecontents="";
+			$concat=false;
+			$graphics="SELECT Gr_ID, Gr_Name, Gr_UpdateDateTime FROM AutomaticLoopDates INNER JOIN Graphics ON AutomaticLoopDates.AD_Graphic=Graphics.Gr_ID WHERE (AD_Loop='$loopid') AND ((AD_Date='$todaydate') OR (AD_Month='$month') OR ((AD_StartDateRange<='$todaydate') AND (AD_EndDateRange>='$todaydate')))"; $vlcfilecontents=""; $concatfilecontents="";
 			if(!$rs=mysqli_query($db,$graphics)) { echo("Unable to Run Query: $graphics"); exit; }
 			while($row = mysqli_fetch_array($rs))
 			{
+				if(strtotime($row['Gr_UpdateDateTime']) >= strtotime($lastconcat)) { $concat=true; }
 				$graphicid=$row['Gr_ID']; $exists=false;
 				if(file_exists("/var/www/html/pss/files/$graphicid-$orientation.mp4"))
 				{
@@ -23,8 +29,13 @@
 				}
 				if($exists == false) { $amissing[$loopid][$graphicid]=$row['Gr_Name']; }
 			}
-			if($vlcfilecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.m3u", $vlcfilecontents); }
-			if($concatfilecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.concat", $concatfilecontents); }
+			if($vlcfilecontents != "")
+			{
+				$currentm3u=file_get_contents("/var/www/html/pss/files/loop-$loopid.m3u");
+				if($currentm3u != $vlcfilecontents) { $concat=true; }
+				file_put_contents("/var/www/html/pss/files/loop-$loopid.m3u", $vlcfilecontents);
+			}
+			if($concat == true) { if($concatfilecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.concat", $concatfilecontents); } }
 		}
 	}
 
@@ -36,10 +47,12 @@
 	{
 		foreach($mloopstobuild as $loopid => $orientation)
 		{
-			$graphics="SELECT Gr_ID, Gr_Name FROM LoopGraphics INNER JOIN Graphics ON LoopGraphics.LG_Graphic=Graphics.Gr_ID WHERE (LG_Loop='$loopid') ORDER BY LG_Order"; $vlcfilecontents=""; $concatfilecontents="";
+			$concat=false;
+			$graphics="SELECT Gr_ID, Gr_Name, Gr_UpdateDateTime FROM LoopGraphics INNER JOIN Graphics ON LoopGraphics.LG_Graphic=Graphics.Gr_ID WHERE (LG_Loop='$loopid') ORDER BY LG_Order"; $vlcfilecontents=""; $concatfilecontents="";
 			if(!$rs=mysqli_query($db,$graphics)) { echo("Unable to Run Query: $graphics"); exit; }
 			while($row = mysqli_fetch_array($rs))
 			{
+				if(strtotime($row['Gr_UpdateDateTime']) >= strtotime($lastconcat)) { $concat=true; }
 				$graphicid=$row['Gr_ID']; $exists=false;
 				if(file_exists("/var/www/html/pss/files/$graphicid-$orientation.mp4"))
 				{
@@ -49,8 +62,13 @@
 				}
 				if($exists == false) { $mmissing[$loopid][$graphicid]=$row['Gr_Name']; }
 			}
-			if($vlcfilecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.m3u", $vlcfilecontents); }
-			if($concatfilecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.concat", $concatfilecontents); }
+			if($vlcfilecontents != "")
+			{
+				$currentm3u=file_get_contents("/var/www/html/pss/files/loop-$loopid.m3u");
+				if($currentm3u != $vlcfilecontents) { $concat=true; }
+				file_put_contents("/var/www/html/pss/files/loop-$loopid.m3u", $vlcfilecontents);
+			}
+			if($concat == true) { if($concatfilecontents != "") { file_put_contents("/var/www/html/pss/files/loop-$loopid.concat", $concatfilecontents); } }
 		}
 	}
 

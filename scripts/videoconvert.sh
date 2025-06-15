@@ -3,6 +3,7 @@
 . /var/www/html/pss/conf/pss.conf
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
+lanip=$(hostname -I | tr -d ' ')
 echo "MESSAGE $datetime: Starting videoconvert" >> /home/pi/log/$log.log
 
 inputfile="in.mp4"
@@ -16,6 +17,11 @@ doublebitrate="10000000"
 mode="CBR"
 fps="30"
 lastquery=0
+
+if [ "$database_ip" != "$lanip" ]
+then
+  exit
+fi
 
 while true
 do

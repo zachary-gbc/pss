@@ -155,8 +155,8 @@
         $rtable.=("<th><select name='month$x'><option value='*'>All</option>$months</select></th>\n");
         $rtable.=("<th><select name='day$x'><option value='*'>All</option>$days</select></th>\n");
         $rtable.=("<th><select name='dow$x'><option value='*'>All</option>$dows</select></th>\n");
-        $rtable.=("<th><select name='hour$x'><option value='*'>All</option>$hours</select></th>\n");
-        $rtable.=("<th><select name='minute$x'><option value='*'>All</option>$minutes</select></th>\n");
+        $rtable.=("<th><select name='hour$x'>$hours</select></th>\n");
+        $rtable.=("<th><select name='minute$x'><option value='0'>0</option>$minutes</select></th>\n");
         $rtable.=("<th><input type='number' style='width:50px' name='duration$x' value='$duration' /></th>\n");
         $rtable.=("<th><select name='screenonoff$x'><option value='1' $yes>Yes</option><option value='0' $no>No</option></select></th>\n");
         $rtable.=("<th><input type='number' name='input$x' value=\"" . $row['Sch_ScreenInput'] . "\" min='0' max='3' /></th>\n");

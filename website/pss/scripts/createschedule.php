@@ -34,21 +34,20 @@
 			{
 				$sminute=$row['Sch_RMinute'];
 				$shour=$row['Sch_RHour'];
-				$sdom=$row['Sch_RDOM'];
-				$smonth=$row['Sch_RMonth'];
+				$sdom=$row['Sch_RDOM']; if($sdom == "*") { $ddom=date("j"); } else { $ddom=$sdom; }
+				$smonth=$row['Sch_RMonth']; if($smonth == "*") { $dmonth=date("n"); } else { $dmonth=$smonth; }
 				$sdow=$row['Sch_RDOW'];
 				$duration=$row['Sch_DurationMinutes'];
 				$edow=$sdow; $s=1;
+				$sdatetime=mktime($shour,$sminute,0,$dmonth,$ddom,date("Y"));
 				if($duration != 0)
 				{
-					$daystoadd=floor($duration / 86400);
-					$hourstoadd=floor($duration / 60);
-					$minutestoadd=fmod($duration,60);
-
-					if($sdom == "*") { $edom=$sdom; } else { $edom=($sdom + $daystoadd); }
-					if($shour == "*") { $ehour=$shour; } else { $ehour=($shour + $hourstoadd); }
-					if($sminute == "*") { $eminute=$sminute; } else { $eminute=($sminute + $minutestoadd); }
-					$emonth=$smonth; $e=1;
+					$enddate=strtotime("+$duration minutes",$sdatetime);
+					if($smonth == "*") { $emonth="*"; } else { $emonth=date("n",$enddate); }
+					if($sdom == "*") { $edom="*"; } else { $edom=date("j",$enddate); }
+					$ehour=date("G",$enddate);
+					$eminute=intval(date("i",$enddate));
+					$e=1;
 				}
 		}
 			$onoff=$row['Sch_ScreenOnOff'];

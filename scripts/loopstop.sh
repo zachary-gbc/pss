@@ -4,7 +4,6 @@
 # 2 = screen input change (value)   echo 'tx 4F:82:10:00 $tv' | cec-client -s -d 1 for input 1, change the 10 to 20 for input 2
 
 . /var/www/html/pss/conf/pss.conf
-
 tv="0"
 power="Off"
 dow=$(date +%u)

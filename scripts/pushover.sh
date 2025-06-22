@@ -1,7 +1,6 @@
 #!/bin/bash
 
 . /var/www/html/pss/conf/pss.conf
-
 title=$1
 sound=$2
 message=$3

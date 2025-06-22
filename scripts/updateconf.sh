@@ -1,7 +1,6 @@
 #!/bin/bash
 
 . /var/www/html/pss/conf/pss.conf
-
 lanip=$(hostname -I | tr -d ' ')
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 log=$(date -I)

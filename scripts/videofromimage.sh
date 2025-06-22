@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
 . /var/www/html/pss/conf/pss.conf
-
 pssonoff="off"
 pssonoff=$(</home/pi/pssonoff)
 lanip=$(hostname -I | tr -d ' ')

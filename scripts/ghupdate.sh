@@ -1,9 +1,8 @@
 #!/bin/bash
 
-. /var/www/html/pss/conf/pss.conf
-
 sleep 62
 
+. /var/www/html/pss/conf/pss.conf
 lastupdate=$(</home/pi/pss_lastupdatecommit)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 log=$(date -I)

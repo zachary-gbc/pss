@@ -1,7 +1,6 @@
 #!/bin/bash
 
 . /var/www/html/pss/conf/pss.conf
-
 if [[ ! -f /home/pi/scripts/lanip ]]
 then
   echo "1.1.1.1" > /home/pi/scripts/lanip

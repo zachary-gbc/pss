@@ -1,7 +1,6 @@
 #!/usr/bin/bash
 
 . /var/www/html/pss/conf/pss.conf
-
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 power="Off"
 log=$(date -I)

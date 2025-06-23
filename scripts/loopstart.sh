@@ -40,7 +40,7 @@ if [[ ! -z $4 ]]; then checkvariable "$4"; fi
 if [[ ! -z $5 ]]; then checkvariable "$5"; fi
 if [[ ! -z $6 ]]; then checkvariable "$6"; fi
 
-bash /home/pi/scripts/loopstop.sh $vars
+bash /home/pi/scripts/loopstop.sh $vars &
 
 if [[ $type == "L" ]]
 then

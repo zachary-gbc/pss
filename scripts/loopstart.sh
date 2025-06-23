@@ -1,25 +1,48 @@
 #!/usr/bin/bash
 
-# 1 = loop (L-#) or graphic (G-#-L or G-#-P)
-# 2 = start screen on (yes=1/no=0)
-# 3 = start screen input change (value)   echo 'tx 4F:82:10:00 $tv' | cec-client -s -d 1 for input 1, change the 10 to 20 for input 2
+# loop (L-#) or graphic (G-#-L or G-#-P)
+# power (start: yes=PS-1/no=PS-0, end: yes=PE-1/no=PE-0)
+# input (start: IS-1, end: IE-1)
+# duration in minutes (DM-minutes)
 # bash /home/pi/scripts/loopstart.sh L-1 1 1
 # bash /home/pi/scripts/loopstart.sh G-1-P 1 1
 
 . /var/www/html/pss/conf/pss.conf
-
-tv="0"
-power="unknown"
-input="unknown"
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 log=$(date -I)
-type=${1:0:1}
-number=${1:2}
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
+type=""
+number=""
+vars=""
 
-echo "MESSAGE $datetime: Starting $1, Turn TV On (1=yes): $2, Input Set: $3" >> /home/pi/log/$log.log
+if [[ ! -z $1 ]]; then vars+="$1 "; fi
+if [[ ! -z $2 ]]; then vars+="$2 "; fi
+if [[ ! -z $3 ]]; then vars+="$3 "; fi
+if [[ ! -z $4 ]]; then vars+="$4 "; fi
+if [[ ! -z $5 ]]; then vars+="$5 "; fi
+if [[ ! -z $6 ]]; then vars+="$6 "; fi
 
-if [ $type == "L" ]
+echo "MESSAGE $datetime: Loop Start ($vars)" >> /home/pi/log/$log.log
+
+function checkvariable {
+  vartype=${1:0:2}
+  case $vartype in
+    "L-"|"G-") type=${1:0:1}; number=${1:2}; loopgraphic=$1 ;;
+    "PS") bash /home/pi/scripts/tvpower.sh $1 ;;
+    "IS") bash /home/pi/scripts/tvinput.sh $1 ;;
+  esac
+}
+
+if [[ ! -z $1 ]]; then checkvariable "$1"; fi
+if [[ ! -z $2 ]]; then checkvariable "$2"; fi
+if [[ ! -z $3 ]]; then checkvariable "$3"; fi
+if [[ ! -z $4 ]]; then checkvariable "$4"; fi
+if [[ ! -z $5 ]]; then checkvariable "$5"; fi
+if [[ ! -z $6 ]]; then checkvariable "$6"; fi
+
+bash /home/pi/scripts/loopstop.sh $vars
+
+if [[ $type == "L" ]]
 then
   if [[ $omxorvlc == "o" ]]
   then
@@ -36,13 +59,7 @@ else
   message="Graphic"
 fi
 
-if [[ $1 == 0 ]]
-then
-  bash /home/pi/scripts/loopstop.sh $2 $3
-  exit 1
-fi
-
-if [[ $1 != 1 ]] && [[ ! -f "$file" ]]
+if [[ $type != 1 ]] && [[ ! -f "$file" ]]
 then
   curl -Ss "$downloadlink" > /home/pi/download.file
   sudo mv /home/pi/download.file $file
@@ -54,48 +71,6 @@ then
   fi
 fi
 
-if [[ $2 == "1" ]]
-then
-  echo on $tv | cec-client -s -d 1
-  power="On"
-  sleep 10
-  powerstatus=$(echo pow $tv | cec-client -s -d 1)
-  if [[ $powerstatus != *": on"* ]]
-  then
-    echo on $tv | cec-client -s -d 1
-    sleep 10
-    powerstatus=$(echo pow $tv | cec-client -s -d 1)
-    if [[ $powerstatus != *": on"* ]]
-    then
-      echo "ALERT $datetime: TV Did Not Turn On" >> /home/pi/log/$log.log
-      bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "TV Did Not Turn On"
-      power="Off"
-    fi
-  fi
-fi
-
-if [[ $3 == 1 ]]
-then
-  sleep 10
-  echo tx 4F:82:10:00 $tv | cec-client -s -d 1
-  echo "MESSAGE $datetime: TV Turned to Input 1" >> /home/pi/log/$log.log
-  input="1"
-fi
-if [[ $3 == 2 ]]
-then
-  sleep 10
-  echo tx 4F:82:20:00 $tv | cec-client -s -d 1
-  echo "MESSAGE $datetime: TV Turned to Input 2" >> /home/pi/log/$log.log
-  input="2"
-fi
-if [[ $3 == 3 ]]
-then
-  sleep 10
-  echo tx 4F:82:30:00 $tv | cec-client -s -d 1
-  echo "MESSAGE $datetime: TV Turned to Input 3" >> /home/pi/log/$log.log
-  input="3"
-fi
-
 pkill loopcheck.sh
 if [[ $omxorvlc == "o" ]]
 then
@@ -105,18 +80,18 @@ else
 fi
 sleep 1
 
-if [[ $1 != 1 ]]
+if [[ $type != 1 ]]
 then
-  echo "MESSAGE $datetime: Starting $message" >> /home/pi/log/$log.log
+  echo "MESSAGE $datetime: Starting $message ($loopgraphic)" >> /home/pi/log/$log.log
   if [[ $omxorvlc == "o" ]]
   then
     omxplayer --no-keys --loop $file &
   else
     DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
   fi
-  echo "$1" > /home/pi/pssonoff
+  echo "$loopgraphic" > /home/pi/pssonoff
 fi
-curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input&loop=$1" >> /home/pi/log/$log.log
+curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&loop=$1" >> /home/pi/log/$log.log
 
 sleep 5
 bash /home/pi/scripts/loopcheck.sh &

@@ -79,8 +79,10 @@ CREATE TABLE Schedules(
   Sch_RMonth VARCHAR(255) NULL,
   Sch_RDOW VARCHAR(255) NULL,
   Sch_DurationMinutes VARCHAR(255) NULL,
-  Sch_ScreenOnOff CHAR(1) NULL,
-  Sch_ScreenInput CHAR(1) NULL,
+  Sch_ScreenPowerStart CHAR(1) NULL DEFAULT '1',
+  Sch_ScreenPowerEnd CHAR(1) NULL DEFAULT '1',
+  Sch_ScreenInputStart CHAR(1) NULL DEFAULT '1',
+  Sch_ScreenInputEnd CHAR(1) NULL DEFAULT '1',
   Sch_Active CHAR(1) NULL,
   Sch_UpdateDateTime DATETIME NOT NULL,
   PRIMARY KEY(Sch_ID)

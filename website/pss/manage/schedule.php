@@ -13,15 +13,17 @@
       $name=str_replace("'","''",$_POST["name$x"]);
       $loopgraphic=str_replace("'","''",$_POST["loopgraphic$x"]);
       $duration=str_replace("'","''",$_POST["duration$x"]);
-      $screen=str_replace("'","''",$_POST["screenonoff$x"]);
-      $input=str_replace("'","''",$_POST["input$x"]);
+      $screenpowerstart=str_replace("'","''",$_POST["screenpowerstart$x"]);
+      $screenpowerend=str_replace("'","''",$_POST["screenpowerend$x"]);
+      $inputstart=str_replace("'","''",$_POST["inputstart$x"]);
+      $inputend=str_replace("'","''",$_POST["inputend$x"]);
       if(isset($_POST["active$x"])) { $active='1'; } else { $active='0'; }
       if($_POST["otr$x"] == "O")
       {
         $date=str_replace("'","''",$_POST["date$x"]);
         $time=str_replace("'","''",$_POST["time$x"]);
         $startdatetime=date("YmdHi",strtotime($date . " " . $time));
-        $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_OTStartDateTime='$startdatetime', Sch_DurationMinutes='$duration', Sch_ScreenOnOff='$screen', Sch_ScreenInput='$input',  Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
+        $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_OTStartDateTime='$startdatetime', Sch_DurationMinutes='$duration', Sch_ScreenPowerStart='$screenpowerstart', Sch_ScreenPowerEnd='$screenpowerend', Sch_ScreenInputStart='$inputstart', Sch_ScreenInputEnd='$inputend', Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
         if(!mysqli_query($db,$update)) { echo("Unable to Run Query: $update"); exit; }
       }
         else
@@ -31,7 +33,7 @@
         $day=str_replace("'","''",$_POST["day$x"]);
         $month=str_replace("'","''",$_POST["month$x"]);
         $dow=str_replace("'","''",$_POST["dow$x"]);
-        $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_RMinute='$minute', Sch_RHour='$hour', Sch_RDOM='$day', Sch_RMonth='$month', Sch_RDOW='$dow', Sch_DurationMinutes='$duration', Sch_ScreenOnOff='$screen', Sch_ScreenInput='$input',  Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
+        $update="UPDATE Schedules SET Sch_Name='$name', Sch_LoopGraphic='$loopgraphic', Sch_RMinute='$minute', Sch_RHour='$hour', Sch_RDOM='$day', Sch_RMonth='$month', Sch_RDOW='$dow', Sch_DurationMinutes='$duration', Sch_ScreenPowerStart='$screenpowerstart', Sch_ScreenPowerEnd='$screenpowerend', Sch_ScreenInputStart='$inputstart', Sch_ScreenInputEnd='$inputend',  Sch_Active='$active', Sch_UpdateDateTime=now() WHERE (Sch_ID='$id')";
         if(!mysqli_query($db,$update)) { echo("Unable to Run Query: $update"); exit; }
       }
 
@@ -91,13 +93,13 @@
         $time=(substr($row['Sch_OTStartDateTime'],8,2) . ":" . substr($row['Sch_OTStartDateTime'],10,2));
         $loopgraphic=$row['Sch_LoopGraphic'];
         $duration=$row['Sch_DurationMinutes'];
-        $screenonoff=$row['Sch_ScreenOnOff'];
         $input=$row['Sch_ScreenInput'];
         $active=$row['Sch_Active'];
         $otitem=true;
 
         $actives=""; if($row['Sch_Active'] == '1') { $actives="checked='checked'"; }
-        if($row['Sch_ScreenOnOff'] == "1") { $yes="selected='selected'"; $no=""; } else { $yes=""; $no="selected='selected'"; }
+        if($row['Sch_ScreenPowerStart'] == "1") { $onyes="selected='selected'"; $onno=""; } else { $onyes=""; $onno="selected='selected'"; }
+        if($row['Sch_ScreenPowerEnd'] == "1") { $offyes="selected='selected'"; $offno=""; } else { $offyes=""; $offno="selected='selected'"; }
         if($row['Sch_LoopGraphic'] == "1") { $nols="selected='selected'"; } else { $nols=""; } $lgoptions="";
         foreach($lgselect as $groupname => $group)
         {
@@ -114,8 +116,10 @@
         $ottable.=("<th><input type='date' style='width:75px' name='date$x' value='$date' /></th>\n");
         $ottable.=("<th><input type='time' style='width:75px' name='time$x' value='$time' /></th>\n");
         $ottable.=("<th><input type='number' style='width:50px' name='duration$x' value='$duration' /></th>\n");
-        $ottable.=("<th><select name='screenonoff$x'><option value='1' $yes>Yes</option><option value='0' $no>No</option></select></th>\n");
-        $ottable.=("<th><input type='number' name='input$x' value=\"" . $row['Sch_ScreenInput'] . "\" min='0' max='3' /></th>\n");
+        $ottable.=("<th><select name='screenpowerstart$x'><option value='1' $onyes>Yes</option><option value='0' $onno>No</option></select></th>\n");
+        $ottable.=("<th><select name='screenpowerend$x'><option value='1' $offyes>Yes</option><option value='0' $offno>No</option></select></th>\n");
+        $ottable.=("<th><input type='number' name='inputstart$x' value=\"" . $row['Sch_ScreenInputStart'] . "\" min='0' max='5' /></th>\n");
+        $ottable.=("<th><input type='number' name='inputend$x' value=\"" . $row['Sch_ScreenInputEnd'] . "\" min='0' max='5' /></th>\n");
         $ottable.=("<th><input type='checkbox' $actives name='active$x' /></th>\n");
         $ottable.=("<th><input type='checkbox' name='delete$x' /></th>\n");
         $ottable.=("</tr>\n");
@@ -126,13 +130,13 @@
         $months=""; $days=""; $dows=""; $hours=""; $minutes=""; $alldows=array(1=>"Monday",2=>"Tuesday",3=>"Wednesday",4=>"Thursday",5=>"Friday",6=>"Saturday",7=>"Sunday");
         $loopgraphic=$row['Sch_LoopGraphic'];
         $duration=$row['Sch_DurationMinutes'];
-        $screenonoff=$row['Sch_ScreenOnOff'];
         $input=$row['Sch_ScreenInput'];
         $active=$row['Sch_Active'];
         $ritem=true;
 
         $actives=""; if($row['Sch_Active'] == '1') { $actives="checked='checked'"; }
-        if($row['Sch_ScreenOnOff'] == "1") { $yes="selected='selected'"; $no=""; } else { $yes=""; $no="selected='selected'"; }
+        if($row['Sch_ScreenPowerStart'] == "1") { $onyes="selected='selected'"; $onno=""; } else { $onyes=""; $onno="selected='selected'"; }
+        if($row['Sch_ScreenPowerEnd'] == "1") { $offyes="selected='selected'"; $offno=""; } else { $offyes=""; $offno="selected='selected'"; }
         if($row['Sch_LoopGraphic'] == "1") { $nols="selected='selected'"; } else { $nols=""; } $lgoptions="";
         foreach($lgselect as $groupname => $group)
         {
@@ -158,8 +162,10 @@
         $rtable.=("<th><select name='hour$x'>$hours</select></th>\n");
         $rtable.=("<th><select name='minute$x'><option value='0'>00</option>$minutes</select></th>\n");
         $rtable.=("<th><input type='number' style='width:50px' name='duration$x' value='$duration' /></th>\n");
-        $rtable.=("<th><select name='screenonoff$x'><option value='1' $yes>Yes</option><option value='0' $no>No</option></select></th>\n");
-        $rtable.=("<th><input type='number' name='input$x' value=\"" . $row['Sch_ScreenInput'] . "\" min='0' max='3' /></th>\n");
+        $rtable.=("<th><select name='screenpowerstart$x'><option value='1' $onyes>Yes</option><option value='0' $onno>No</option></select></th>\n");
+        $rtable.=("<th><select name='screenpowerend$x'><option value='1' $offyes>Yes</option><option value='0' $offno>No</option></select></th>\n");
+        $rtable.=("<th><input type='number' name='inputstart$x' value=\"" . $row['Sch_ScreenInputStart'] . "\" min='0' max='5' /></th>\n");
+        $rtable.=("<th><input type='number' name='inputend$x' value=\"" . $row['Sch_ScreenInputEnd'] . "\" min='0' max='5' /></th>\n");
         $rtable.=("<th><input type='checkbox' $actives name='active$x' /></th>\n");
         $rtable.=("<th><input type='checkbox' name='delete$x' /></th>\n");
         $rtable.=("</tr>\n");
@@ -173,19 +179,20 @@
     if($otitem == true)
     {
       echo("<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Date</th>\n<th><br>Time</th>\n<th>Duration<br>(Minutes)</th>\n");
-      echo("<th>Screen<br>On/Off</th>\n<th>Change<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$ottable");
+      echo("<th>Screen<br>On</th>\n<th>Screen<br>Off</th>\n<th>Starting<br>Input</th>\n<th>Ending<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$ottable");
     }
-    echo("<tr><th>&nbsp;</th></tr>\n<tr bgcolor='94DE94'>\n<th colspan='10' style='text-align:left'> -- NEW ONE TIME SCHEDULE -- </th>\n</tr>\n");
+    echo("<tr><th>&nbsp;</th></tr>\n<tr bgcolor='94DE94'>\n<th colspan='12' style='text-align:left'> -- NEW ONE TIME SCHEDULE -- </th>\n</tr>\n");
     echo("<tr>\n<td colspan='10'><input type='text' name='otnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
     echo("</table>\n");
 
     echo("<h4 style='margin:0px'><br>Recurring Schedules:</h4>\n<table>\n");
     if($ritem == true)
     {
-      echo("<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Month</th>\n<th>Day of<br>Month</th>\n<th>Day of<br>Week</th>\n<th><br>Hour</th>\n");
-      echo("<th><br>Minute</th>\n<th>Duration<br>(Minutes)</th>\n<th>Screen<br>On/Off</th>\n<th>Change<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$rtable");
+      echo("<tr>\n<th><br>ID</th>\n<th><br>Name</th>\n<th><br>Loop/Graphic</th>\n<th><br>Month</th>\n<th>Day of<br>Month</th>\n<th>Day of<br>Week</th>\n");
+      echo("<th><br>Hour</th>\n<th><br>Minute</th>\n<th>Duration<br>(Minutes)</th>\n<th>Screen<br>On</th>\n<th>Screen<br>Off</th>\n<th>Starting<br>Input</th>\n");
+      echo("<th>Ending<br>Input</th>\n<th><br>Active</th>\n<th><br>Delete</th>\n</tr>\n$rtable");
     }
-    echo("<tr><th>&nbsp;</th></tr>\n<tr bgcolor='94DE94'>\n<th colspan='13' style='text-align:left'> -- NEW RECURRING SCHEDULE -- </th>\n</tr>\n");
+    echo("<tr><th>&nbsp;</th></tr>\n<tr bgcolor='94DE94'>\n<th colspan='15' style='text-align:left'> -- NEW RECURRING SCHEDULE -- </th>\n</tr>\n");
     echo("<tr>\n<td colspan='13'><input type='text' name='recnew' placeholder='Input New Schedule Name Here'><td>\n</tr>\n");
     echo("</table>\n");
 

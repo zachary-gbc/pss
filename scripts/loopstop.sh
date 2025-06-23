@@ -1,18 +1,44 @@
 #!/usr/bin/bash
 
-# 1 = screen off (yes=1/no=0)
-# 2 = screen input change (value)   echo 'tx 4F:82:10:00 $tv' | cec-client -s -d 1 for input 1, change the 10 to 20 for input 2
+# 1 = minutes (S-minutes)
+# 2 = power (yes=F-3/no=F-4)
 
 . /var/www/html/pss/conf/pss.conf
-tv="0"
-power="Off"
 dow=$(date +%u)
-input="unknown"
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 log=$(date -I)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
+power=""
+vars=""
 
-echo "MESSAGE $datetime: Stopping Loop/Graphic, Turn TV On (1=yes): $1, Input Set: $2" >> /home/pi/log/$log.log
+if [[ ! -z $1 ]]; then vars+="$1 "; fi
+if [[ ! -z $2 ]]; then vars+="$2 "; fi
+if [[ ! -z $3 ]]; then vars+="$3 "; fi
+if [[ ! -z $4 ]]; then vars+="$4 "; fi
+if [[ ! -z $5 ]]; then vars+="$5 "; fi
+if [[ ! -z $6 ]]; then vars+="$6 "; fi
+
+echo "MESSAGE $datetime: Stopping Loop/Graphic ($vars)" >> /home/pi/log/$log.log
+
+function checkvariable {
+  vartype=${1:0:2}
+  case $vartype in
+    "PE") power=$1 ;;
+    "DM")
+      if [[ $1 == "DM-0" ]]; then exit 1; fi
+      minutes=${1:3}
+      seconds=$((minutes * 60))
+      sleep $seconds
+      ;;
+  esac
+}
+
+if [[ ! -z $1 ]]; then checkvariable "$1"; fi
+if [[ ! -z $2 ]]; then checkvariable "$2"; fi
+if [[ ! -z $3 ]]; then checkvariable "$3"; fi
+if [[ ! -z $4 ]]; then checkvariable "$4"; fi
+if [[ ! -z $5 ]]; then checkvariable "$5"; fi
+if [[ ! -z $6 ]]; then checkvariable "$6"; fi
 
 echo "off" > /home/pi/pssonoff
 sleep 20
@@ -55,42 +81,6 @@ else
 fi
 sleep 5
 
-if [[ $2 == "1" ]]
-then
-  echo tx 4F:82:10:00 $tv | cec-client -s -d 1
-  sleep 5
-  input="1"
-fi
-if [[ $2 == "2" ]]
-then
-  echo tx 4F:82:20:00 $tv | cec-client -s -d 1
-  sleep 5
-  input="2"
-fi
-if [[ $2 == "3" ]]
-then
-  echo tx 4F:82:30:00 $tv | cec-client -s -d 1
-  sleep 5
-  input="3"
-fi
-if [[ $1 == "1" ]]
-then
-  echo standby $tv | cec-client -s -d 1
-  sleep 10
-  powerstatus=$(echo pow $tv | cec-client -s -d 1)
-  if [[ $powerstatus != *"standby"* ]]
-  then
-    echo standby $tv | cec-client -s -d 1
-    sleep 10
-    powerstatus=$(echo pow $tv | cec-client -s -d 1)
-    if [[ $powerstatus != *"standby"* ]]
-    then
-      echo "ALERT $datetime: TV Failed to Turn Off" >> /home/pi/log/$log.log
-      bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "TV Failed to Turn Off"
-      sleep 5
-      power="On"
-    fi
-  fi
-fi
+if [[ $power != "" ]]; then bash /home/pi/scripts/tvpower.sh $power; fi
 
-sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&input=$input&loop=0" >> /home/pi/log/$log.log
+sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&loop=0" >> /home/pi/log/$log.log

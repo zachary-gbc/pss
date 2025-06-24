@@ -18,16 +18,21 @@ if [[ ! -z $4 ]]; then vars+="$4 "; fi
 if [[ ! -z $5 ]]; then vars+="$5 "; fi
 if [[ ! -z $6 ]]; then vars+="$6 "; fi
 
-echo "MESSAGE $datetime: Stopping Loop/Graphic ($vars)" >> /home/pi/log/$log.log
+echo "MESSAGE $datetime: Loop Stop Script ($vars)" >> /home/pi/log/$log.log
 
 function checkvariable {
   vartype=${1:0:2}
   case $vartype in
     "PE") power=$1 ;;
     "DM")
-      if [[ $1 == "DM-0" ]]; then exit 1; fi
+      if [[ $1 == "DM-0" ]]
+      then
+        echo "MESSAGE $datetime: Loop Stop Script Quitting ($vars)" >> /home/pi/log/$log.log
+        exit 1
+      fi
       minutes=${1:3}
       seconds=$((minutes * 60))
+      echo "MESSAGE $datetime: Loop Stop Script Sleeping for $seconds Seconds" >> /home/pi/log/$log.log
       sleep $seconds
       ;;
   esac
@@ -40,6 +45,8 @@ if [[ ! -z $4 ]]; then checkvariable "$4"; fi
 if [[ ! -z $5 ]]; then checkvariable "$5"; fi
 if [[ ! -z $6 ]]; then checkvariable "$6"; fi
 
+echo "MESSAGE $datetime: Stopping Loop/Graphic ($vars)" >> /home/pi/log/$log.log
+
 echo "off" > /home/pi/pssonoff
 sleep 20
 
@@ -49,7 +56,7 @@ then
 else
   pkill vlc
 fi
-sleep 60
+sleep 20
 
 if [[ $omxorvlc == "o" ]]
 then

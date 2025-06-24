@@ -39,7 +39,7 @@ while IFS= read -r line; do
     11) bash /home/pi/scripts/loopstart.sh $variables ;;
     12) bash /home/pi/scripts/loopstop.sh ;;
     13) bash /home/pi/scripts/tvpower.sh PS-1 ;;
-    14) bash /home/pi/scripts/tvpower.sh PE-0 ;;
+    14) bash /home/pi/scripts/tvpower.sh PE-1 ;;
     15) bash /home/pi/scripts/cronsandmirror.sh manualmirror ;;
     16) bash /home/pi/scripts/cronsandmirror.sh manualcrons ;;
     21) bash /home/pi/scripts/tvinput.sh IS-1 ;;

@@ -33,9 +33,9 @@ sudo apt-get update
 sudo apt-get upgrade -y
 if [[ $omxvlc == "o" ]]
 then
-  appstoinstall=(apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg omxplayer)
+  appstoinstall=(at apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg omxplayer)
 else
-  appstoinstall=(apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg vlc vlc-bin)
+  appstoinstall=(at apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg vlc vlc-bin)
 fi
 
 for app in ${appstoinstall[@]}

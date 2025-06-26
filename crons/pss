@@ -39,4 +39,4 @@
 0 * * * * pi bash /home/pi/scripts/updatemain.sh &
 
 # Manual Action Check Every 5 Minutes
-# */5 * * * * pi bash /home/pi/scripts/manualaction.sh &
+*/5 * * * * pi bash /home/pi/scripts/manualaction.sh &

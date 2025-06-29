@@ -30,10 +30,6 @@ function checkvariable {
         echo "MESSAGE $datetime: Loop Stop Script Quitting ($vars)" >> /home/pi/log/$log.log
         exit 1
       fi
-      minutes=${1:3}
-      seconds=$((minutes * 60))
-      echo "MESSAGE $datetime: Loop Stop Script Sleeping for $seconds Seconds" >> /home/pi/log/$log.log
-      sleep $seconds
       ;;
   esac
 }

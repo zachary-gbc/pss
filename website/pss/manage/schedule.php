@@ -95,12 +95,11 @@
         $duration=$row['Sch_DurationMinutes'];
         $input=$row['Sch_ScreenInput'];
         $active=$row['Sch_Active'];
-        $otitem=true;
-
+        $otitem=true; $lgoptions="";
         $actives=""; if($row['Sch_Active'] == '1') { $actives="checked='checked'"; }
         if($row['Sch_ScreenPowerStart'] == "1") { $onyes="selected='selected'"; $onno=""; } else { $onyes=""; $onno="selected='selected'"; }
         if($row['Sch_ScreenPowerEnd'] == "1") { $offyes="selected='selected'"; $offno=""; } else { $offyes=""; $offno="selected='selected'"; }
-        if($row['Sch_LoopGraphic'] == "1") { $nols="selected='selected'"; } else { $nols=""; } $lgoptions="";
+
         foreach($lgselect as $groupname => $group)
         {
           $lgoptions.="<optgroup label='$groupname'>\n";
@@ -112,7 +111,7 @@
         if($row['Sch_Active'] == "0") { $ottable.=("<tr bgcolor='#DE5D5D'>\n"); } else { $ottable.=("<tr>\n"); }
         $ottable.=("<th>" . $row['Sch_ID'] . "<input type='hidden' name='id$x' value=\"" . $row['Sch_ID'] . "\" /><input type='hidden' name='otr$x' value='O' /></th>\n");
         $ottable.=("<th><input type='text' style='width:200px' name='name$x' value=\"" . $row['Sch_Name'] . "\" /></th>\n");
-        $ottable.=("<th><select name='loopgraphic$x'>\n<option value='0'>Loop Off</option>\n<option value='1' $nols>No Loop</option>\n$lgoptions</select></th>\n");
+        $ottable.=("<th><select name='loopgraphic$x'>\n<option value='L-0'>No Loop</option>\n$lgoptions</select></th>\n");
         $ottable.=("<th><input type='date' style='width:75px' name='date$x' value='$date' /></th>\n");
         $ottable.=("<th><input type='time' style='width:75px' name='time$x' value='$time' /></th>\n");
         $ottable.=("<th><input type='number' style='width:50px' name='duration$x' value='$duration' /></th>\n");
@@ -132,12 +131,11 @@
         $duration=$row['Sch_DurationMinutes'];
         $input=$row['Sch_ScreenInput'];
         $active=$row['Sch_Active'];
-        $ritem=true;
-
+        $ritem=true; $lgoptions="";
         $actives=""; if($row['Sch_Active'] == '1') { $actives="checked='checked'"; }
         if($row['Sch_ScreenPowerStart'] == "1") { $onyes="selected='selected'"; $onno=""; } else { $onyes=""; $onno="selected='selected'"; }
         if($row['Sch_ScreenPowerEnd'] == "1") { $offyes="selected='selected'"; $offno=""; } else { $offyes=""; $offno="selected='selected'"; }
-        if($row['Sch_LoopGraphic'] == "1") { $nols="selected='selected'"; } else { $nols=""; } $lgoptions="";
+
         foreach($lgselect as $groupname => $group)
         {
           $lgoptions.="<optgroup label='$groupname'>\n";
@@ -155,7 +153,7 @@
         if($row['Sch_Active'] == "0") { $rtable.=("<tr bgcolor='#DE5D5D'>\n"); } else { $rtable.=("<tr>\n"); }
         $rtable.=("<th>" . $row['Sch_ID'] . "<input type='hidden' name='id$x' value=\"" . $row['Sch_ID'] . "\" /><input type='hidden' name='otr$x' value='R' /></th>\n");
         $rtable.=("<th><input type='text' style='width:200px' name='name$x' value=\"" . $row['Sch_Name'] . "\" /></th>\n");
-        $rtable.=("<th><select name='loopgraphic$x'>\n<option value='0'>Loop Off</option>\n<option value='1' $nols>No Loop</option>\n$lgoptions</select></th>\n");
+        $rtable.=("<th><select name='loopgraphic$x'>\n<option value='L-0'>No Loop</option>\n$lgoptions</select></th>\n");
         $rtable.=("<th><select name='month$x'><option value='*'>All</option>$months</select></th>\n");
         $rtable.=("<th><select name='day$x'><option value='*'>All</option>$days</select></th>\n");
         $rtable.=("<th><select name='dow$x'><option value='*'>All</option>$dows</select></th>\n");

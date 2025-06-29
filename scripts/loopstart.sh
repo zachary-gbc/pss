@@ -14,6 +14,7 @@ mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 type=""
 number=""
 vars=""
+loopgraphic="off"
 
 if [[ ! -z $1 ]]; then vars+="$1 "; fi
 if [[ ! -z $2 ]]; then vars+="$2 "; fi
@@ -30,6 +31,12 @@ function checkvariable {
     "L-"|"G-") type=${1:0:1}; number=${1:2}; loopgraphic=$1 ;;
     "PS") bash /home/pi/scripts/tvpower.sh $1 ;;
     "IS") bash /home/pi/scripts/tvinput.sh $1 ;;
+    "DM")
+      if [[ $1 != "DM-0" ]]
+      then
+        minutes=${1:3}
+        echo "/home/pi/scripts/loopstop.sh $vars &" | at now + $minutes minutes
+      fi
   esac
 }
 
@@ -39,8 +46,6 @@ if [[ ! -z $3 ]]; then checkvariable "$3"; fi
 if [[ ! -z $4 ]]; then checkvariable "$4"; fi
 if [[ ! -z $5 ]]; then checkvariable "$5"; fi
 if [[ ! -z $6 ]]; then checkvariable "$6"; fi
-
-bash /home/pi/scripts/loopstop.sh $vars &
 
 if [[ $type == "L" ]]
 then
@@ -59,7 +64,7 @@ else
   message="Graphic"
 fi
 
-if [[ $type != 1 ]] && [[ ! -f "$file" ]]
+if [[ $loopgraphic != "L-0" ]] && [[ ! -f "$file" ]]
 then
   curl -Ss "$downloadlink" > /home/pi/download.file
   sudo mv /home/pi/download.file $file
@@ -80,7 +85,7 @@ else
 fi
 sleep 1
 
-if [[ $type != 1 ]]
+if [[ $loopgraphic != "L-0" ]]
 then
   echo "MESSAGE $datetime: Starting $message ($loopgraphic)" >> /home/pi/log/$log.log
   if [[ $omxorvlc == "o" ]]
@@ -90,8 +95,8 @@ then
     DISPLAY=:0 cvlc --no-audio --fullscreen --no-video-title-show --loop --quiet $file &
   fi
   echo "$loopgraphic" > /home/pi/pssonoff
-fi
-curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&loop=$1" >> /home/pi/log/$log.log
+  curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&loop=$loopgraphic" >> /home/pi/log/$log.log
 
-sleep 5
-bash /home/pi/scripts/loopcheck.sh &
+  sleep 5
+  bash /home/pi/scripts/loopcheck.sh &
+fi

@@ -30,8 +30,9 @@
 			$powerend=("PE-" . $row['Sch_ScreenPowerEnd']);
 			$inputstart=("IS-" . $row['Sch_ScreenInputStart']);
 			$inputend=("IE-" . $row['Sch_ScreenInputEnd']);
-			$duration=("DM-" . $row['Sch_DurationMinutes']);
 			$lorg=$row['Sch_LoopGraphic'];
+			if(($row['Sch_DurationMinutes'] == "") || ($row['Sch_DurationMinutes'] == "NULL"))
+			{ $duration="DM-0"; } else { $duration=("DM-" . $row['Sch_DurationMinutes']); }
 
 			$cron.="$sminute $shour $sdom $smonth $sdow pi bash /home/pi/scripts/loopstart.sh $lorg $powerstart $powerend $inputstart $inputend $duration &\n";
 		}

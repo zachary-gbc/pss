@@ -35,7 +35,7 @@ function checkvariable {
       if [[ $1 != "DM-0" ]]
       then
         minutes=${1:3}
-        echo "/home/pi/scripts/loopstop.sh $vars &" | at now + $minutes minutes
+        echo "/bin/bash /home/pi/scripts/loopstop.sh $vars &" | at now + $minutes minutes
       fi
   esac
 }

@@ -17,6 +17,8 @@ lastcommit=$(git log --pretty=format:"%H")
 if [[ $lastcommit != $lastupdate ]]
 then
   find . -name '*DS_Store*' -delete
+  mv /home/pi/pss/scripts/ghupdate.sh /home/pi/ghupdate.sh
+  ( sleep 60; mv /home/pi/ghupdate.sh /home/pi/scripts/ghupdate.sh ) & 
 
   # Scripts
   sudo mv -f /home/pi/pss/scripts/* /home/pi/scripts/

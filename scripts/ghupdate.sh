@@ -32,8 +32,7 @@ then
   sudo chown www-data:www-data /var/www/html/pss/scripts/manualaction
 
   echo $lastcommit > /home/pi/pss_lastupdatecommit
-
-  curl http://$database_ip/pss/scripts/dbupdate.php?type=ghupdate\&device=$mac
 fi
 
+curl http://$database_ip/pss/scripts/dbupdate.php?type=ghupdate\&device=$mac
 sudo rm -r -f /home/pi/pss

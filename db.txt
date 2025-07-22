@@ -114,7 +114,7 @@ INSERT INTO Variables(Var_Name, Var_Value) VALUES('Use-Pushover', 'no');
 INSERT INTO Variables(Var_Name, Var_Value) VALUES('Pushover-Token', '1');
 INSERT INTO Variables(Var_Name, Var_Value) VALUES('Pushover-User-Key', '1');
 INSERT INTO Variables(Var_Name, Var_Value) VALUES('Alert-On-IP-Change', 'no');
-INSERT INTO Variables(Var_Name, Var_Value) VALUES('OMXPlayer-Or-VLC', 'o');
+INSERT INTO Variables(Var_Name, Var_Value) VALUES('Background-Processing', '0');
 
 DROP TABLE IF EXISTS PushoverLog;
 CREATE TABLE PushoverLog(

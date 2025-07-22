@@ -3,8 +3,13 @@
 <?php include('../other/posttitle.php'); ?>
 
 <?php
+  $processing="SELECT Var_Value FROM Variables WHERE (Var_Name='Background-Processing')"; $backgroundprocessing="1";
+  if(!$rs=mysqli_query($db,$processing)) { echo("Unable to Run Query: $processing"); exit; }
+  while($row = mysqli_fetch_array($rs)) { $backgroundprocessing=$row['Var_Value']; }
+
   $id="";
-  if(isset($_POST['submit']))
+  if($backgroundprocessing == "1") { echo("<h3 style='color:red'>Background Processing in Progress, Try Again Later</h3>\n"); }
+  elseif(isset($_POST['submit']))
   {
     $id=$_POST['id'];
     $oldname=str_replace("'","''",$_POST['oldname']);
@@ -57,7 +62,7 @@
   }
 
   if(isset($_GET['id'])) { $id=$_GET['id']; } else { $id="new"; }
-  $categories=array("Caring", "Events", "Kids", "Mens", "Missions", "Womens", "Youth", "Other"); $active="checked='checked'";
+  $categories=array("Caring", "Events", "Kids", "Mens", "Missions", "Womens", "Youth", "Other");
 
   $name=""; $category=""; $updated="";
   $data="SELECT * FROM Graphics WHERE (Gr_ID='$id')";
@@ -68,7 +73,7 @@
     if($row['Gr_Delete'] == "N") { $delete=""; } else { $delete="checked='checked'"; }
   }
 
-  if($id != "new") { echo("<h4>Edit: $name</h4>\n"); } else { echo("<br>"); }
+  if($id != "new") { echo("<h4>Edit: $name</h4>\n"); } else { echo("<h4>Add New Graphic</h4>\n"); }
 
   echo("<form method='post' action='' enctype='multipart/form-data'>\n");
   echo("<input type='hidden' name='id' value='$id' />\n<table>\n");
@@ -86,11 +91,9 @@
   else { echo("<td colspan='2'></td>\n"); }
   echo("</tr>\n");
 
-  if($id == "new")
-  {
-    echo("<tr>\n<th colspan='2'><input type='submit' name='submit' value='Add New Graphic' /></th>\n<td colspan='2'></td>\n</tr>\n");
-  }
-  else
+  if($id == "new" && $backgroundprocessing != "1")
+  { echo("<tr>\n<th colspan='2'><input type='submit' name='submit' value='Add New Graphic' /></th>\n<td colspan='2'></td>\n</tr>\n"); }
+  elseif ($backgroundprocessing != "1")
   {
     echo("<tr>\n<th colspan='2'><input type='submit' name='submit' value='Submit Changes' /></th>\n");
     echo("<td colspan='2'><small>Last Updated: " . date("M d, Y g:i a", $updated) . "</small></td>\n</tr>\n");
@@ -117,8 +120,44 @@
       echo("</form>\n");
       echo("<iframe src='graphicautodates.php?graphic=$id&loop=$loop' id='iframeform' name='iframeform-$id-$loop' hidden></iframe>\n");
     }
-    echo("<br><br>"); $graphiclist=true; include('graphiclist.php');
   }
+
+  echo("<br>"); $categories="";
+  if(isset($_GET['graphicfilter']) && $_GET['graphicfilter'] != "All")
+  {
+    $graphicfilter="AND (Gr_Category='" . $_GET['graphicfilter'] . "')";
+    echo("<h3>" . $_GET['graphicfilter'] . " Graphics (<a href='graphic.php'>All Graphics</a>)</h3>");
+  }
+  else
+  {
+    $graphicfilter=""; echo("<h3>All Graphics</h3>");
+    $dbcategories="SELECT Gr_Category FROM Graphics GROUP BY Gr_Category ORDER BY Gr_Category";
+    if(!$rs=mysqli_query($db,$dbcategories)) { echo("Unable to Run Query: $dbcategories"); exit; }
+    while($row = mysqli_fetch_array($rs)) { $categories.=("<a href='?graphicfilter=" . $row['Gr_Category'] . "'>" . $row['Gr_Category'] . "</a> &nbsp; &nbsp; "); }
+  }
+
+  $graphics="SELECT * FROM Graphics WHERE (Gr_Delete='N') $graphicfilter ORDER BY Gr_Category, Gr_Name"; $oldcat=""; $table="";$x=0;
+  if(!$rs=mysqli_query($db,$graphics)) { echo("Unable to Run Query: $graphics"); exit; }
+  while($row = mysqli_fetch_array($rs))
+  {
+    if($row['Gr_Category'] != $oldcat)
+    {
+        $oldcat=$row['Gr_Category']; $table.=("<tr>\n<th colspan='7' style='text-align:left'><u>$oldcat</u></th>\n</tr>\n");
+        $table.=("<tr>\n<th> &nbsp; Name &nbsp; </th>\n<th> &nbsp; Landscape &nbsp; </th>\n<th> &nbsp; Portrait &nbsp; </th>\n<th>Last Updated</th>\n</tr>\n");
+        $x=0;
+    }
+    if($x%2 == 0) { $table.=("<tr class='tr_odd'>\n"); } else { $table.=("<tr class='tr_even'>\n"); }
+    $table.=("<td><a href='graphic.php?id=" . $row['Gr_ID'] . "'>" . $row['Gr_Name'] . "</a></td>\n");
+    if(file_exists("/var/www/html/pss/files/" . $row['Gr_ID'] . "-L.mp4")) { $table.=("<td style='text-align:center'>&check;</td>\n"); } else { $table.=("<td></td>\n"); }
+    if(file_exists("/var/www/html/pss/files/" . $row['Gr_ID'] . "-P.mp4")) { $table.=("<td style='text-align:center'>&check;</td>\n"); } else { $table.=("<td></td>\n"); }
+    $table.=("<td style='text-align:center'>" . date("M d, Y g:i a",strtotime($row['Gr_UpdateDateTime'])) . "</td>\n");
+    $table.=("<td style='text-align:center'>" . $row['Gr_ID'] . "</td>\n");
+    $table.=("</tr>\n");
+    $x++;
+  }
+
+  if($table == "") { echo("No Graphics Available"); }
+  else { echo("$categories<table>\n$table</table>\n"); }
 ?>
 
 <?php include('../other/footer.php'); ?>

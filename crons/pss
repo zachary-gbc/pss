@@ -8,19 +8,13 @@
 5 6 * * * pi bash /home/pi/scripts/dbbackup.sh &
 
 # Cleanup Once a Week
-30 6 * * 2 pi bash /home/pi/scripts/cleanup.sh &
+32 6 * * 2 pi bash /home/pi/scripts/cleanup.sh &
 
 # Update Device Details in Database On Reboot
 @reboot pi bash /home/pi/scripts/devicedetails.sh &
 
-# Create Videos From Images Once an Hour
-3 * * * * pi bash /home/pi/scripts/videofromimage.sh &
-
-# Convert Videos Once an Hour
-20 * * * * pi bash /home/pi/scripts/videoconvert.sh &
-
-# Create Loops Once an Hour
-35 * * * * pi bash /home/pi/scripts/loopcreate.sh &
+# Create Videos From Images, Convert Videos, and Create Loops Once an Hour
+35 * * * * pi bash /home/pi/scripts/videofromimage.sh &
 
 # Update Conf File Once A Day
 10 1 * * * pi bash /home/pi/scripts/updateconf.sh &

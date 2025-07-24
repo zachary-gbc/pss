@@ -9,6 +9,8 @@ datetime=$(date '+%Y-%m-%d %H:%M:%S');
 
 if [ "$database_ip" == "$lanip" ] && [ ${pssonoff:0:3} == "off" ]
 then
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Variables SET Var_Value='1' WHERE (Var_Name='Background-Processing')")
+
   echo "MESSAGE $datetime: Starting videofromimage" >> /home/pi/log/$log.log
   pngimages=$(ls /var/www/html/pss/files/*.png 2>/dev/null)
   jpgimages=$(ls /var/www/html/pss/files/*.jpg 2>/dev/null)
@@ -34,4 +36,6 @@ then
     sudo rm -f /var/www/html/pss/files/temp.mp4
     sleep 2
   done
+  
+  bash /home/pi/scripts/videoconvert.sh &
 fi

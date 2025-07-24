@@ -20,8 +20,10 @@ then
     if [[ -f "$filename" ]]
     then
       sudo ffmpeg -y -f concat -safe 0 -i $filename -c copy /var/www/html/pss/files/loop-$loop.mp4
-      sleep 2
+      sleep 1
       sudo rm /var/www/html/pss/files/loop-$loop.concat
     fi
   done
+  
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Variables SET Var_Value='0' WHERE (Var_Name='Background-Processing')")
 fi

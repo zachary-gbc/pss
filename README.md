@@ -9,7 +9,7 @@
     - Wireless LAN
     - Update password (recommended but not required)
   - Interface Options
-    - Enable SSH (not required but recommended for remote access)
+    - Enable SSH (recommended for remote access but not required)
   - Reboot
 
 1. sudo apt-get update

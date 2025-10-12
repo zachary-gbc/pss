@@ -46,11 +46,20 @@ do
       rm "/home/pi/converted.mp4"
       sleep 1
     fi
-    ffmpeg -i "/var/www/html/pss/files/$query-P.mp4" -vcodec $codec -x264-params $codecparams -an -vf scale=$width:$height -b:v $bitrate -minrate $bitrate -maxrate $bitrate -bufsize $doublebitrate -r $fps $outputfile
-    sleep 5
-    sudo mv -f "/home/pi/converted.mp4" "/var/www/html/pss/files/$query-P.mp4"
-    sleep 1
-    echo "MESSAGE $datetime: Converted $query-P" >> /home/pi/log/$log.log
+    
+    lengthsec=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 /var/www/html/pss/files/$query-P.mp4)
+    length=$(echo "$lengthsec" | sed 's/\..*//')
+    if [[ $length -lt 120 ]]
+    then
+      ffmpeg -i "/var/www/html/pss/files/$query-P.mp4" -vcodec $codec -x264-params $codecparams -an -vf scale=$width:$height -b:v $bitrate -minrate $bitrate -maxrate $bitrate -bufsize $doublebitrate -r $fps $outputfile
+      sleep 5
+      sudo mv -f "/home/pi/converted.mp4" "/var/www/html/pss/files/$query-P.mp4"
+      sleep 1
+      echo "MESSAGE $datetime: Converted $query-P" >> /home/pi/log/$log.log
+    else
+      echo "MESSAGE $datetime: Video Too Long for Conversion $query-P" >> /home/pi/log/$log.log
+    fi
+    mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Graphics SET Gr_DurationP='$length' WHERE (Gr_ID='$query')"
   fi
 
   # Landscape
@@ -61,12 +70,21 @@ do
       rm "/home/pi/converted.mp4"
       sleep 1
     fi
-    ffmpeg -i "/var/www/html/pss/files/$query-L.mp4" -vcodec $codec -x264-params $codecparams -an -vf scale=$width:$height -b:v $bitrate -minrate $bitrate -maxrate $bitrate -bufsize $doublebitrate -r $fps $outputfile
-    sleep 5
-    sudo mv -f "/home/pi/converted.mp4" "/var/www/html/pss/files/$query-L.mp4"
-    sleep 1
-    echo "MESSAGE $datetime: Converted $query-L" >> /home/pi/log/$log.log
-  fi
+
+    lengthsec=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 /var/www/html/pss/files/$query-L.mp4)
+    length=$(echo "$lengthsec" | sed 's/\..*//')
+    if [[ $length -lt 120 ]]
+    then
+      ffmpeg -i "/var/www/html/pss/files/$query-L.mp4" -vcodec $codec -x264-params $codecparams -an -vf scale=$width:$height -b:v $bitrate -minrate $bitrate -maxrate $bitrate -bufsize $doublebitrate -r $fps $outputfile
+      sleep 5
+      sudo mv -f "/home/pi/converted.mp4" "/var/www/html/pss/files/$query-L.mp4"
+      sleep 1
+      echo "MESSAGE $datetime: Converted $query-L" >> /home/pi/log/$log.log
+      else
+      echo "MESSAGE $datetime: Video Too Long for Conversion $query-L" >> /home/pi/log/$log.log
+    fi
+    mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Graphics SET Gr_DurationL='$length' WHERE (Gr_ID='$query')"
+fi
 
   # Update DB
   mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Graphics SET Gr_Converted='Y', Gr_UpdateDateTime=now() WHERE (Gr_ID='$query')"

@@ -27,7 +27,8 @@ CREATE TABLE Graphics(
   Gr_UpdateDateTime DATETIME NOT NULL,
   Gr_Converted CHAR(1) NULL DEFAULT 'N',
   Gr_LastUsed DATETIME NULL,
-  Gr_Duration INT NULL,
+  Gr_DurationL INT NULL,
+  Gr_DurationP INT NULL,
   Gr_Delete CHAR(1) NULL DEFAULT 'N',
   PRIMARY KEY(Gr_ID)
 );

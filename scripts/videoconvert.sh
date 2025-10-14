@@ -17,6 +17,7 @@ doublebitrate="10000000"
 mode="CBR"
 fps="30"
 lastquery=0
+secondsforconversion=60
 
 if [ "$database_ip" != "$lanip" ]
 then
@@ -49,7 +50,7 @@ do
     
     lengthsec=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 /var/www/html/pss/files/$query-P.mp4)
     length=$(echo "$lengthsec" | sed 's/\..*//')
-    if [[ $length -lt 120 ]]
+    if [[ $length -lt $secondsforconversion ]]
     then
       ffmpeg -i "/var/www/html/pss/files/$query-P.mp4" -vcodec $codec -x264-params $codecparams -an -vf scale=$width:$height -b:v $bitrate -minrate $bitrate -maxrate $bitrate -bufsize $doublebitrate -r $fps $outputfile
       sleep 5
@@ -73,7 +74,7 @@ do
 
     lengthsec=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 /var/www/html/pss/files/$query-L.mp4)
     length=$(echo "$lengthsec" | sed 's/\..*//')
-    if [[ $length -lt 120 ]]
+    if [[ $length -lt $secondsforconversion ]]
     then
       ffmpeg -i "/var/www/html/pss/files/$query-L.mp4" -vcodec $codec -x264-params $codecparams -an -vf scale=$width:$height -b:v $bitrate -minrate $bitrate -maxrate $bitrate -bufsize $doublebitrate -r $fps $outputfile
       sleep 5

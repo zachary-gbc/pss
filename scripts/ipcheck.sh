@@ -15,7 +15,7 @@ wanip=$(curl https://ipecho.net/plain)
 laniplength=${#lanip}
 waniplength=${#wanip}
 log=$(date -I)
-datetime=$(date '+%Y-%m-%d %H:%M:%S');
+datetime=$(date '+%Y-%m-%d %H:%M:%S')
 echo "MESSAGE $datetime: Starting ipcheck" >> /home/pi/log/$log.log
 
 if [ $waniplength > 5 ] && [ $laniplength > 5 ]

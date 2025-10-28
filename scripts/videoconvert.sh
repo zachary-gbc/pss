@@ -17,7 +17,7 @@ doublebitrate="10000000"
 mode="CBR"
 fps="30"
 lastquery=0
-secondsforconversion=60
+secondsforconversion=300
 
 if [ "$database_ip" != "$lanip" ]
 then
@@ -81,7 +81,7 @@ do
       sudo mv -f "/home/pi/converted.mp4" "/var/www/html/pss/files/$query-L.mp4"
       sleep 1
       echo "MESSAGE $datetime: Converted $query-L" >> /home/pi/log/$log.log
-      else
+    else
       echo "MESSAGE $datetime: Video Too Long for Conversion $query-L" >> /home/pi/log/$log.log
     fi
     mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Graphics SET Gr_DurationL='$length' WHERE (Gr_ID='$query')"

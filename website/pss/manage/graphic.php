@@ -109,7 +109,7 @@
 
     echo("<br><h3 style='margin:0px'>Add Graphic to Automatic Loops</h3>");
 
-    $aloops="SELECT Lop_ID, Lop_Name, Lop_Orientation FROM Loops WHERE (Lop_Type='Automatic')";
+    $aloops="SELECT Lop_ID, Lop_Name, Lop_Orientation FROM Loops WHERE (Lop_Type='Automatic') ORDER BY Lop_Name";
     if(!$rs=mysqli_query($db,$aloops)) { echo("Unable to Run Query: $aloops"); exit; }
     while($row = mysqli_fetch_array($rs))
     {

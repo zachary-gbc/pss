@@ -7,6 +7,7 @@
 		if(!$rs=mysqli_query($db,$schedule)) { echo("Unable to Run Query: $schedule"); exit; }
 		while($row = mysqli_fetch_array($rs))
 		{
+			$use=false;
 			if($row['Sch_OneTimeRecurring'] == "O")
 			{
 				if(substr($row['Sch_OTStartDateTime'],0,4) == date("Y"))
@@ -16,6 +17,7 @@
 					$shour=substr($row['Sch_OTStartDateTime'],8,2); if(substr($shour,0,1) == 0) { $shour=substr($shour,1); }
 					$sminute=substr($row['Sch_OTStartDateTime'],10,2); if(substr($sminute,0,1) == 0) { $sminute=substr($sminute,1); }
 					$sdow="*";
+					$use=true;
 				}
 			}
 			else
@@ -25,6 +27,7 @@
 				$shour=$row['Sch_RHour'];
 				$sminute=$row['Sch_RMinute'];
 				$sdow=$row['Sch_RDOW'];
+				$use=true;
 			}
 			$powerstart=("PS-" . $row['Sch_ScreenPowerStart']);
 			$powerend=("PE-" . $row['Sch_ScreenPowerEnd']);
@@ -34,7 +37,7 @@
 			if(($row['Sch_DurationMinutes'] == "") || ($row['Sch_DurationMinutes'] == "NULL"))
 			{ $duration="DM-0"; } else { $duration=("DM-" . $row['Sch_DurationMinutes']); }
 
-			$cron.="$sminute $shour $sdom $smonth $sdow pi bash /home/pi/scripts/loopstart.sh $lorg $powerstart $powerend $inputstart $inputend $duration &\n";
+			if($use == true) { $cron.="$sminute $shour $sdom $smonth $sdow pi bash /home/pi/scripts/loopstart.sh $lorg $powerstart $powerend $inputstart $inputend $duration &\n"; }
 		}
 		echo($cron);
 	}

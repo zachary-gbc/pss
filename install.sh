@@ -94,6 +94,13 @@ else
   echo "sudo curl -Ss 'http://$dbip/pss/scripts/dbupdate.php?type=devicedetails&device=$mac&devname=$HOSTNAME'"
 fi
 
+sudo sed -i 's/exit.*//' /etc/rc.local
+sudo bash -c 'echo "/sbin/iw wlan0 set power_save off" >> /etc/rc.local'
+sudo bash -c 'echo "" >> /etc/rc.local'
+sudo bash -c 'echo "sleep 10 && /usr/bin/clear > /dev/tty1 &" >> /etc/rc.local'
+sudo bash -c 'echo "" >> /etc/rc.local'
+sudo bash -c 'echo "exit 0" >> /etc/rc.local'
+
 sudo apt autoremove -y
 
 . /var/www/html/pss/conf/pss.conf

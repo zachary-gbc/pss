@@ -15,7 +15,7 @@
 		foreach($aloopstobuild as $loopid => $orientation)
 		{
 			$concat=false;
-			$graphics="SELECT Gr_ID, Gr_Name, Gr_UpdateDateTime FROM AutomaticLoopDates INNER JOIN Graphics ON AutomaticLoopDates.AD_Graphic=Graphics.Gr_ID WHERE (AD_Loop='$loopid') AND ((AD_Date='$todaydate') OR (AD_Month='$month') OR ((AD_StartDateRange<='$todaydate') AND (AD_EndDateRange>='$todaydate')))"; $vlcfilecontents=""; $concatfilecontents="";
+			$graphics="SELECT Gr_ID, Gr_Name, Gr_UpdateDateTime FROM AutomaticLoopDates INNER JOIN Graphics ON AutomaticLoopDates.AD_Graphic=Graphics.Gr_ID WHERE (Gr_Delete='N') AND (AD_Loop='$loopid') AND ((AD_Date='$todaydate') OR (AD_Month='$month') OR ((AD_StartDateRange<='$todaydate') AND (AD_EndDateRange>='$todaydate')))"; $vlcfilecontents=""; $concatfilecontents="";
 			if(!$rs=mysqli_query($db,$graphics)) { echo("Unable to Run Query: $graphics"); exit; }
 			while($row = mysqli_fetch_array($rs))
 			{
@@ -39,7 +39,7 @@
 		}
 	}
 
-	$manualloops="SELECT Lop_ID, Lop_Orientation FROM Loops INNER JOIN LoopGraphics ON Loops.Lop_ID=LoopGraphics.LG_Loop INNER JOIN Graphics ON LoopGraphics.LG_Graphic=Graphics.Gr_ID WHERE (Lop_UpdateDateTime > Lop_LastCreateDateTime) OR (Gr_UpdateDateTime > Lop_LastCreateDateTime) OR (Lop_LastCreateDateTime IS NULL) GROUP BY Lop_ID, Lop_Orientation";
+	$manualloops="SELECT Lop_ID, Lop_Orientation FROM Loops INNER JOIN LoopGraphics ON Loops.Lop_ID=LoopGraphics.LG_Loop INNER JOIN Graphics ON LoopGraphics.LG_Graphic=Graphics.Gr_ID WHERE (Gr_Delete='N') AND (Lop_UpdateDateTime > Lop_LastCreateDateTime) OR (Gr_UpdateDateTime > Lop_LastCreateDateTime) OR (Lop_LastCreateDateTime IS NULL) GROUP BY Lop_ID, Lop_Orientation";
 	if(!$rs=mysqli_query($db,$manualloops)) { echo("Unable to Run Query: $manualloops"); exit; }
 	while($row = mysqli_fetch_array($rs)) { $mloopstobuild[$row['Lop_ID']]=$row['Lop_Orientation']; }
 

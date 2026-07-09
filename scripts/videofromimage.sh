@@ -1,17 +1,17 @@
 #!/usr/bin/bash
 
-. /var/www/html/pss/conf/pss.conf
+. /var/www/conf/csdb.conf
 pssonoff="off"
 pssonoff=$(</home/pi/pssonoff)
 lanip=$(hostname -I | tr -d ' ')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 
-if [ "$database_ip" == "$lanip" ] && [ ${pssonoff:0:3} == "off" ]
+if [ "$main_or_remote" == "main" ] && [ ${pssonoff:0:3} == "off" ]
 then
-  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Variables SET Var_Value='1' WHERE (Var_Name='Background-Processing')")
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Variables SET Var_Value='1' WHERE (Var_SystemName='pss') AND (Var_Name='Background-Processing')")
 
-  echo "MESSAGE $datetime: Starting videofromimage" >> /home/pi/log/$log.log
+  echo "MESSAGE $datetime: Starting videofromimage" >> /home/pi/log/pss/$log.log
   sudo rm -f /var/www/html/pss/files/temp.png
   pngimages=$(ls /var/www/html/pss/files/*.png 2>/dev/null)
   jpgimages=$(ls /var/www/html/pss/files/*.jpg 2>/dev/null)

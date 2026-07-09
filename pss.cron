@@ -1,0 +1,18 @@
+# Create Videos From Images, Convert Videos, and Create Loops Once an Hour
+35 * * * * pi bash /home/pi/scripts/pss/videofromimage.sh &
+
+# Download Schedule And Mirror Main Once an Hour
+50 * * * * pi bash /home/pi/scripts/pss/cronsandmirror.sh &
+
+# Turn Screen Off After Reboot
+@reboot pi bash /home/pi/scripts/pss/reboot.sh &
+
+# GitHub Update Once A Day
+@reboot pi bash /home/pi/scripts/pss/ghupdate.sh &
+0 1 * * * pi bash /home/pi/scripts/pss/ghupdate.sh &
+
+# Update Main DB With Location Status Once an Hour
+0 * * * * pi bash /home/pi/scripts/pss/updatemain.sh &
+
+# Manual Action Check Every 5 Minutes
+*/5 * * * * pi bash /home/pi/scripts/pss/manualaction.sh &

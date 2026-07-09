@@ -2,12 +2,12 @@
 
 # 1 = power (on=N-1/off=F-1)
 
-. /var/www/html/pss/conf/pss.conf
+. /var/www/conf/csdb.conf
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 log=$(date -I)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
-echo "MESSAGE $datetime: TV Power: $1" >> /home/pi/log/$log.log
+echo "MESSAGE $datetime: TV Power: $1" >> /home/pi/log/pss/$log.log
 
 if [[ ! -z $1 ]]
 then
@@ -23,8 +23,8 @@ then
       powerstatus=$(echo pow 0 | cec-client -s -d 1)
       if [[ $powerstatus != *": on"* ]]
       then
-        echo "ALERT $datetime: TV Did Not Turn On" >> /home/pi/log/$log.log
-        bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "TV Did Not Turn On"
+        echo "ALERT $datetime: TV Did Not Turn On" >> /home/pi/log/pss/$log.log
+        bash /home/pi/scripts/csdb/pushover.sh "$HOSTNAME" "tugboat" "TV Did Not Turn On"
       fi
     fi
   fi
@@ -44,8 +44,8 @@ then
       powerstatus=$(echo pow 0 | cec-client -s -d 1)
       if [[ $powerstatus != *"standby"* ]]
       then
-        echo "ALERT $datetime: TV Did Not Turn Off" >> /home/pi/log/$log.log
-        bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "TV Did Not Turn Off"
+        echo "ALERT $datetime: TV Did Not Turn Off" >> /home/pi/log/pss/$log.log
+        bash /home/pi/scripts/csdb/pushover.sh "$HOSTNAME" "tugboat" "TV Did Not Turn Off"
       fi
     fi
   fi
@@ -62,4 +62,4 @@ else
   power="Unknown"
 fi
 
-curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power" >> /home/pi/log/$log.log
+curl -Ss "http://$database_ip/pss/other/dbupdate.php?type=locationstatus&device=$mac&power=$power" >> /home/pi/log/pss/$log.log

@@ -1,15 +1,15 @@
 #!/bin/bash
 
-. /var/www/html/pss/conf/pss.conf
+. /var/www/conf/csdb.conf
 
 lanip=$(hostname -I | tr -d ' ')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 
-if [ "$database_ip" == "$lanip" ]
+if [ "$main_or_remote" == "main" ]
 then
-  echo "MESSAGE $datetime: Starting loopcreate" >> /home/pi/log/$log.log
-  sudo curl -Ss http://$database_ip/pss/scripts/createloop.php >> /home/pi/log/$log.log
+  echo "MESSAGE $datetime: Starting loopcreate" >> /home/pi/log/pss/$log.log
+  sudo curl -Ss http://$database_ip/pss/scripts/createloop.php >> /home/pi/log/pss/$log.log
 
   loopsquery=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "SELECT Lop_ID FROM Loops")
   loops=($loopsquery)
@@ -25,5 +25,5 @@ then
     fi
   done
   
-  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Variables SET Var_Value='0' WHERE (Var_Name='Background-Processing')")
+  query=$(mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Variables SET Var_Value='0' WHERE (Var_System='pss') AND (Var_Name='Background-Processing')")
 fi

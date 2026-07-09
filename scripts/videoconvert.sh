@@ -1,10 +1,10 @@
 #! /bin/bash
 
-. /var/www/html/pss/conf/pss.conf
+. /var/www/conf/csdb.conf
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 lanip=$(hostname -I | tr -d ' ')
-echo "MESSAGE $datetime: Starting videoconvert" >> /home/pi/log/$log.log
+echo "MESSAGE $datetime: Starting videoconvert" >> /home/pi/log/pss/$log.log
 
 inputfile="in.mp4"
 outputfile="/home/pi/converted.mp4"
@@ -35,7 +35,7 @@ do
 
   if [[ "$lastquery" == "$query" ]]
   then
-    bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "Issue Converting Video $query"
+    bash /home/pi/scripts/csdb/pushover.sh "$HOSTNAME" "tugboat" "Issue Converting Video $query"
     break
   fi
 
@@ -56,9 +56,9 @@ do
       sleep 5
       sudo mv -f "/home/pi/converted.mp4" "/var/www/html/pss/files/$query-P.mp4"
       sleep 1
-      echo "MESSAGE $datetime: Converted $query-P" >> /home/pi/log/$log.log
+      echo "MESSAGE $datetime: Converted $query-P" >> /home/pi/log/pss/$log.log
     else
-      echo "MESSAGE $datetime: Video Too Long for Conversion $query-P" >> /home/pi/log/$log.log
+      echo "MESSAGE $datetime: Video Too Long for Conversion $query-P" >> /home/pi/log/pss/$log.log
     fi
     mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Graphics SET Gr_DurationP='$length' WHERE (Gr_ID='$query')"
   fi
@@ -80,9 +80,9 @@ do
       sleep 5
       sudo mv -f "/home/pi/converted.mp4" "/var/www/html/pss/files/$query-L.mp4"
       sleep 1
-      echo "MESSAGE $datetime: Converted $query-L" >> /home/pi/log/$log.log
+      echo "MESSAGE $datetime: Converted $query-L" >> /home/pi/log/pss/$log.log
     else
-      echo "MESSAGE $datetime: Video Too Long for Conversion $query-L" >> /home/pi/log/$log.log
+      echo "MESSAGE $datetime: Video Too Long for Conversion $query-L" >> /home/pi/log/pss/$log.log
     fi
     mysql --user="$database_username" --password="$database_password" --database="$database_name" -N -e "UPDATE Graphics SET Gr_DurationL='$length' WHERE (Gr_ID='$query')"
 fi

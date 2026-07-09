@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-. /var/www/html/pss/conf/pss.conf
+. /var/www/conf/csdb.conf
+. /var/www/conf/pss.conf
 
 pssonoff="off"
 pssonoff=$(</home/pi/pssonoff)
@@ -41,7 +42,7 @@ then
     if [[ -z $omxrunning ]]
     then
       echo "ALERT $datetime: Loop Stopped" >> /home/pi/log/$log.log
-      bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "Loop Stopped"
+      bash /home/pi/scripts/csdb/pushover.sh "$HOSTNAME" "tugboat" "Loop Stopped"
       exit 1
     fi
   fi
@@ -55,7 +56,7 @@ else
     if [[ -z $vlcrunning ]]
     then
       echo "ALERT $datetime: Loop Stopped" >> /home/pi/log/$log.log
-      bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "Loop Stopped"
+      bash /home/pi/scripts//csdb/pushover.sh "$HOSTNAME" "tugboat" "Loop Stopped"
       exit 1
     fi
   fi

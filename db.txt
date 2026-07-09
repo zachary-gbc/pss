@@ -1,26 +1,14 @@
-DROP TABLE IF EXISTS Devices;
-CREATE TABLE Devices(
-  Dev_ID INT NOT NULL AUTO_INCREMENT,
-  Dev_Name VARCHAR(255) NOT NULL,
-  Dev_Type VARCHAR(255) NOT NULL,
-  Dev_MAC VARCHAR(255) NULL,
-  Dev_IP VARCHAR(255) NULL,
-  Dev_LocName VARCHAR(255) NOT NULL,
-  Dev_RoomBuilding VARCHAR(255) NOT NULL,
-  Dev_Orientation VARCHAR(20) NOT NULL DEFAULT 'L',
-  Dev_Power VARCHAR(10) NULL,
-  Dev_Input VARCHAR(10) NULL,
-  Dev_Loop VARCHAR(10) NULL,
-  Dev_OMXorVLC VARCHAR(10) NULL,
-  Dev_CronMirrorDateTime VARCHAR(255) NULL,
-  Dev_GHUpdateDateTime VARCHAR(255) NULL,
-  Dev_ConfDateTime VARCHAR(255) NULL,
-  Dev_UpdateDateTime DATETIME NOT NULL,
-  PRIMARY KEY(Dev_ID)
-);
+ALTER TABLE Devices ADD COLUMN IF NOT EXISTS Dev_LocName VARCHAR(100) NULL,
+ALTER TABLE Devices ADD COLUMN IF NOT EXISTS Dev_RoomBuilding VARCHAR(100) NULL,
+ALTER TABLE Devices ADD COLUMN IF NOT EXISTS Dev_Orientation VARCHAR(20) NULL DEFAULT 'L',
+ALTER TABLE Devices ADD COLUMN IF NOT EXISTS Dev_Power VARCHAR(10) NULL,
+ALTER TABLE Devices ADD COLUMN IF NOT EXISTS Dev_Input VARCHAR(10) NULL,
+ALTER TABLE Devices ADD COLUMN IF NOT EXISTS Dev_Loop VARCHAR(10) NULL,
+ALTER TABLE Devices ADD COLUMN IF NOT EXISTS Dev_CronMirror DATETIME NULL,
+ALTER TABLE Devices ADD COLUMN IF NOT EXISTS Dev_PSSGHUpdate DATETIME NULL,
 
-DROP TABLE IF EXISTS Graphics;
-CREATE TABLE Graphics(
+DROP TABLE IF EXISTS pss_Graphics;
+CREATE TABLE pss_Graphics(
   Gr_ID INT NOT NULL AUTO_INCREMENT,
   Gr_Name VARCHAR(255) NOT NULL,
   Gr_Category VARCHAR(255) NULL,
@@ -33,8 +21,8 @@ CREATE TABLE Graphics(
   PRIMARY KEY(Gr_ID)
 );
 
-DROP TABLE IF EXISTS Loops;
-CREATE TABLE Loops(
+DROP TABLE IF EXISTS pss_Loops;
+CREATE TABLE pss_Loops(
   Lop_ID INT NOT NULL AUTO_INCREMENT,
   Lop_Name VARCHAR(255) NOT NULL UNIQUE,
   Lop_Type VARCHAR(20) NOT NULL,
@@ -44,11 +32,11 @@ CREATE TABLE Loops(
   Lop_LastCreateDateTime DATETIME NULL,
   PRIMARY KEY(Lop_ID)
 );
-INSERT INTO Loops(Lop_Name, Lop_Type, Lop_Category, Lop_Orientation, Lop_UpdateDateTime) VALUES('No Loop', 'Y', 'X', 'X', '1001-01-01');
+INSERT INTO pss_Loops(Lop_Name, Lop_Type, Lop_Category, Lop_Orientation, Lop_UpdateDateTime) VALUES('No Loop', 'Y', 'X', 'X', '1001-01-01');
 DELETE FROM Loops;
 
-DROP TABLE IF EXISTS LoopGraphics;
-CREATE TABLE LoopGraphics(
+DROP TABLE IF EXISTS pss_LoopGraphics;
+CREATE TABLE pss_LoopGraphics(
   LG_Loop INT NOT NULL,
   LG_Graphic INT NOT NULL,
   LG_Duration INT NULL,
@@ -56,8 +44,8 @@ CREATE TABLE LoopGraphics(
   PRIMARY KEY(LG_Loop, LG_Graphic, LG_Order)
 );
 
-DROP TABLE IF EXISTS AutomaticLoopDates;
-CREATE TABLE AutomaticLoopDates(
+DROP TABLE IF EXISTS pss_AutomaticLoopDates;
+CREATE TABLE pss_AutomaticLoopDates(
   AD_Graphic INT NOT NULL,
   AD_Loop INT NOT NULL,
   AD_Date DATE NOT NULL,
@@ -66,8 +54,8 @@ CREATE TABLE AutomaticLoopDates(
   AD_EndDateRange DATE NOT NULL
 );
 
-DROP TABLE IF EXISTS Schedules;
-CREATE TABLE Schedules(
+DROP TABLE IF EXISTS pss_Schedules;
+CREATE TABLE pss_Schedules(
   Sch_ID INT NOT NULL AUTO_INCREMENT,
   Sch_Name VARCHAR(255) NOT NULL,
   Sch_Device INT NOT NULL,
@@ -89,47 +77,12 @@ CREATE TABLE Schedules(
   PRIMARY KEY(Sch_ID)
 );
 
-DROP TABLE IF EXISTS Users;
-CREATE TABLE Users(
-  Usr_ID INT NOT NULL AUTO_INCREMENT,
-  Usr_Name VARCHAR(255) NOT NULL UNIQUE,
-  Usr_Email VARCHAR(255) NOT NULL UNIQUE,
-  Usr_FirstName VARCHAR(255) NOT NULL,
-  Usr_LastName VARCHAR(255) NOT NULL,
-  Usr_Password VARCHAR(255) NOT NULL,
-  Usr_PermissionLevel INT NOT NULL,
-  Usr_PushoverCode VARCHAR(255) NULL,
-  PRIMARY KEY(Usr_ID)
-);
+INSERT INTO Variables(Var_System, Var_Name, Var_Value) VALUES('pss', 'Last-Loop-Created', '1');
+INSERT INTO Variables(Var_System, Var_Name, Var_Value) VALUES('pss', 'RoomOrBuilding', 'Room');
+INSERT INTO Variables(Var_System, Var_Name, Var_Value) VALUES('pss', 'Background-Processing', '0');
 
-DROP TABLE IF EXISTS Variables;
-CREATE TABLE Variables(
-  Var_ID INT NOT NULL AUTO_INCREMENT,
-  Var_Name VARCHAR(255) NOT NULL,
-  Var_Value VARCHAR(255) NULL,
-  PRIMARY KEY(Var_ID)
-);
-INSERT INTO Variables(Var_Name, Var_Value) VALUES('Last-Loop-Created', '1');
-INSERT INTO Variables(Var_Name, Var_Value) VALUES('RoomOrBuilding', 'Room');
-INSERT INTO Variables(Var_Name, Var_Value) VALUES('Use-Pushover', 'no');
-INSERT INTO Variables(Var_Name, Var_Value) VALUES('Pushover-Token', '1');
-INSERT INTO Variables(Var_Name, Var_Value) VALUES('Pushover-User-Key', '1');
-INSERT INTO Variables(Var_Name, Var_Value) VALUES('Alert-On-IP-Change', 'no');
-INSERT INTO Variables(Var_Name, Var_Value) VALUES('Background-Processing', '0');
-
-DROP TABLE IF EXISTS PushoverLog;
-CREATE TABLE PushoverLog(
-  PO_ID INT NOT NULL AUTO_INCREMENT,
-  PO_Device VARCHAR(255) NOT NULL,
-  PO_Title VARCHAR(255) NOT NULL,
-  PO_Response VARCHAR(255) NULL,
-  PO_AlertSent VARCHAR(255) NULL,
-  PO_DateTime VARCHAR(255) NULL,
-  PRIMARY KEY(PO_ID)
-);
-
-DROP TABLE IF EXISTS ManualActions;
-CREATE TABLE ManualActions(
+DROP TABLE IF EXISTS pss_ManualActions;
+CREATE TABLE pss_ManualActions(
   MA_ID INT NOT NULL AUTO_INCREMENT,
   MA_Device VARCHAR(255) NOT NULL,
   MA_Number INT NOT NULL,

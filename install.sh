@@ -4,38 +4,29 @@ lanip=$(hostname -I)
 dblan=${lanip%.*}
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 
+if [[ ! -f "/var/www/conf/csdb.conf" ]]
+then
+    git clone --depth=1 https://github.com/zachary-gbc/csdb /home/pi/csdb
+    bash /home/pi/csdb/install.sh subinstall
+    sleep 5
+else
+    sudo apt-get update
+    sudo apt-get upgrade -y
+fi
 echo "Will this system use (o)OMXPlayer or (v)VLC? (o or v)"
 read omxvlc
-echo "Is this the Main PSS Instance? (y or n)"
-read maininstall
-if [[ $maininstall == "Y" ]] || [[ $maininstall == "y" ]]
-then
-  echo "Please Input a Database Name No Spaces Allowed (example churchname_prod)"
-  read dbname
-  echo "Please Input a User for the Database (No Spaces)"
-  read dbuser
-  echo "Please Input a Password for $dbuser (No Spaces)"
-  echo "Keep it simple, this isn't Fort Knox"
-  read dbpass
-  echo ""
-  dbip=$lanip
-else
-  echo "Input Main Host IP Address To Copy Settings:"
-  read dbip
-fi
 
-install_log="/home/pi/pss_install.log"
+. /var/www/conf/csdb.conf
+
+mkdir -p /home/pi/log/pss
+install_log="/home/pi/log/pss/pss_install.log"
 echo "Initiating Install" > $install_log
-mkdir -p /home/pi/scripts
-mkdir -p /home/pi/log
 
-sudo apt-get update
-sudo apt-get upgrade -y
 if [[ $omxvlc == "o" ]]
 then
-  appstoinstall=(at apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg omxplayer)
+  appstoinstall=(at cec-utils ffmpeg omxplayer)
 else
-  appstoinstall=(at apache2 php php-mysql php-curl mariadb-server git wget curl cec-utils ffmpeg vlc vlc-bin)
+  appstoinstall=(at curl cec-utils ffmpeg vlc vlc-bin)
 fi
 
 for app in ${appstoinstall[@]}
@@ -48,51 +39,25 @@ do
   echo "" >> $install_log
 done
 
-sudo mkdir -p /var/www/html/pss/conf
 sudo mkdir -p /var/www/html/pss/scripts
-sudo chown pi:pi /var/www/html
 sudo chown pi:pi /var/www/html/pss/scripts
-sudo chown pi:pi /var/www/html/pss/conf
 echo "never" > /home/pi/pss_lastupdatecommit
 echo "off" > /home/pi/pssonoff
-cp /home/pi/pss/configs/pss.conf /var/www/html/pss/conf/pss.conf
-cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/ghupdate.sh
-cp /home/pi/pss/scripts/pushover.sh /home/pi/scripts/pushover.sh
-sudo cp -f /home/pi/pss/crons/pss /etc/cron.d/pss
+cp /home/pi/pss/pss.conf /var/www/conf/pss.conf
+cp /home/pi/pss/scripts/ghupdate.sh /home/pi/scripts/pss/ghupdate.sh
+sudo cp -f /home/pi/pss/pss.cron /etc/cron.d/pss
 sudo chown root:root /etc/cron.d/pss
-sudo rm /var/www/html/index.html
-sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"
+sudo rsync -avu "/home/pi/pss/website/" "/var/www/html/pss"
 sudo chown www-data:www-data /var/www/html/pss/scripts/manualaction
-
-phpversion=$(php -i | grep "PHP Version")
-phpversionnumber=${phpversion:15:3}
-
 sudo mkdir -p /var/www/html/pss/files
 sudo chown www-data:www-data /var/www/html/pss/files
-sudo sed -i 's/upload_max_filesize.*/upload_max_filesize = 800M/' /etc/php/$phpversionnumber/apache2/php.ini
-sudo sed -i 's/post_max_size.*/post_max_size = 800M/' /etc/php/$phpversionnumber/apache2/php.ini
-sudo sed -i 's/bind-address.*/#bind-address = 127.0.0.1/' /etc/mysql/mariadb.conf.d/50-server.cnf
 sudo usermod -aG video www-data
 
-if [[ $maininstall == "Y" ]] || [[ $maininstall == "y" ]]
+if [ "$main_or_remote" == "main" ]
 then
-  sudo mysql --user='root' -e "GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'localhost' IDENTIFIED BY '$dbpass'"
-  sudo mysql --user='root' -e "GRANT ALL PRIVILEGES ON *.* TO '$dbuser'@'$dblan%' IDENTIFIED BY '$dbpass'"
-  sudo mysql --user='root' -e "CREATE DATABASE IF NOT EXISTS $dbname"
-  sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" < /home/pi/pss/db.txt
-  sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-IP', '$lanip');"
-  sudo mysql --user="$dbuser" --password="$dbpass" --database="$dbname" -e "INSERT INTO Variables(Var_Name, Var_Value) VALUES('Database-Name', '$dbname');"
-
-  sudo sed -i "s/database_ip.*/database_ip=\"$dbip\"/" /var/www/html/pss/conf/pss.conf
-  sudo sed -i "s/database_name.*/database_name=\"$dbname\"/" /var/www/html/pss/conf/pss.conf
-  sudo sed -i "s/database_username.*/database_username=\"$dbuser\"/" /var/www/html/pss/conf/pss.conf
-  sudo sed -i "s/database_password.*/database_password=\"$dbpass\"/" /var/www/html/pss/conf/pss.conf
-else
-  sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf
-  sudo curl -Ss "http://$dbip/pss/scripts/dbupdate.php?type=devicedetails&device=$mac&devname=$HOSTNAME" >> $install_log
-  echo "sudo curl -Ss "http://$dbip/pss/conf/pss.conf" --output /var/www/html/pss/conf/pss.conf"
-  echo "sudo curl -Ss 'http://$dbip/pss/scripts/dbupdate.php?type=devicedetails&device=$mac&devname=$HOSTNAME'"
+    sudo mysql --user="$database_username" --password="$database_password" --database="$database_name" < /home/pi/pss/db.txt
 fi
+sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=devicedetails&device=$mac&devname=$HOSTNAME" >> $install_log
 
 sudo sed -i 's/exit.*//' /etc/rc.local
 sudo bash -c 'echo "/sbin/iw wlan0 set power_save off" >> /etc/rc.local'
@@ -102,8 +67,6 @@ sudo bash -c 'echo "" >> /etc/rc.local'
 sudo bash -c 'echo "exit 0" >> /etc/rc.local'
 
 sudo apt autoremove -y
-
-. /var/www/html/pss/conf/pss.conf
 
 echo ""
 echo "----------------------"

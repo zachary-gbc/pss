@@ -2,12 +2,12 @@
 
 sleep 62
 
-. /var/www/html/pss/conf/pss.conf
+. /var/www/conf/csdb.conf
 lastupdate=$(</home/pi/pss_lastupdatecommit)
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 log=$(date -I)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
-echo "MESSAGE $datetime: Starting ghupdate" >> /home/pi/log/$log.log
+echo "MESSAGE $datetime: Starting ghupdate" >> /home/pi/log/pss/$log.log
 
 sudo rm -r -f /home/pi/pss
 git clone --depth=1 https://github.com/zachary-gbc/pss /home/pi/pss
@@ -17,22 +17,22 @@ lastcommit=$(git log --pretty=format:"%H")
 if [[ $lastcommit != $lastupdate ]]
 then
   find . -name '*DS_Store*' -delete
-  mv /home/pi/pss/scripts/ghupdate.sh /home/pi/ghupdate.sh
-  ( sleep 60; mv /home/pi/ghupdate.sh /home/pi/scripts/ghupdate.sh ) & 
+  mv /home/pi/pss/scripts/pss/ghupdate.sh /home/pi/pssghupdate.sh
+  ( sleep 60; mv /home/pi/pssghupdate.sh /home/pi/scripts/pss/ghupdate.sh ) & 
 
   # Scripts
-  sudo mv -f /home/pi/pss/scripts/* /home/pi/scripts/
+  sudo mv -f /home/pi/pss/scripts/* /home/pi/scripts/pss/
 
   # Crons
-  sudo mv -f /home/pi/pss/crons/pss /etc/cron.d/pss
+  sudo mv -f /home/pi/pss/pss.cron /etc/cron.d/pss
   sudo chown root:root /etc/cron.d/pss
 
   # Website
-  sudo rsync -avu "/home/pi/pss/website/" "/var/www/html"
+  sudo rsync -avu "/home/pi/pss/website/" "/var/www/html/pss"
   sudo chown www-data:www-data /var/www/html/pss/scripts/manualaction
 
   echo $lastcommit > /home/pi/pss_lastupdatecommit
 fi
 
-curl http://$database_ip/pss/scripts/dbupdate.php?type=ghupdate\&device=$mac
+curl http://$database_ip/pss/other/dbupdate.php?type=ghupdate\&device=$mac
 sudo rm -r -f /home/pi/pss

@@ -3,7 +3,8 @@
 # 1 = minutes (S-minutes)
 # 2 = power (yes=F-3/no=F-4)
 
-. /var/www/html/pss/conf/pss.conf
+. /var/www/conf/csdb.conf
+. /var/www/conf/pss.conf
 dow=$(date +%u)
 datetime=$(date '+%Y-%m-%d %H:%M:%S');
 log=$(date -I)
@@ -18,7 +19,7 @@ if [[ ! -z $4 ]]; then vars+="$4 "; fi
 if [[ ! -z $5 ]]; then vars+="$5 "; fi
 if [[ ! -z $6 ]]; then vars+="$6 "; fi
 
-echo "MESSAGE $datetime: Loop Stop Script ($vars)" >> /home/pi/log/$log.log
+echo "MESSAGE $datetime: Loop Stop Script ($vars)" >> /home/pi/log/pss/$log.log
 
 function checkvariable {
   vartype=${1:0:2}
@@ -27,7 +28,7 @@ function checkvariable {
     "DM")
       if [[ $1 == "DM-0" ]]
       then
-        echo "MESSAGE $datetime: Loop Stop Script Quitting ($vars)" >> /home/pi/log/$log.log
+        echo "MESSAGE $datetime: Loop Stop Script Quitting ($vars)" >> /home/pi/log/pss/$log.log
         exit 1
       fi
       ;;
@@ -64,8 +65,8 @@ then
     omxrunning=$(pidof omxplayer.bin)
     if [[ $omxrunning ]]
     then
-      echo "ALERT $datetime: omxplayer Failed to Stop" >> /home/pi/log/$log.log
-      bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "Player Failed to Stop"
+      echo "ALERT $datetime: omxplayer Failed to Stop" >> /home/pi/log/pss/$log.log
+      bash /home/pi/scripts/csdb/pushover.sh "$HOSTNAME" "tugboat" "Player Failed to Stop"
     fi
   fi
 else
@@ -77,13 +78,13 @@ else
     vlcrunning=$(pidof vlc.bin)
     if [[ $vlcrunning ]]
     then
-      echo "ALERT $datetime: vlc Failed to Stop" >> /home/pi/log/$log.log
-      bash /home/pi/scripts/pushover.sh "$HOSTNAME" "tugboat" "Player Failed to Stop"
+      echo "ALERT $datetime: vlc Failed to Stop" >> /home/pi/log/pss/$log.log
+      bash /home/pi/scripts/csdb/pushover.sh "$HOSTNAME" "tugboat" "Player Failed to Stop"
     fi
   fi
 fi
 sleep 5
 
-if [[ $power != "" ]]; then bash /home/pi/scripts/tvpower.sh $power; fi
+if [[ $power != "" ]]; then bash /home/pi/scripts/pss/tvpower.sh $power; fi
 
-sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&loop=0" >> /home/pi/log/$log.log
+sudo curl -Ss "http://$database_ip/pss/other/dbupdate.php?type=locationstatus&device=$mac&loop=0" >> /home/pi/log/pss/$log.log

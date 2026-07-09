@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-. /var/www/html/pss/conf/pss.conf
+. /var/www/conf/csdb.conf
 mac=$(cat /sys/class/net/wlan0/address | sed 's/://g')
 power="Off"
 log=$(date -I)
@@ -23,4 +23,4 @@ else
   loop="$type-$number"
 fi
 
-sudo curl -Ss "http://$database_ip/pss/scripts/dbupdate.php?type=locationstatus&device=$mac&power=$power&loop=$loop" >> /home/pi/log/$log.log
+sudo curl -Ss "http://$database_ip/pss/other/dbupdate.php?type=locationstatus&device=$mac&power=$power&loop=$loop" >> /home/pi/log/pss/$log.log
